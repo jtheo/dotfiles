@@ -1,0 +1,73 @@
+[user]
+	name = Matteo Marchelli
+	email = matteo.marchelli@gmail.com
+	signingkey = /Users/matteomarchelli/.ssh/keys/github.Apr.2021
+
+[core]
+  pager = less -x1,5
+  fileMode = true
+  editor = vim
+
+#[push]
+#  default = current
+
+[diff]
+      tool = meld
+
+[difftool]
+      prompt = false
+
+[merge]
+  tool = meld
+
+[mergetool]
+  prompt = false
+  
+[mergetool "meld"]
+  trustExitCode = true
+  cmd = open -W -a Meld --args --auto-merge \"$PWD/$LOCAL\" \"$PWD/$BASE\" \"$PWD/$REMOTE\" --output=\"$PWD/$MERGED\"
+
+[color]
+	ui = auto
+[pack]
+	threads = 0
+[alias]
+  br         = branch
+  cdr        = ! gitTools mainBranch
+  ch         = ! git co $(git last | fzf --no-sort | awk '{print $1}')
+  cl         = ! gitTools mainBranch && git pcb && gitRemoveOldBranch -f
+  ci         = commit
+  co         = checkout
+  cs         = commit -S -s
+  commend    = commit --amend --no-edit
+  deepsearch = !git rev-list --all  | xargs git grep -F 
+  df         = diff -b --ignore-blank-lines
+  dry-run    = diff --stat --cached
+  l1         = log --graph --abbrev-commit --decorate --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)'
+  l2         = log --pretty=oneline --color --graph --decorate --pretty='format:%Cred%h%Creset %Cgreen%ai%Creset %Cblue%cn%Creset %s'
+  last       = for-each-ref --sort=-committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - (%(color:green)%(committerdate:relative)%(color:reset)) %(subject)'
+  listAlias =  config --get-regexp alias
+  ln        = df --name-only
+  lp        = log --oneline
+  pcb       = !git pull origin $(git branch --show-current)
+  pfl       = !git pu --force-with-lease 
+  pom       = pull origin master
+  prom      = pull --rebase origin master
+  pu        = !git push origin $(git branch --show-current)
+  push      = push -u
+  rc        = rebase --continue
+  rl        = reflog
+  st        = status
+  standup   = log --author=Marchelli --since='9am yesterday' --oneline --all
+  standfry  = log --author=Marchelli --since='9am 3 days ago' --oneline --all
+  sw        = show -1 --format=%B--stat --word-diff=color
+
+[gpg]
+	program = /usr/local/bin/gpg
+	format = ssh
+[commit]
+	gpgsign = true
+[fetch]
+	prune = true
+[init]
+	defaultBranch = main

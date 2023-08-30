@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+if command -v kubectl > /dev/null; then
+    # shellcheck source=/dev/null
+    source <(kubectl completion bash)
+    alias k=kubectl
+    complete -F __start_kubectl k
+fi
+
+[[ -e /Users/jtheo/.bin/terraform ]]  && complete -C /Users/jtheo/.bin/terraform terraform
+
+[[ -e '/usr/local/bin/aws_completer' ]] && complete -C '/usr/local/bin/aws_completer' aws
+
+# https://www.dwarmstrong.org/bashrc/
+# Disable XON/XOFF flow control. Enables use of Ctrl-S in other commands. Examples: forward search in history; disable screen freeze in vim ...
+stty -ixon
+
+#https://twitter.com/nil0x42/status/1323949856067637248
+#https://cirw.in/blog/bracketed-paste
+if ! grep -q "set enable-bracketed-paste" ~/.inputrc; then
+    echo "set enable-bracketed-paste" >> ~/.inputrc && bind -f ~/.inputrc
+fi
+
+if [[ $(uname -s) == "Darwin" ]]; then
+    ulimit -n 25000
+fi

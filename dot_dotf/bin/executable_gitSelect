@@ -1,0 +1,30 @@
+#!/bin/bash 
+
+
+declare -a branches
+
+Exit="Out of here please..."
+branches+=("${Exit}")
+
+while read -r l; do
+    branches+=("${l}")
+done < <(git last)
+
+
+curBranch=$(git rev-parse --abbrev-ref HEAD)
+
+echo "You are in ${curBranch}, where do you want to go today?"
+
+select choice in "${branches[@]}"; do
+    echo "Ok, you chosed: ${choice}!"
+
+    if [[ ${choice} == "${Exit}" ]]; then
+        exit
+    fi
+    
+    branchName="$(echo "${choice}" | awk '{print $1}')"
+    
+    git co "${branchName}"
+    exit
+done
+

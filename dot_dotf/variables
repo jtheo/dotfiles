@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+runningOS=$(uname -s)
+arch=$(uname -m)
+
+if [[ "${runningOS}" == "Darwin" ]]; then
+	isMac=true
+else
+	isMac=false
+fi
+
+if [[ ${arch} == "arm64" ]]; then
+	isArm=true
+else
+	isArm=false
+fi
+
+export EDITOR=vi
+export GOPATH=${HOME}/go
+
+export ANSIBLE_NOCOWS=1
+
+GPG_TTY=$(tty)
+
+export GO111MODULE=on
+
+# # do not export https://git.wiki.kernel.org/index.php?title=GitFaq&oldid=12932#Why_is_it_wrong_to_export_the_environment_variable_CDPATH.3F
+# CDPATH=.:${HOME}/Downloads:${HOME}/go/src/experiments
+
+export DEVOPS_INFRA=${HOME}/Repo/devops-infrastructure
+export DEVOPS_SCRIPT=${HOME}/Repo/devops-scripts
+
+export PATH=${PATH}:${GOPATH}/bin:${HOME}/.bin:${DEVOPS_INFRA}/scripts:${DEVOPS_SCRIPT}/utilities:${HOME}/.krew/bin:${HOME}/.dotf/bin
+
+export GPG_TTY runningOS isMac isArm
+
+export LC_COLLATE=C

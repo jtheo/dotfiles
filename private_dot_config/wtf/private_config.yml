@@ -1,0 +1,342 @@
+---
+wtf:
+  colors:
+    border:
+      focusable: "navy"
+      focused: "green"
+      normal: "gray"
+    highlight:
+      fore: "black"
+      back: "gray"
+    rows:
+      even: yellow
+      odd: white
+    exitMessage:
+      display: true
+  term: "xterm-256color"
+  grid:
+    # columns: [30,35]
+    columns: [30]
+    rows: [10]
+  refreshInterval: 5
+  mods:
+    clocks:
+      colors:
+        rows:
+          even: "lightgreen"
+          odd: "white"
+      enabled: true
+      title: World Clock
+      locations:
+        # From https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+        Auckland: "Pacific/Auckland"
+        Barcelona: "Europe/Madrid"
+        Beijing: "Asia/Shanghai"
+        Chicago: "America/Chicago"
+        Denver: "America/Denver"
+        Dubai: "Asia/Dubai"
+        India: "Asia/Kolkata"
+        London: "Europe/London"
+        Los Angeles: "America/Los_Angeles"
+        Melbourne: "Australia/Melbourne"
+        Minsk: "Europe/Minsk"
+        New York: "America/New York"
+        # Paris: "Europe/Paris"
+        Perth: "Australia/Perth"
+        Rome: "Europe/Rome"
+        Sidney: "Australia/Brisbane"
+        Singapore: "Asia/Singapore"
+        Tehran: "Asia/Tehran"
+        # Toronto: "America/Toronto"
+        Vancouver: "America/Vancouver"
+      position:
+        top: 1
+        left: 1
+        height: 2
+        width: 1
+      refreshInterval: 15
+      # sort: "alphabetical"
+      sort: "chronological"
+
+    # weather:
+    #   apiKey: "298efe6408aa05f1c37094c7cf2a7cfb"
+    #   # From http://openweathermap.org/help/city_list.txt
+    #   cityids:
+    #     - 2643743
+    #     - 6542283
+    #     - 6541464
+    #     - 2172349
+    #     - 3333133
+    #     - 112931
+    #     - 2193732
+    #   colors:
+    #     current: "lightblue"
+    #   enabled: true
+    #   language: "EN"
+    #   position:
+    #     top: 4
+    #     left: 0
+    #     height: 1
+    #     width: 2
+    #   refreshInterval: 900
+    #   tempUnit: "C"
+
+    # ipinfo:
+    #   colors:
+    #     name: red
+    #     value: white
+    #   enabled: true
+    #   position:
+    #     top: 3
+    #     left: 1
+    #     height: 1
+    #     width: 1
+    #   refreshInterval: 3600
+
+    cryptolive:
+      enabled: true
+      position:
+        top: 0
+        left: 0
+        height: 2
+        width: 1
+      updateInterval: 600
+      currencies:
+        BTC:
+          displayName: Bitcoin
+          to:
+            - USD
+            # - EUR
+            - GBP
+        ETH:
+          displayName: Ethereum
+          to:
+            - USD
+            # - EUR
+            - GBP
+        LTC:
+          displayName: Litecoin
+          to:
+            - USD
+            # - EUR
+            - GBP
+        XRP:
+          displayName: Ripple
+          to:
+            - USD
+            # - EUR
+            - GBP
+      colors:
+        from:
+          name: coral
+          displayName: grey
+        to:
+          name: white
+          price: green
+        top:
+          from:
+            name: grey
+            displayName: coral
+          to:
+            name: red
+            field: white
+            value: green
+
+    resourceusage:
+      cpuCombined: false
+      enabled: true
+      position:
+        top: 2
+        left: 0
+        height: 1
+        width: 1
+      refreshInterval: 1
+      showCPU: true
+      showMem: true
+      showSwp: true
+
+    lobste:
+      title: lobste.rs
+      enabled: true
+      showSource: false
+      feeds:
+        - https://lobste.rs/newest.rss
+      feedLimit: 30
+      position:
+        top: 0
+        left: 2
+        height: 3
+        width: 2
+      refreshInterval: 2h
+      type: feedreader
+
+    # tilde-news:
+    #   title: tilde.news
+    #   enabled: true
+    #   focusChar: 5
+    #   showSource: false
+    #   feeds:
+    #     - https://tilde.news/rss
+    #   feedLimit: 10
+    #   position:
+    #     top: 5
+    #     left: 2
+    #     height: 1
+    #     width: 2
+    #   refreshInterval: 2h
+    #   type: feedreader
+
+
+    # test-feed-reader:
+    #   enabled: true
+    #   feeds:
+    #     - https://rss.cbc.ca/lineup/topstories.xml
+    #     # - https://lobste.rs/rss
+    #   feedLimit: 10
+    #   position:
+    #     top: 5
+    #     left: 2
+    #     height: 1
+    #     width: 2
+    #   refreshInterval: 4h
+    #   type: feedreader
+
+    hackernews:
+      enabled: true
+      focusChar: 2
+      numberOfStories: 25
+      position:
+        top: 0
+        left: 4
+        height: 3
+        width: 2
+      storyType: top
+      refreshInterval: 900
+
+    r-go:
+      enabled: true
+      focusChar: 3
+      numberOfPosts: 16
+      position:
+        top: 3
+        left: 2
+        height: 2
+        width: 2
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "golang"
+      topTimePeriod: week
+      type: subreddit
+
+    r-k8s:
+      enabled: true
+      focusChar: 4
+      numberOfPosts: 16
+      position:
+        top: 3
+        left: 4
+        height: 2
+        width: 2
+      refreshInterval: 15m
+      sortOrder: new
+      subreddit: "kubernetes"
+      topTimePeriod: week
+      type: subreddit
+
+    r-terraform:
+      enabled: true
+      focusChar: 5
+      numberOfPosts: 8
+      position:
+        top: 5
+        left: 2
+        height: 1
+        width: 2
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "terraform"
+      topTimePeriod: week
+      type: subreddit
+
+    # devto:
+    #   enabled: true
+    #   focusChar: 6
+    #   numberOfArticles: 8
+    #   position:
+    #     top: 5
+    #     left: 4
+    #     height: 1
+    #     width: 2
+    #   # contentState: "rising"
+
+    r-sre:
+      enabled: true
+      focusChar: 6
+      numberOfPosts: 8
+      position:
+        top: 5
+        left: 4
+        height: 1
+        width: 2
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "sre"
+      topTimePeriod: week
+      type: subreddit
+
+    digitalclock:
+      color: orange
+      enabled: true
+      font: bigfont
+      hourFormat: 24
+      position:
+        top: 0
+        left: 1
+        height: 1
+        width: 1
+      refreshInterval: 1
+      title: "big clock"
+      type: "digitalclock"
+      withDatePrefix: false
+      
+    # logger:
+    #   enabled: true
+    #   colors:
+    #     label: "green"
+    #     text: "white"
+    #   position:
+    #     top: 3
+    #     left: 0
+    #     height: 1
+    #     width: 1
+    #   refreshInterval: 15
+
+    textfile:
+      enabled: true
+      filePath: "/Users/matteomarchelli/.config/wtf/fortune.txt"
+      focusable: false
+      format: false
+      position:
+        top: 5
+        left: 0
+        height: 1
+        width: 2
+      refreshInterval: 1800
+      title: "Fortune"
+      formatStyle: "dracula"
+
+    pihole:
+      apiUrl: http://192.168.0.4/admin/api.php
+      enabled: true
+      maxClientWidth: 20
+      maxDomainWidth: 20
+      position:
+        top: 3
+        left: 0
+        height: 2
+        width: 2
+      refreshInterval: 1m
+      showSummary: true
+      showTopItems: 5
+      showTopClients: 5
+      token: 8d12f9838c8e34d9c0f56a4085e79b983008f542696d248be99ca70b89a53600

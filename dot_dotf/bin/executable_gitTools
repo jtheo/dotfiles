@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+
+source ${HOME}/.dotf/git_functions
+
+
+eval ${@}

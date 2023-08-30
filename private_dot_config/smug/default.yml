@@ -1,0 +1,56 @@
+session: default
+
+root: ~
+
+windows:
+  - name: brew
+    commands:
+      - brewup
+
+  - name: Down
+    root: Downloads
+
+  - name: WTF
+    commands:
+      - wtfutil
+
+  - name: CiCd
+    layout: tiled
+    panes:
+      - type: vertical
+        commands:
+          - cd ~/Repo/devops-docker/
+        commands:
+          - cd ~/Repo/devops-packer/
+        commands:
+          - cd ~/Repo/devops-scripts/
+
+  - name: Nginx
+    layout: tiled
+    panes:
+      - type: vertical
+        commands:
+          - cd ~/Repo/web/nginx-proxy
+        commands:
+          - cd ~/Repo/web/yourmd-website-nginx
+
+  - name: Mon
+    layout: tiled
+    panes:
+      - type: vertical
+        commands:
+          - cd ~/Repo/monitor/alertmanager
+        commands:
+          - cd ~/Repo/monitor/prometheus
+        commands:
+          - cd ~/Repo/monitor/grafana
+
+  - name: TF/GO
+    layout: tiled
+    panes:
+      - type: vertical
+        commands:
+          - cd ~/go/src/
+        commands:
+          - cd ~/Repo/Theo/terraform/tf_tests/actual
+

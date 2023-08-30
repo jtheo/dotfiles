@@ -1,0 +1,64 @@
+#!/bin/bash 
+
+
+function err() {
+    echo "${*}"
+    exit 1
+}
+
+PAT='(master|main|dev)'
+
+if ! curBranch=$(git rev-parse --abbrev-ref HEAD 2>&1); then
+    err "Not sure you're in a git repo"
+fi
+
+if [[ ! ${curBranch} =~ ${PAT} ]]; then
+    echo "Current Branch invalid: > ${curBranch} <"
+    return
+fi
+
+delete=false
+
+case ${1} in 
+    -f)
+        delete=true
+    ;;
+    -e)
+        empty=true
+    ;;
+    -t)
+        delete=true;
+        empty=true;
+        remote=true
+    ;;
+    *)
+        err "  ${0} -f (force delete merged branches) -e (remove empty branches) -t (delete merged, empty and that doesn't exist on the remote)"
+    ;;
+esac
+
+read -r -a branches < <(git checkout -q "${curBranch}" && git for-each-ref refs/heads/ "--format=%(refname:short)" | grep -vE ${PAT} | tr '\n' ' ')
+
+for branch in "${branches[@]}"; do
+    if ! mergeBase=$(git merge-base "${curBranch}" "${branch}"); then
+        echo "Failed git merge-base";
+        return;
+    fi;
+    treeObj=$(git rev-parse "${branch}^{tree}");
+    commitObj=$(git commit-tree "${treeObj}" -p "${mergeBase}" -m _);
+    findCommitToBeApplied=$(git cherry "${curBranch}" "${commitObj}");
+    if [[ ${findCommitToBeApplied} == "-"* ]]; then
+        if ${delete}; then
+            git branch -D "${branch}"
+        else
+            echo "${branch} is merged into ${curBranch} and can be deleted";
+        fi;
+    fi;
+done
+
+if ${empty}; then
+    git br | grep -vF '*' | grep -vE "${PAT}" | xargs -IX git br -d X 2> /dev/null;
+fi
+
+if ${remote}; then
+    git remote prune origin
+fi

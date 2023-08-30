@@ -1,0 +1,84 @@
+#!/opt/homebrew/bin/bash
+
+function pcolor() {
+    local msg=${1} color=${2} value=${3} 
+    echo -en "${msg}: ${color}${value}${clean} "
+}
+
+function pcolorln() {
+    local msg=${1} color=${2} value=${3} 
+    echo -e "${msg}: ${color}${value}${clean}"
+}
+
+function tempCPU(){
+    read -r cpuString <<< "$(sudo powermetrics  --sample-count 1 --sample-rate=1 --samplers smc | sort | awk '/^CPU die temperature/')" 
+    read -r fanString <<< "$(sudo powermetrics  --sample-count 1 --sample-rate=1 --samplers smc | sort | awk '/^Fan: [0-9]+/')" 
+
+    ctemp=${cpuString#CPU die temperature: }
+    ctemp=${ctemp% C*}
+    cpuTemp=${ctemp}
+    ctemp=${ctemp/./}
+    if [[ ${ctemp} -lt 5000 ]]; then
+        cpuColor=${green}
+    elif [[ ${ctemp} -gt 5000 ]] && [[ ${ctemp} -lt 7000 ]]; then
+        cpuColor=${yellow}
+    else
+        cpuColor=${red}
+    fi
+
+    pcolorln "CPU temperature" "${cpuColor}" "${cpuTemp}" "\n"
+
+    fanRPM=${fanString#Fan: }
+    fanRPM=${fanRPM% rpm}
+
+    if [[ ${fanRPM} -le 5000 ]]; then
+        fanColor=${green}
+    elif [[ ${fanRPM} -gt 5000 ]] && [[ ${fanRPM} -lt 7000 ]]; then
+        fanColor=${yellow}
+    else
+        fanColor=${red}
+    fi
+
+    pcolorln "FAN rpms" "${fanColor}" "${fanRPM}" "\n"
+}
+
+
+function loadAVG() {
+    CPUs=$(/usr/sbin/sysctl -n hw.ncpu)
+    CPUsM=$((CPUs * 100))
+    CPUsH=$((CPUsM / 2))
+    u=$(uptime)
+    declare -A loadavg
+    read -r loadavg["one"] loadavg["five"] loadavg["fifteen"] <<< "${u#* load averages:}"
+    echo "Load AVG: "
+    for k in one five fifteen; do
+        v=${loadavg[$k]}
+        vm=${v/./}
+        vm=${vm##0}
+        if [[ ${vm} -lt ${CPUsH} ]]; then
+            # echo "${vm} <  ${CPUsH}"
+            vColor=${green}
+        elif [[ ${vm} -gt ${CPUsH} ]] && [[ ${vm} -lt ${CPUsM} ]]; then
+            # echo "${CPUsH} < ${vm} < ${CPUsM}"
+            vColor=${yellow}
+        else
+            # echo "${vm} > ${CPUsM}"
+            vColor=${red}
+        fi 
+        pcolorln "  - ${k}" "${vColor}" "${v}"
+    done
+    echo
+}
+
+
+
+red="\x1b[31m"
+green="\x1b[32m"
+yellow="\x1b[33m"
+reset="\x1b[101m"
+clean="\E[0;10m"
+
+date
+# tempCPU
+loadAVG
+echo

@@ -1,0 +1,14 @@
+*.crdownload
+*.mkv
+*.part
+.Trash
+.lima
+.minikube
+.terraform.d
+.vagrant.d
+.vscode
+Applications
+Desktop
+Library
+VirtualBox VMs
+go/pkg

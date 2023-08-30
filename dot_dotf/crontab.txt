@@ -1,0 +1,18 @@
+HOME=/Users/matteomarchelli
+LOGD=/Users/matteomarchelli/Logs
+BREW=/opt/homebrew/bin
+
+* * * * * ${HOME}/.bin/bckScreenShots >> ${LOGD}/bckScreenShots.log 2>> ${LOGD}/bckScreenShots.err
+#* * * * * ${HOME}/.bin/bckScreenShots > ${LOGD}/bckScreenShots.log 2> ${LOGD}/bckScreenShots.err
+
+
+# *  * * * * ${HOME}/.dotf/bin/MactempCPULoad > ${HOME}/.config/wtf/cpustats
+
+0  * * * * ${BREW}/fortune > ${HOME}/.config/wtf/fortune.txt
+
+05 09,12,18 * * * ${HOME}/.bin/bckRestic >> ${HOME}/Logs/bckRestic.log 2>> ${HOME}/Logs/bckRestic.err
+30 20       * * * ${HOME}/.bin/prnRestic >> ${HOME}/Logs/prnRestic.log 2>> ${HOME}/Logs/prnRestic.err
+
+
+#25 13 * * * ${HOME}/.bin/bckRestic >> ${HOME}/Logs/bckRestic.log 2>> ${HOME}/Logs/bckRestic.err
+

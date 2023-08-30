@@ -1,0 +1,43 @@
+#!/bin/env bash
+
+export SHELL=/usr/local/bin/bash
+
+# https://www.addictivetips.com/mac-os/hide-default-interactive-shell-is-now-zsh-in-terminal-on-macos/
+# Unfucking belivable
+export BASH_SILENCE_DEPRECATION_WARNING=1
+export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
+
+[[ -f /usr/local/etc/profile.d/bash_completion.sh ]] && source /usr/local/etc/profile.d/bash_completion.sh
+
+
+alias gdu="${HOME}/go/bin/gdu"
+alias unrar=7z
+
+# Pycharm is missing some pieces...
+if echo "${PATH}" | grep /usr/loca/bin; then 
+    PATH=${PATH}:/usr/local/bin
+fi
+
+if [[ -e /usr/local/bin/ssh ]]; then
+    alias ssh=/usr/local/bin/ssh
+    alias ssh-add=/usr/local/bin/ssh-add
+    alias ssh-agent=/usr/local/bin/ssh-agent
+    alias ssh-copy-id=/usr/local/bin/ssh-copy-id
+    alias ssh-keygen=/usr/local/bin/ssh-keygen
+    alias ssh-keyscan=/usr/local/bin/ssh-keyscan
+else
+    # shellcheck disable=SC2263
+    cat << EoM
+    You're using default ssh that it's probably missing the Yubikey suport"
+    To solve this problem, do:
+      brew install openssh
+    and then source again this file ${BASH_SOURCE[0]}
+    Version available: $(ssh -V)
+EoM
+fi
+# reset
+echo
+# shellcheck disable=SC2046
+cowsay $(fortune)
+echo
+echo

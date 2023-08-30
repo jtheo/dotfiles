@@ -1,0 +1,150 @@
+#!/bin/bash
+
+function warning(){
+  echo "================================================="
+  echo "${*}"
+  echo "================================================="
+}
+
+function _assumeDeploymentRole() {
+  if [[ -z ${1} ]]; then
+    warning "Invalid Usage"
+    echo "Usage: awsp <profile>"
+    echo "Valid profiles are: "
+    _awsListAll
+    echo
+    return
+  fi
+
+  profile=${1}
+  read -r -a awsVars <<< "$(env | awk -F = '$1 ~ /^AWS_/ {printf "%s ",$1}')"
+  [[ ${#awsVars[@]} -gt 0 ]] && unset "${awsVars[@]}"
+
+  role_arn=$(aws configure get role_arn --profile "${profile}")
+
+  if [[ -n ${role_arn} ]]; then
+
+          mfa_serial_present="$(aws configure get mfa_serial --profile "${profile}")"
+          source_profile="$(aws configure get source_profile --profile "${profile}")"
+
+          echo "Assuming role ${role_arn} using profile ${profile}"
+
+          if [[ -n ${mfa_serial_present} ]]; then
+              mfa_serial="$(aws iam list-mfa-devices --profile "${source_profile}" | jq -r '.MFADevices[].SerialNumber | select(match("mfa"))')"
+              read -r -p "Please enter your MFA token for ${mfa_serial}: " mfa_token
+              JSON=$(aws sts assume-role --role-arn "${role_arn}" --role-session-name "${profile}" --serial-number "${mfa_serial}" --token-code "${mfa_token}")
+          else
+              JSON=$(aws sts assume-role --role-arn "${role_arn}" --role-session-name "${profile}")
+          fi
+
+           # shellcheck disable=SC2046
+          eval $(echo "${JSON}" | jq -r '.Credentials | 
+                "export AWS_ACCESS_KEY_ID=" + .AccessKeyId + "\n" + 
+                "export AWS_SECRET_ACCESS_KEY=" + .SecretAccessKey + "\n" +
+                "export AWS_SESSION_TOKEN=" + .SessionToken + "\n" +
+                "export AWS_SESSION_EXPIRE=" + .Expiration + "\n"
+                ')
+            now=$(date +%s)
+         
+      export AWS_DEFAULT_PROFILE=${profile}
+      export AWS_SESSION_EXPIRE_EPOCH=$((now + 3600))
+
+      echo "Successfully switched to AWS Profile: ${profile}";
+      aws configure list
+      echo ""
+
+      get_permissions "${profile}"
+
+      echo
+      date
+      echo
+  else
+    if ! aws configure get aws_access_key_id  --profile default > /dev/null; then
+      warning "Profile ${1} doesn't exists"
+      _awsListAll
+      echo
+     return 1
+    fi
+  fi
+}
+
+function _awsListAll() {
+
+    credentialFileLocation=$(env | grep AWS_SHARED_CREDENTIALS_FILE | cut -d= -f2);
+    if [[ -z ${credentialFileLocation} ]]; then
+       credentialFileLocation=~/.aws/credentials
+    fi
+
+    while read -r line; do
+        if [[ ${line} == "["* ]]; then echo "${line}"; fi;
+    done < "${credentialFileLocation}";
+};
+
+function _awsHelp {
+
+  echo "
+
+  ########################################################################
+  #                       Usage:                                         #
+  #                                                                      #
+  #    To find all profiles run:                   awsall                #
+  #                                                                      #
+  #    To find your currently assumed profile run: awsq                  #
+  #                                                                      #
+  #    To switch profile run:                      awsp <profile>        #
+  #                                                                      #
+  #    For usage instructions run:                 awshelp               #
+  #                                                                      #
+  #    AWS Credentials location:                   ~/.aws/credentials    #
+  #                                                                      #
+  ########################################################################
+
+  "
+};
+
+function _awsQuery {
+  current_profile="$(aws sts get-caller-identity | jq -r '.Arn | split("/") | .[1]')"
+  case ${current_profile} in
+    yourmd-dev-website-deployment )
+      echo "Current assumed profile is dev-website-data"
+    ;;
+    yourmd-staging-website-deployment )
+      echo "Current assumed profile is staging-website-data"
+    ;;
+    yourmd-prod-website-deployment )
+      echo "Current assumed profile is prod-website-data"
+    ;;
+    * )
+      echo "Current assumed profile is ${current_profile}"
+    ;;
+    esac
+}
+
+function get_permissions () {
+  case "${1}" in
+    *-website-data )
+        role_name=$(echo "${role_arn}" | awk -F "/" '{print ${2}}')
+        echo "Getting permissions for profile ${1}"
+        policy_count=$(aws iam list-attached-role-policies --role-name "${role_name}" | jq '.AttachedPolicies | .[] .PolicyName' | wc -l)
+        for ((i=0;i<policy_count;i++)); do
+          policy_name=$(aws iam list-attached-role-policies --role-name "${role_name}" | jq -r '.AttachedPolicies | .['${i}'] .PolicyName')
+          if [[ "${policy_name}" == *"describe-self"* ]]; then
+            continue
+          fi
+          policy_arn=$(aws iam list-attached-role-policies --role-name "${role_name}" | jq -r '.AttachedPolicies | .['${i}'] .PolicyArn')
+          printf "\nProfile policy %s allows you to perform the following actions:\n" "${policy_name}"
+          actions=$(aws iam get-policy-version --policy-arn "${policy_arn}" --version-id v1 | jq -r '.PolicyVersion.Document.Statement | .[] .Action | .[]')
+
+          printf "%s\nOn the following resources:\n" "${actions}"
+          resources=$(aws iam get-policy-version --policy-arn "${policy_arn}" --version-id v1 | jq -r '.PolicyVersion.Document.Statement | .[] .Resource | .[]')
+          printf "%s\n" "${resources}"
+        done
+        ;;
+        * ) return ;;
+  esac
+}
+
+alias awsall="_awsListAll"
+alias awsp="_assumeDeploymentRole"
+alias awswho="aws configure list"
+alias awsq="_awsQuery"

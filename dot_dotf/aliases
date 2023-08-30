@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+
+# https://www.cyberciti.biz/tips/bash-aliases-mac-centos-linux-unix.html
+alias tac='tail -r'
+alias diff='colordiff'
+
+# https://appuals.com/display-path-variable-newlines-linux/
+alias path='echo -e ${PATH//:/\\n}'
+
+alias now='date +"%T"'
+alias nowtime=now
+alias nowdate='date +"%d-%m-%Y"'
+alias vi=nvim
+
+alias ls='ls -G'
+alias ll='ls -l'
+alias la='ls -la'
+
+# https://zeldor.biz/2014/07/mtr-for-mac-os-x/
+# added also /usr/local/sbin to the PATH variable
+alias mtr='sudo /usr/local/sbin/mtr'
+alias grep='grep --color'
+
+alias lsd='ls -l | grep ^d'
+
+alias jup='jupyter-notebook --notebook-dir=~/Downloads/Python/'
+
+alias maVattinne='rensrt && scpsrt'
+
+# https://www.circuidipity.com/bashrc/
+# https://github.com/vonbrownie/dotfiles/blob/master/.bashrc
+# 
+alias stophistory="set +o history"
+alias starthistory="set -o history"
+
+alias flush_dns='sudo killall -HUP mDNSResponder'
+
+alias update_cleanup='curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/master/installer.sh" | bash -s update'
+
+
+alias whaler="docker run -t --rm -v /var/run/docker.sock:/var/run/docker.sock:ro pegleg/whaler"
+
+alias sublime="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
+
+# shellcheck disable=SC2139
+alias bck="rsync -avz ${HOME} r4:/media/bck/op5/termux --stats --progress --exclude-from ${HOME}/.excludeDir"
+# shellcheck disable=SC2139
+alias bckitup="restic -r sftp:r4:/media/bck/restic_ymd --verbose --exclude-file ~/.exclude_list --files-from /Users/jtheo/.include_list backup ${HOME}"
+
+alias bashfmt="shfmt -s -i 2 -ci -sr -kp -w"
+
+alias lsextold="file * | grep -v directory | awk -f ~/.bin/lsext.awk"
+
+alias colstart="colima start --cpu 1 --memory 3 --disk 16 --mount /Users/jtheo/Downloads/:w"
+alias colcont="colima start --runtime containerd --cpu 1 --memory 3 --disk 16 --mount /Users/jtheo/Downloads/:w"
+
+alias tfmt="terraform fmt"
+
+# shellcheck disable=SC2139
+alias ctop="export DOCKER_HOST=unix:///${HOME}/.colima/docker.sock; ctop"
+
+alias updatedb="sudo /usr/libexec/locate.updatedb"
+
+
+alias tempcpu="sudo powermetrics  --sample-count 1 --sample-rate=1 --samplers smc | sort | grep -E '^(CPU die temperature|Fan: [0-9]+)' | tr '\n' ' '; echo"
+
+alias wtf="GODEBUG=http2client=0 wtfutil"
+# shellcheck disable=SC2139
+alias editwtf="sublime ${HOME}/.config/wtf/config.yml"
+alias deMacMyAss="xattr -c"
+
+alias kshell='kubectl run -it --image nicolaka/netshoot --restart Never --rm shell'
+
+alias gd=~/go/bin/gdu 
+
+alias dewitch='hash -d'
+
+alias wtfEd='subl ${HOME}/.config/wtf/config.yml'
+
+alias yt3="yt-dlp -f bestaudio --audio-quality 0 --audio-format mp3  --extract-audio  -o '%(title)s.%(ext)s'"
+
+alias checkLine='networkQuality -v'
