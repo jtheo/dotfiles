@@ -4,7 +4,8 @@
 	signingkey = /Users/matteomarchelli/.ssh/keys/github.Apr.2021
 
 [core]
-  pager = less -x1,5
+#  pager = less -x1,5
+  pager = delta
   fileMode = true
   editor = vim
 

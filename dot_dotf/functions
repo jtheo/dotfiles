@@ -75,32 +75,6 @@ function quickPass() {
 	echo "$(random_string)${x:i:1}$(random_string $(((RANDOM % 10) + 5)))$(more_random 5)"
 }
 
-# function xkpass() {
-# 	local pass words
-# 	if [[ -n ${1} ]]; then
-# 		MAX_LEN=${1}
-# 	else
-# 		MAX_LEN=6
-# 	fi
-#
-# 	symb=',._!,+=%'
-# 	rand1=$((RANDOM % ${#symb}))
-# 	s1=${symb:rand1:1}
-#
-# 	for wl in eff_short_norm.txt fra_word_list_norm.txt ita_word_lista_norm.txt; do
-# 		word="$(xkcdpass --min 3 --max "${MAX_LEN}" -n 1 -w ~/.wordlist/${wl})"
-# 		word="$(tr '[:lower:]' '[:upper:]' <<<"${word:0:1}")${word:1}"
-# 		words+=("${word}")
-# 	done
-#
-# 	words+=("${s1}")
-# 	words+=("${RANDOM}")
-#
-# 	read -r -a pass <<<"$(echo "${words[*]}" | shuf)"
-#
-# 	echo "${pass[@]}" | tr -d ' '
-# }
-
 function mkcd() {
 	if [[ -z $1 ]]; then
 		echo "Yeees?"
@@ -456,13 +430,8 @@ function mtg() {
 	done
 }
 
-function urldecoder() {
-	: "${*//+/ }"
-	echo -e "${_//%/\\x}"
-}
-
 # https://gist.github.com/cdown/1163649
-urlencode() {
+function urlencode() {
 	# urlencode <string>
 
 	old_lc_collate=$LC_COLLATE
@@ -480,7 +449,7 @@ urlencode() {
 	LC_COLLATE=$old_lc_collate
 }
 
-urldecode() {
+function urldecode() {
 	# urldecode <string>
 
 	local url_encoded="${1//+/ }"
@@ -660,3 +629,86 @@ function lsext() {
 # 	echo "${answer}" | jq -r '.choices[0].message.content'
 #
 # }
+#
+# function xkpass() {
+# 	local pass words
+# 	if [[ -n ${1} ]]; then
+# 		MAX_LEN=${1}
+# 	else
+# 		MAX_LEN=6
+# 	fi
+#
+# 	symb=',._!,+=%'
+# 	rand1=$((RANDOM % ${#symb}))
+# 	s1=${symb:rand1:1}
+#
+# 	for wl in eff_short_norm.txt fra_word_list_norm.txt ita_word_lista_norm.txt; do
+# 		word="$(xkcdpass --min 3 --max "${MAX_LEN}" -n 1 -w ~/.wordlist/${wl})"
+# 		word="$(tr '[:lower:]' '[:upper:]' <<<"${word:0:1}")${word:1}"
+# 		words+=("${word}")
+# 	done
+#
+# 	words+=("${s1}")
+# 	words+=("${RANDOM}")
+#
+# 	read -r -a pass <<<"$(echo "${words[*]}" | shuf)"
+#
+# 	echo "${pass[@]}" | tr -d ' '
+# }
+# function xkpass() {
+# 	local pass words
+# 	if [[ -n ${1} ]]; then
+# 		MAX_LEN=${1}
+# 	else
+# 		MAX_LEN=6
+# 	fi
+#
+# 	symb=',._!,+=%'
+# 	rand1=$((RANDOM % ${#symb}))
+# 	s1=${symb:rand1:1}
+#
+# 	for wl in eff_short_norm.txt fra_word_list_norm.txt ita_word_lista_norm.txt; do
+# 		word="$(xkcdpass --min 3 --max "${MAX_LEN}" -n 1 -w ~/.wordlist/${wl})"
+# 		word="$(tr '[:lower:]' '[:upper:]' <<<"${word:0:1}")${word:1}"
+# 		words+=("${word}")
+# 	done
+#
+# 	words+=("${s1}")
+# 	words+=("${RANDOM}")
+#
+# 	read -r -a pass <<<"$(echo "${words[*]}" | shuf)"
+#
+# 	echo "${pass[@]}" | tr -d ' '
+# }
+# function xkpass() {
+# 	local pass words
+# 	if [[ -n ${1} ]]; then
+# 		MAX_LEN=${1}
+# 	else
+# 		MAX_LEN=6
+# 	fi
+#
+# 	symb=',._!,+=%'
+# 	rand1=$((RANDOM % ${#symb}))
+# 	s1=${symb:rand1:1}
+#
+# 	for wl in eff_short_norm.txt fra_word_list_norm.txt ita_word_lista_norm.txt; do
+# 		word="$(xkcdpass --min 3 --max "${MAX_LEN}" -n 1 -w ~/.wordlist/${wl})"
+# 		word="$(tr '[:lower:]' '[:upper:]' <<<"${word:0:1}")${word:1}"
+# 		words+=("${word}")
+# 	done
+#
+# 	words+=("${s1}")
+# 	words+=("${RANDOM}")
+#
+# 	read -r -a pass <<<"$(echo "${words[*]}" | shuf)"
+#
+# 	echo "${pass[@]}" | tr -d ' '
+# }
+#
+# function urldecoder() {
+# 	: "${*//+/ }"
+# 	echo -e "${_//%/\\x}"
+# }
+
+#
