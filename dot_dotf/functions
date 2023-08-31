@@ -561,6 +561,13 @@ function lsext() {
 	file ./* | sort -k2 | awk '$2 != "directory" { if ($2 != prev) { print ""; prev = $2 }; print }'
 }
 
+function ced() {
+	chezmoi edit "${*}" --apply --verbose
+}
+
+# ========================================================
+#
+#
 # function _devops_autocomplete() {
 #
 # 	BASE=/Users/matteomarchelli/Repo/devops-infrastructure

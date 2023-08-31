@@ -15,7 +15,8 @@ else
 	isArm=false
 fi
 
-export EDITOR=vi
+export EDITOR=nvim
+export VISUAL=nvim
 export GOPATH=${HOME}/go
 
 export ANSIBLE_NOCOWS=1

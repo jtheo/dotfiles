@@ -9,29 +9,37 @@
   fileMode = true
   editor = vim
 
-#[push]
-#  default = current
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+  navigate = true    # use n and N to move between diff sections
+  light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
 
 [diff]
-      tool = meld
+  tool = meld
+  colorMoved = default
 
 [difftool]
-      prompt = false
+  prompt = false
 
 [merge]
   tool = meld
+  conflictstyle = diff3
 
 [mergetool]
-  prompt = false
-  
+    prompt = false
+
 [mergetool "meld"]
   trustExitCode = true
   cmd = open -W -a Meld --args --auto-merge \"$PWD/$LOCAL\" \"$PWD/$BASE\" \"$PWD/$REMOTE\" --output=\"$PWD/$MERGED\"
 
 [color]
 	ui = auto
+
 [pack]
 	threads = 0
+
 [alias]
   br         = branch
   cdr        = ! gitTools mainBranch
