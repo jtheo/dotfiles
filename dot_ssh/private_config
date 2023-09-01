@@ -1,6 +1,8 @@
 Include ~/.ssh/config.d/home.config
 Include /Users/matteomarchelli/.colima/ssh_config
 
+IgnoreUnknown   UseKeychain,AddKeysToAgent
+
 Host *
   UseKeychain yes
   AddKeysToAgent yes
