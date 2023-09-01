@@ -15,10 +15,29 @@ wtf:
       display: true
   term: "xterm-256color"
   grid:
-    columns: [30]
-    rows: [10]
+    columns: [ 35, 35, 100, 100 ]
+    rows: [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 ]
   refreshInterval: 5
+
   mods:
+
+    digitalclock:
+      withDatePrefix: False
+      dateFormat: "Monday 02 Jan 2006"
+      color: yellow
+      enabled: true
+      font: digitalfont
+      #font: bigfont
+      hourFormat: 24
+      position:
+        top: 0
+        left: 0
+        height: 2
+        width: 1
+      refreshInterval: 1
+      title: "big clock"
+      type: "digitalclock"
+
     clocks:
       colors:
         rows:
@@ -40,84 +59,47 @@ wtf:
         Melbourne: "Australia/Melbourne"
         Minsk: "Europe/Minsk"
         New York: "America/New York"
-        # Paris: "Europe/Paris"
         Perth: "Australia/Perth"
         Rome: "Europe/Rome"
         Sidney: "Australia/Brisbane"
         Singapore: "Asia/Singapore"
         Tehran: "Asia/Tehran"
-        # Toronto: "America/Toronto"
         Vancouver: "America/Vancouver"
       position:
-        top: 1
-        left: 1
-        height: 2
+        top: 2
+        left: 0
+        height: 3
         width: 1
       refreshInterval: 15
       # sort: "alphabetical"
       sort: "chronological"
 
-    cryptolive:
-      enabled: true
-      position:
-        top: 0
-        left: 0
-        height: 2
-        width: 1
-      updateInterval: 600
-      currencies:
-        BTC:
-          displayName: Bitcoin
-          to:
-            - USD
-            # - EUR
-            - GBP
-        ETH:
-          displayName: Ethereum
-          to:
-            - USD
-            # - EUR
-            - GBP
-        LTC:
-          displayName: Litecoin
-          to:
-            - USD
-            # - EUR
-            - GBP
-        XRP:
-          displayName: Ripple
-          to:
-            - USD
-            # - EUR
-            - GBP
-      colors:
-        from:
-          name: coral
-          displayName: grey
-        to:
-          name: white
-          price: green
-        top:
-          from:
-            name: grey
-            displayName: coral
-          to:
-            name: red
-            field: white
-            value: green
-
     resourceusage:
       cpuCombined: false
       enabled: true
       position:
-        top: 2
-        left: 0
-        height: 1
+        top: 0
+        left: 1
+        height: 2
         width: 1
-      refreshInterval: 1
+      refreshInterval: 10
       showCPU: true
       showMem: true
-      showSwp: true
+      showSwp: false
+
+    textfile:
+      enabled: true
+      filePath: "/Users/matteomarchelli/.config/wtf/fortune.txt"
+      focusable: false
+      format: false
+      position:
+        top: 2
+        left: 1
+        height: 3
+        width: 1
+      refreshInterval: 1800
+      title: "Fortune"
+      formatStyle: "dracula"
 
     lobste:
       title: lobste.rs
@@ -125,12 +107,12 @@ wtf:
       showSource: false
       feeds:
         - https://lobste.rs/newest.rss
-      feedLimit: 30
+      feedLimit: 26
       position:
         top: 0
         left: 2
-        height: 3
-        width: 2
+        height: 5
+        width: 1
       refreshInterval: 2h
       type: feedreader
 
@@ -140,21 +122,21 @@ wtf:
       numberOfStories: 25
       position:
         top: 0
-        left: 4
-        height: 3
-        width: 2
+        left: 3
+        height: 5
+        width: 1
       storyType: top
       refreshInterval: 900
 
     r-go:
       enabled: true
       focusChar: 3
-      numberOfPosts: 16
+      numberOfPosts: 15
       position:
-        top: 3
+        top: 5
         left: 2
         height: 2
-        width: 2
+        width: 1
       refreshInterval: 6h
       sortOrder: new
       subreddit: "golang"
@@ -164,12 +146,12 @@ wtf:
     r-k8s:
       enabled: true
       focusChar: 4
-      numberOfPosts: 16
+      numberOfPosts: 15
       position:
-        top: 3
-        left: 4
+        top: 5
+        left: 3
         height: 2
-        width: 2
+        width: 1
       refreshInterval: 15m
       sortOrder: new
       subreddit: "kubernetes"
@@ -179,12 +161,12 @@ wtf:
     r-terraform:
       enabled: true
       focusChar: 5
-      numberOfPosts: 8
+      numberOfPosts: 10
       position:
-        top: 5
+        top: 7
         left: 2
-        height: 1
-        width: 2
+        height: 2
+        width: 1
       refreshInterval: 6h
       sortOrder: new
       subreddit: "terraform"
@@ -194,43 +176,94 @@ wtf:
     r-sre:
       enabled: true
       focusChar: 6
-      numberOfPosts: 8
+      numberOfPosts: 10
       position:
-        top: 5
-        left: 4
-        height: 1
-        width: 2
+        top: 7
+        left: 3
+        height: 2
+        width: 1
       refreshInterval: 6h
       sortOrder: new
       subreddit: "sre"
       topTimePeriod: week
       type: subreddit
 
-    digitalclock:
-      color: orange
+    r-neovim:
       enabled: true
-      font: bigfont
-      hourFormat: 24
-      position:
-        top: 0
-        left: 1
-        height: 1
-        width: 1
-      refreshInterval: 1
-      title: "big clock"
-      type: "digitalclock"
-      withDatePrefix: false
-      
-    textfile:
-      enabled: true
-      filePath: "/Users/matteomarchelli/.config/wtf/fortune.txt"
-      focusable: false
-      format: false
+      focusChar: 7
+      numberOfPosts: 10
       position:
         top: 5
         left: 0
-        height: 1
+        height: 2
         width: 2
-      refreshInterval: 1800
-      title: "Fortune"
-      formatStyle: "dracula"
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "neovim"
+      topTimePeriod: week
+      type: subreddit
+
+    r-linux:
+      enabled: true
+      focusChar: 8
+      numberOfPosts: 10
+      position:
+        top: 7
+        left: 0
+        height: 2
+        width: 2
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "linux"
+      topTimePeriod: week
+
+      # cryptolive:
+      #   enabled: true
+      #   position:
+      #     top: 2
+      #     left: 1
+      #     height: 2
+      #     width: 1
+      #   updateInterval: 600
+      #   currencies:
+      #     BTC:
+      #       displayName: Bitcoin
+      #       to:
+      #         - USD
+      #         # - EUR
+      #         - GBP
+      #     ETH:
+      #       displayName: Ethereum
+      #       to:
+      #         - USD
+      #         # - EUR
+      #         - GBP
+      #     LTC:
+      #       displayName: Litecoin
+      #       to:
+      #         - USD
+      #         # - EUR
+      #         - GBP
+      #     XRP:
+      #       displayName: Ripple
+      #       to:
+      #         - USD
+      #         # - EUR
+      #         - GBP
+      #   colors:
+      #     from:
+      #       name: coral
+      #       displayName: grey
+      #     to:
+      #       name: white
+      #       price: green
+      #     top:
+      #       from:
+      #         name: grey
+      #         displayName: coral
+      #       to:
+      #         name: red
+      #         field: white
+      #         value: green
+
+      type: subreddit
