@@ -1,7 +1,7 @@
 [user]
 	name = Matteo Marchelli
 	email = matteo.marchelli@gmail.com
-	signingkey = /Users/matteomarchelli/.ssh/keys/github.Apr.2021
+	signingkey = ~/.ssh/keys/github.Apr.2021
 
 [core]
 #  pager = less -x1,5

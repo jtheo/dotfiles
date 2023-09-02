@@ -89,7 +89,8 @@ wtf:
 
     textfile:
       enabled: true
-      filePath: "/Users/matteomarchelli/.config/wtf/fortune.txt"
+      focusChar: 0
+      filePath: "~/.config/wtf/fortune.txt"
       focusable: false
       format: false
       position:
@@ -104,6 +105,7 @@ wtf:
     lobste:
       title: lobste.rs
       enabled: true
+      focusChar: 1
       showSource: false
       feeds:
         - https://lobste.rs/newest.rss
