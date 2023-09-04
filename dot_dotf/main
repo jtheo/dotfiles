@@ -1,36 +1,37 @@
 #!/bin/bash
 
-function loadIfExists(){
-    local include=${1}    
-    if [[ -f "${include}" ]]; then
-        # shellcheck source=/dev/null
-        source "${include}"
-    fi
+function loadIfExists() {
+	local include=${1}
+	if [[ -f "${include}" ]]; then
+		# shellcheck source=/dev/null
+		source "${include}"
+	fi
 }
 
-includes=(  
-    variables
-    functions
-    git_functions
-    git-completion.bash
-    aliases
-    aws_functions
-    omega
+includes=(
+	variables
+	functions
+	git_functions
+	git-completion.bash
+	aliases
+	aws_functions
+	omega
+	${runningOS}
 )
 
 BASE="${HOME}/.dotf"
 
 if [[ $(uname -s) == "Darwin" ]]; then
-    ulimit -n 25000
+	ulimit -n 25000
 fi
 
 for include in "${includes[@]}"; do
-    # echo "Loading... ${include}"
-    loadIfExists "${BASE}/${include}"
+	# echo "Loading... ${include}"
+	loadIfExists "${BASE}/${include}"
 done
 
 case ${SHELL##*/} in
-    zsh)  loadIfExists "${BASE}/zshrc" ;;
-    bash) loadIfExists "${BASE}/prompt" ;;
-    *)    echo "What Shell is this one? <${SHELL}>" ;;
+zsh) loadIfExists "${BASE}/zshrc" ;;
+bash) loadIfExists "${BASE}/prompt" ;;
+*) echo "What Shell is this one? <${SHELL}>" ;;
 esac

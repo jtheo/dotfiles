@@ -133,7 +133,7 @@ wtf:
     r-go:
       enabled: true
       focusChar: 3
-      numberOfPosts: 15
+      numberOfPosts: 10
       position:
         top: 5
         left: 2
@@ -148,7 +148,7 @@ wtf:
     r-k8s:
       enabled: true
       focusChar: 4
-      numberOfPosts: 15
+      numberOfPosts: 10
       position:
         top: 5
         left: 3
