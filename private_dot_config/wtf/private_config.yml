@@ -15,12 +15,11 @@ wtf:
       display: true
   term: "xterm-256color"
   grid:
-    columns: [ 35, 35, 100, 100 ]
+    columns: [ 35, 35, 105, 105 ]
     rows: [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 ]
   refreshInterval: 5
 
   mods:
-
     digitalclock:
       withDatePrefix: False
       dateFormat: "Monday 02 Jan 2006"
@@ -218,54 +217,4 @@ wtf:
       sortOrder: new
       subreddit: "linux"
       topTimePeriod: week
-
-      # cryptolive:
-      #   enabled: true
-      #   position:
-      #     top: 2
-      #     left: 1
-      #     height: 2
-      #     width: 1
-      #   updateInterval: 600
-      #   currencies:
-      #     BTC:
-      #       displayName: Bitcoin
-      #       to:
-      #         - USD
-      #         # - EUR
-      #         - GBP
-      #     ETH:
-      #       displayName: Ethereum
-      #       to:
-      #         - USD
-      #         # - EUR
-      #         - GBP
-      #     LTC:
-      #       displayName: Litecoin
-      #       to:
-      #         - USD
-      #         # - EUR
-      #         - GBP
-      #     XRP:
-      #       displayName: Ripple
-      #       to:
-      #         - USD
-      #         # - EUR
-      #         - GBP
-      #   colors:
-      #     from:
-      #       name: coral
-      #       displayName: grey
-      #     to:
-      #       name: white
-      #       price: green
-      #     top:
-      #       from:
-      #         name: grey
-      #         displayName: coral
-      #       to:
-      #         name: red
-      #         field: white
-      #         value: green
-
       type: subreddit

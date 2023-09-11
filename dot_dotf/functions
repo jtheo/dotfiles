@@ -565,6 +565,15 @@ function ced() {
 	chezmoi edit "${*}" --apply --verbose
 }
 
+function w2g() {
+	w="${*}"
+	if [[ ! -e "${w}" ]]; then
+		err "I mean, an existing file would be much more appreciated: ${w}"
+		return 1
+	fi
+	g=${w%.webp}.gif
+	convert "${w}" "${g}"
+}
 # ========================================================
 #
 #
