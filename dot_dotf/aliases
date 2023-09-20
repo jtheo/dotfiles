@@ -13,10 +13,6 @@ alias nowdate='date +"%d-%m-%Y"'
 alias vi=nvim
 alias vim=nvim
 
-alias ls='ls -G'
-alias ll='ls -l'
-alias la='ls -la'
-
 # https://zeldor.biz/2014/07/mtr-for-mac-os-x/
 # added also /usr/local/sbin to the PATH variable
 alias mtr='sudo /usr/local/sbin/mtr'

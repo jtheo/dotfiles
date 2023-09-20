@@ -6,3 +6,7 @@ alias r4mount='sshfs -o follow_symlinks  -o ro r4:/media/bck ${HOME}/Videos/r4/ 
 
 
 PATH=${PATH}:/usr/local/go/bin
+
+
+alias ls='ls --color'
+alias ll='ls -l'

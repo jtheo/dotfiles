@@ -17,6 +17,14 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply jtheo
 - [age](https://github.com/FiloSottile/age)
 
 
+### For Mac
+Install BREW
+```
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+**Note** There's no need to install xcode cli anymore, Brew can do it automatically (see [here](https://www.freecodecamp.org/news/install-xcode-command-line-tools/))
+
 
 
 ## Refs:

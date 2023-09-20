@@ -1,6 +1,6 @@
 #!/bin/env bash
 
-export SHELL=/usr/local/bin/bash
+export SHELL=/opt/homebrew/bin/bash
 
 # https://www.addictivetips.com/mac-os/hide-default-interactive-shell-is-now-zsh-in-terminal-on-macos/
 # Unfucking belivable
