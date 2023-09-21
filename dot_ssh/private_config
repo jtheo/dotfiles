@@ -21,6 +21,7 @@ Host *
   CanonicalizeHostName yes
   CanonicalizeFallbackLocal yes
   CanonicalizeMaxDots 1
+  RequestTTY force
 
   # https://www.ssh-audit.com/hardening_guides.html
   # https://github.com/jtesta/ssh-audit

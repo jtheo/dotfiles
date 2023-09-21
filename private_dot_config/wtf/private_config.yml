@@ -15,8 +15,8 @@ wtf:
       display: true
   term: "xterm-256color"
   grid:
-    columns: [ 35, 35, 105, 105 ]
-    rows: [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 ]
+    columns: [ 40, 40, 100, 100 ]
+    rows: [ 6, 6, 8, 8, 6, 6, 6, 6, 6, 6, 6, 6, 6 ]
   refreshInterval: 5
 
   mods:
