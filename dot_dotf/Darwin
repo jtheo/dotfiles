@@ -11,6 +11,9 @@ export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 
 alias gdu="${HOME}/go/bin/gdu"
 alias unrar=7z
+alias ls='ls -G'
+alias ll='ls -l'
+alias la='ls -la'
 
 # Pycharm is missing some pieces...
 if echo "${PATH}" | grep /usr/loca/bin; then

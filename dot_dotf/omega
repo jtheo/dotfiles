@@ -24,3 +24,5 @@ fi
 if [[ $(uname -s) == "Darwin" ]]; then
     ulimit -n 25000
 fi
+
+source ${HOME}/.dotf/${runningOS}
