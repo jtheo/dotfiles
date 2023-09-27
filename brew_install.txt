@@ -7,6 +7,8 @@ aws-iam-authenticator
 awscli
 bash
 bash-completion
+bat
+bats-core
 bdw-gc
 bearer
 bitwarden-cli
@@ -72,11 +74,13 @@ ghostscript
 giflib
 gifsicle
 git
+git-delta
 gitleaks
 glib
 glow
 gmp
 gnu-getopt
+gnu-sed
 gnupg
 gnutls
 go
@@ -124,6 +128,7 @@ kubectx
 kubernetes-cli
 lame
 lazygit
+ldns
 leptonica
 libaec
 libarchive
@@ -132,11 +137,14 @@ libassuan
 libavif
 libb2
 libbluray
+libcbor
 libde265
 libebml
 libevent
 libexif
+libfido2
 libgcrypt
+libgit2@1.5
 libgpg-error
 libgsf
 libheif
@@ -205,6 +213,7 @@ lux
 lz4
 lzo
 m4
+make
 mbedtls
 md4c
 mdbook
@@ -223,6 +232,7 @@ mpfr
 mpg123
 msgpack
 mtr
+musl-cross
 ncurses
 neofetch
 neovim
@@ -242,6 +252,7 @@ openexr
 openjdk
 openjpeg
 openslide
+openssh
 openssl@1.1
 openssl@3
 opus
@@ -253,6 +264,7 @@ pandoc
 pango
 pcre
 pcre2
+peco
 pinentry
 pixman
 pkg-config
@@ -263,6 +275,8 @@ pup
 pv
 pwgen
 pycparser
+python-certifi
+python-mutagen
 python-tabulate
 python-typing-extensions
 python@3.11
@@ -375,6 +389,7 @@ sublime-text
 telegram
 thonny-xxl
 tor-browser
+utm
 visual-studio-code
 vlc
 wezterm
