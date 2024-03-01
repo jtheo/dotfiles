@@ -15,18 +15,21 @@ wtf:
       display: true
   term: "xterm-256color"
   grid:
-    columns: [ 45, 45, 90, 90 ]
-    rows: [ 6, 6, 8, 8, 6, 6, 6, 6, 6, 6, 6, 6, 6 ]
+    columns: [40, 70, 70, 70]
+    rows: [5]
   refreshInterval: 5
+  openUrlUtil:
+    - /Applications/Firefox.app/Contents/MacOS/firefox
+    - --new-tab
 
   mods:
     digitalclock:
       withDatePrefix: False
       dateFormat: "Monday 02 Jan 2006"
-      color: yellow
+      color: green
       enabled: true
-      font: digitalfont
-      #font: bigfont
+      # font: digitalfont
+      font: bigfont
       hourFormat: 24
       position:
         top: 0
@@ -34,7 +37,7 @@ wtf:
         height: 2
         width: 1
       refreshInterval: 1
-      title: "big clock"
+      title: "clock"
       type: "digitalclock"
 
     clocks:
@@ -63,11 +66,12 @@ wtf:
         Sidney: "Australia/Brisbane"
         Singapore: "Asia/Singapore"
         Tehran: "Asia/Tehran"
+        Tokyo: "Asia/Tokyo"
         Vancouver: "America/Vancouver"
       position:
         top: 2
         left: 0
-        height: 3
+        height: 4
         width: 1
       refreshInterval: 15
       # sort: "alphabetical"
@@ -77,29 +81,29 @@ wtf:
       cpuCombined: false
       enabled: true
       position:
-        top: 0
-        left: 1
-        height: 2
+        top: 6
+        left: 0
+        height: 3
         width: 1
       refreshInterval: 10
       showCPU: true
       showMem: true
-      showSwp: false
+      showSwp: true
 
-    textfile:
-      enabled: true
-      focusChar: 0
-      filePath: "~/.config/wtf/fortune.txt"
-      focusable: false
-      format: false
-      position:
-        top: 2
-        left: 1
-        height: 3
-        width: 1
-      refreshInterval: 1800
-      title: "Fortune"
-      formatStyle: "dracula"
+    # textfile:
+    #   enabled: true
+    #   focusChar: 0
+    #   filePath: "~/.config/wtf/fortune.txt"
+    #   focusable: false
+    #   format: false
+    #   position:
+    #     top: 8
+    #     left: 2
+    #     height: 2
+    #     width: 1
+    #   refreshInterval: 1800
+    #   title: "Fortune"
+    #   formatStyle: "dracula"
 
     lobste:
       title: lobste.rs
@@ -108,10 +112,10 @@ wtf:
       showSource: false
       feeds:
         - https://lobste.rs/newest.rss
-      feedLimit: 26
+      feedLimit: 25
       position:
         top: 0
-        left: 2
+        left: 1
         height: 5
         width: 1
       refreshInterval: 2h
@@ -122,26 +126,26 @@ wtf:
       focusChar: 2
       numberOfStories: 25
       position:
-        top: 0
-        left: 3
+        top: 5
+        left: 1
         height: 5
         width: 1
       storyType: top
-      refreshInterval: 900
+      refreshInterval: 2h
 
     r-go:
       enabled: true
       focusChar: 3
       numberOfPosts: 10
       position:
-        top: 5
+        top: 0
         left: 2
         height: 2
         width: 1
       refreshInterval: 6h
       sortOrder: new
       subreddit: "golang"
-      topTimePeriod: week
+      topTimePeriod: day
       type: subreddit
 
     r-k8s:
@@ -149,8 +153,8 @@ wtf:
       focusChar: 4
       numberOfPosts: 10
       position:
-        top: 5
-        left: 3
+        top: 2
+        left: 2
         height: 2
         width: 1
       refreshInterval: 15m
@@ -159,12 +163,27 @@ wtf:
       topTimePeriod: week
       type: subreddit
 
-    r-terraform:
+    r-sre:
       enabled: true
       focusChar: 5
       numberOfPosts: 10
       position:
-        top: 7
+        top: 4
+        left: 2
+        height: 2
+        width: 1
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "sre"
+      topTimePeriod: week
+      type: subreddit
+
+    r-terraform:
+      enabled: true
+      focusChar: 6
+      numberOfPosts: 10
+      position:
+        top: 6
         left: 2
         height: 2
         width: 1
@@ -174,28 +193,13 @@ wtf:
       topTimePeriod: week
       type: subreddit
 
-    r-sre:
-      enabled: true
-      focusChar: 6
-      numberOfPosts: 10
-      position:
-        top: 7
-        left: 3
-        height: 2
-        width: 1
-      refreshInterval: 6h
-      sortOrder: new
-      subreddit: "sre"
-      topTimePeriod: week
-      type: subreddit
-
     r-neovim:
       enabled: true
       focusChar: 7
       numberOfPosts: 10
       position:
-        top: 5
-        left: 0
+        top: 0
+        left: 3
         height: 2
         width: 2
       refreshInterval: 6h
@@ -209,12 +213,72 @@ wtf:
       focusChar: 8
       numberOfPosts: 10
       position:
-        top: 7
-        left: 0
+        top: 2
+        left: 3
         height: 2
         width: 2
       refreshInterval: 6h
       sortOrder: new
       subreddit: "linux"
+      topTimePeriod: week
+      type: subreddit
+
+    r-tmux:
+      enabled: true
+      focusChar: 9
+      numberOfPosts: 10
+      position:
+        top: 4
+        left: 3
+        height: 2
+        width: 2
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "tmux"
+      topTimePeriod: week
+      type: subreddit
+
+    r-aws:
+      enabled: true
+      focusChar: 0
+      numberOfPosts: 10
+      position:
+        top: 6
+        left: 3
+        height: 2
+        width: 2
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "aws"
+      topTimePeriod: week
+      type: subreddit
+
+    r-wezterm:
+      enabled: true
+      focusChar: 0
+      numberOfPosts: 10
+      position:
+        top: 8
+        left: 3
+        height: 2
+        width: 2
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "wezterm"
+      topTimePeriod: week
+      type: subreddit
+
+    r-rust:
+      enabled: true
+      focusChar: a
+      numberOfPosts: 10
+      position:
+        top: 8
+        left: 2
+        height: 2
+        width: 1
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "rust"
       topTimePeriod: week
       type: subreddit

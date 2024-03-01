@@ -1,6 +1,1 @@
-
-[[ $(uname -s) == "Darwin" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
-
-if [[ -e "${HOME}/.dotf/main" ]]; then
-    source "${HOME}/.dotf/main"
-fi
+[[ -e "${HOME}/.dotf/main" ]] && source "${HOME}/.dotf/main"

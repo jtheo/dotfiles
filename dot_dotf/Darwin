@@ -9,27 +9,32 @@ export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 
 [[ -f /usr/local/etc/profile.d/bash_completion.sh ]] && source /usr/local/etc/profile.d/bash_completion.sh
 
+. "$(brew --prefix asdf)/libexec/asdf.sh"
+
 alias gdu="${HOME}/go/bin/gdu"
 alias unrar=7z
 alias ls='ls -G'
 alias ll='ls -l'
 alias la='ls -la'
 
-# Pycharm is missing some pieces...
-if echo "${PATH}" | grep /usr/loca/bin; then
-	PATH=${PATH}:/usr/local/bin
-fi
+# x=shows/terraform/dev
+# echo ${x}
+# shows/terraform/dev
+# echo ${x%%/*}
+# shows
+# echo ${x#*/}
 
 if [[ -e /opt/homebrew/bin/ssh ]]; then
-	alias ssh=/opt/homebrew/bin/ssh
-	alias ssh-add=/opt/homebrew/bin/ssh-add
-	alias ssh-agent=/opt/homebrew/bin/ssh-agent
-	alias ssh-copy-id=/opt/homebrew/bin/ssh-copy-id
-	alias ssh-keygen=/opt/homebrew/bin/ssh-keygen
-	alias ssh-keyscan=/opt/homebrew/bin/ssh-keyscan
+  alias ssh=/opt/homebrew/bin/ssh
+  alias ssh-add=/opt/homebrew/bin/ssh-add
+  alias ssh-agent=/opt/homebrew/bin/ssh-agent
+  alias ssh-copy-id=/opt/homebrew/bin/ssh-copy-id
+  alias ssh-keygen=/opt/homebrew/bin/ssh-keygen
+  alias ssh-keyscan=/opt/homebrew/bin/ssh-keyscan
 else
-	# shellcheck disable=SC2263
-	cat <<EoM
+  # shellcheck disable=SC2263
+  cat <<EoM
+    Hey jtheo
     You're using default ssh that it's probably missing the Yubikey suport"
     To solve this problem, do:
       brew install openssh
@@ -38,8 +43,9 @@ else
 EoM
 fi
 # reset
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
 echo
 # shellcheck disable=SC2046
-cowsay $(fortune)
-echo
+# cowsay $(fortune)
 echo

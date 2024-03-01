@@ -1,19 +1,134 @@
-#!/bin/bash
+# The following lines were added by compinstall
+
+zstyle ':completion:*' special-dirs true
+zstyle :compinstall filename '/Users/mattmar1/.zshrc'
+
 autoload -Uz compinit && compinit
+# End of lines added by compinstall
+#
+autoload -U +X bashcompinit && bashcompinit
+autoload -U select-word-style && select-word-style bash
+autoload -U colors && colors
 
-autoload -U select-word-style
-select-word-style bash
+autoload -Uz run-help
+unalias -m run-help
+alias help=run-help
 
-autoload -Uz vcs_info
-function precmd_vcs_info() { 
-    vcs_info
+
+# # Load version control information
+# autoload -Uz vcs_info
+# function precmd_vcs_info() {
+#     vcs_info
+# }
+# zstyle ':vcs_info:*' enable git
+# zstyle ':vcs_info:git:*' formats " [%b]"
+#
+# precmd_functions+=( precmd_vcs_info )
+setopt PROMPT_SUBST
+
+setopt histignoredups
+
+eval "$(rbenv init -)"
+
+. "$(brew --prefix asdf)/libexec/asdf.sh"
+
+bindkey -e
+
+# ------------------------------- Alias
+
+alias ls='ls -G'
+alias ll='ls -l'
+alias brewup='brew update; brew upgrade'
+alias deMacMyAss="xattr -c"
+alias vi=nvim
+alias zed='vi ~/.zshrc && source ~/.zshrc'
+alias grep='grep --color'
+
+
+# ------------------------------- Alias-CP-Tools
+# Bundler
+alias be="bundle exec"
+alias bi="bundle install"
+alias bu="bundle update"
+alias ber="bundle exec rake"
+alias bert="bundle exec rake test"
+alias berti="bundle exec rake terraform:install"
+alias berpi="bundle exec rake puppet:install"
+alias berkey="bundle exec rake"
+alias bed="bundle exec dome"
+alias bek="bundle exec kitchen"
+
+#ssm
+alias ssm="cp-ssm ssh --instance-id"
+alias ssml="cp-ssm list"
+
+# Dome
+alias domep="bed --plan"
+alias domea="bed --apply"
+alias domea-a="bed -a --apply"
+alias dometip="berti && bed --plan"
+
+# aws-vault
+# Usage: ave shows-prd-pe
+alias ave="aws-vault exec $1"
+alias avl="aws-vault login $1"
+
+
+# ------------------------------- Function
+source ~/bin/git_functions
+
+function mkcd(){ [[ -n ${1} ]] || (echo "I need a dir"; return 1); nd=${1}; mkdir -p "${1}" && cd "${1}"; }
+function awsID(){ [[ -n ${1} ]] || (echo "No name? OK..."; return 1); jq -r --arg name "${1}" '.[] | select(.name | match($name)) | .id' ~/repos/itv/cp-too
+ls/bin/accounts.json; }
+function ip(){ if [[ -z ${1} ]] || [[ ${1} != "pub" ]]; then ipconfig getifaddr en0; else curl -s https://ip.hako.us; fi; }
+#function parse_git_branch() { git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ [\1]/' }
+function parse_git_branch() {br=$(git rev-parse --abbrev-ref HEAD 2>/dev/null); [[ -n ${br} ]] && echo " [${br}]"; }
+function coffee(){ waketime=${1:=480};  clear; echo; figlet -w 200 "Wake for ${waketime} minutes"; caffeinate -t $((60 * waketime)) -d -s; }
+
+function gcitv(){ 
+  if [[ -z ${1} ]]; then 
+    echo "I need a repo"
+    return 1
+  fi
+  repo=${1%/}
+  dir=${repo##*/}
+  cd "${HOME}/repos/itv"
+  if [[ -d ${dir} ]]; then 
+    echo "I can see ${dir}, so ${repo} looks like already cloned... moving there"; 
+  else 
+    if ! git clone "${repo}"; then
+      echo "Trouble in paradise? git clone failed"
+      return 1
+    fi 
+  fi
+
+  cd "${dir}"
 }
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git:*' formats " [%b]"
 
-precmd_functions+=( precmd_vcs_info )
-setopt prompt_subst
+function cdr() {
+	root=false
+	opwd=${PWD}
+	while ! ${root}; do
+		if [[ ${PWD} == "/" ]]; then
+			echo "Can't find .git, sorry"
+			cd "${opwd}" || err "Can't cd to ${opwd}"
+			return
+		fi
+		if [[ -d .git ]]; then
+			root=true
+			OLDPWD=${opwd}
+		else
+			cd ..
+		fi
+	done
+}
 
+# rain, background sounds: https://apple.stackexchange.com/a/461987
+function rainOn(){ defaults write com.apple.ComfortSounds comfortSoundsEnabled -bool YES; defaults write com.apple.ComfortSounds lastEnablementTimestamp $(date +%s); launchctl kill SIGHUP gui/$(id -u)/com.apple.accessibility.heard; }
+function rainOff(){ defaults write com.apple.ComfortSounds comfortSoundsEnabled -bool NO; launchctl kill SIGHUP gui/$(id -u)/com.apple.accessibility.heard; }
+function rain(){ if [[ $(defaults read com.apple.ComfortSounds comfortSoundsEnabled) -eq 0 ]]; then rainOn; else rainOff; fi;  }
 
 export PROMPT="%(?.√.!) %F{green}jt%F{white}@%F{blue}mac %F{red}%1~%F{yello}\$vcs_info_msg_0_%F{white} $: "
 
@@ -26,8 +141,13 @@ fi
 # alias ll='ls -l'
 alias gdu="${HOME}/go/bin/gdu"
 
-if [[ ! -e ${SSH_AUTH_SOCH} ]] || [[ -z ${SSH_AGENT_PID} ]]; then
-    eval "$(ssh-agent -s)"
-fi
+export KUBECTL_VERSION="1.24"
+export AWS_VAULT_KEYCHAIN_NAME=login
+export DOCKER_HOST=unix:///Users/mattmar1/.colima/default/docker.sock
+export KUBECONFIG=./kube.config
+#export PROMPT="%n@itv %~ ${vcs_info_msg_0_} $: "
+export PROMPT='%F{blue}%n%F{reset_color}@%F{red}itv%F{reset_color} %F{green}%~%F{reset_color}%F{yellow}$(parse_git_branch)%F{reset_color} $: '
+export PATH=${PATH}:/usr/local/bin:${HOME}/bin:${HOME}/go/bin
+export HISTSIZE=10000
 
 bindkey -e

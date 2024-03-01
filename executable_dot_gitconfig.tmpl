@@ -1,19 +1,21 @@
 [user]
 	name = Matteo Marchelli
 	email = matteo.marchelli@gmail.com
-	signingkey = ~/.ssh/keys/github.Apr.2021
+
+[includeIf "gitdir:~/repos/itv"]
+    path = ~/repos/itv/gitconfig
 
 [core]
-#  pager = less -x1,5
-  pager = delta
+  pager = less -x1,5
+#  pager = delta
   fileMode = true
   editor = vim
 
-[interactive]
-  diffFilter = delta --color-only
-
 [url "git@github.com:"]
 	insteadOf = "https://github.com/"
+
+[interactive]
+  diffFilter = delta --color-only
 
 [delta]
   navigate = true    # use n and N to move between diff sections
@@ -40,6 +42,15 @@
 [color]
 	ui = auto
 
+[tag]
+	sort = version:refname
+
+[branch]
+	sort = -committerdate
+
+[rerere]
+	enabled = true
+
 [pack]
 	threads = 0
 
@@ -47,7 +58,7 @@
   br         = branch
   cdr        = ! gitTools mainBranch
   ch         = ! git co $(git last | fzf --no-sort | awk '{print $1}')
-  cl         = ! gitTools mainBranch && git pcb && gitRemoveOldBranch -f
+  cl         = ! gitCl
   ci         = commit
   co         = checkout
   cs         = commit -S -s
@@ -74,12 +85,12 @@
   standfry  = log --author=Marchelli --since='9am 3 days ago' --oneline --all
   sw        = show -1 --format=%B--stat --word-diff=color
 
-{{ if eq .chezmoi.os "darwin" }}
+{{- if eq .chezmoi.os "darwin" }}
 # gpg is present since git 2.34
 [gpg]
 	program = /usr/local/bin/gpg
 	format = ssh
-{{ end }}
+{{- end }}
 
 [commit]
 	gpgsign = true

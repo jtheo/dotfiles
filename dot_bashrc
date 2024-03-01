@@ -1,1 +1,2 @@
-[[ -e "${HOME}/.profile" ]] && source "${HOME}/.profile"
+[[ -e "${HOME}/.dotf/main" ]] && source "${HOME}/.dotf/main"
+#[[ -e "${HOME}/.profile" ]] && source "${HOME}/.profile"

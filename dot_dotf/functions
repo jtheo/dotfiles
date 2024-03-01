@@ -1,730 +1,599 @@
 #!/usr/bin/env bash
 
 function repeat() {
-	times=${1:-100}
-	char=${2:-=}
-	seq=$(eval echo "{1..$times}")
-	printf -- '%s%.0s' "${char}" "${seq}"
-	echo
+  times=${1:-100}
+  char=${2:-=}
+  seq=$(eval echo "{1..$times}")
+  printf -- '%s%.0s' "${char}" "${seq}"
+  echo
 }
 
 function msg() {
-	echo "$(date): ${*}"
+  echo "$(date): ${*}"
 }
 
 function err() {
-	msg "${*}"
-	exit "${2:-1}"
+  msg "${*}"
+  exit "${2:-1}"
 }
 
 # https://stackoverflow.com/a/17841619
 function join_by {
-	local IFS="$1"
-	shift
-	echo "$*"
+  local IFS="$1"
+  shift
+  echo "$*"
 }
 
 function msgLong() {
-	local message="${*}"
-	add=$((100 - 3 - ${#message}))
-	postfix=$(printf "%*s" ${add} ' ' | tr ' ' '=')
-	msg "${message} <=${postfix}"
+  local message="${*}"
+  add=$((100 - 3 - ${#message}))
+  postfix=$(printf "%*s" ${add} ' ' | tr ' ' '=')
+  msg "${message} <=${postfix}"
 }
 
 function ecr_login() {
-	if [[ -z ${1} ]]; then
-		err "I need an AWS Account Id... sorry"
-	else
-		ACCOUNT=${1}
-	fi
+  if [[ -z ${1} ]]; then
+    err "I need an AWS Account Id... sorry"
+  else
+    ACCOUNT=${1}
+  fi
 
-	eval "$(aws ecr get-login --region us-west-2 --registry-id "${ACCOUNT}" --no-include-email)"
+  eval "$(aws ecr get-login --region us-west-2 --registry-id "${ACCOUNT}" --no-include-email)"
 }
 
 function kill_proxy() {
-	if [[ -z $1 ]]; then
-		echo I need a port...
-	else
-		read -r -d '\n' -a Pid_SSH <<<"$(lsof -i tcp:"${1}" | awk '$1 == "ssh" {print $2}' | sort -u)"
-		if [[ ${#Pid_SSH[@]} -gt 0 ]]; then
-			for pid in "${Pid_SSH[@]}"; do
-				echo "Found some stuff ${pid} for port $1"
-				kill "${pid}"
-			done
-		else
-			echo Nothing for port "$1"
-		fi
-	fi
+  if [[ -z $1 ]]; then
+    echo I need a port...
+  else
+    read -r -d '\n' -a Pid_SSH <<<"$(lsof -i tcp:"${1}" | awk '$1 == "ssh" {print $2}' | sort -u)"
+    if [[ ${#Pid_SSH[@]} -gt 0 ]]; then
+      for pid in "${Pid_SSH[@]}"; do
+        echo "Found some stuff ${pid} for port $1"
+        kill "${pid}"
+      done
+    else
+      echo Nothing for port "$1"
+    fi
+  fi
 }
 
 function more_random() {
-	len=${1:-4}
-	randnum=$(LC_CTYPE=C tr -dc '[:digit:]' </dev/urandom | LC_CTYPE=C fold -w "${len}" | head -1)
-	echo "${randnum##0}"
+  len=${1:-4}
+  randnum=$(LC_CTYPE=C tr -dc '[:digit:]' </dev/urandom | LC_CTYPE=C fold -w "${len}" | head -1)
+  echo "${randnum##0}"
 }
 
 function random_string() {
-	len=${1:-15}
-	randstr=$(LC_CTYPE=C tr -dc '[:alnum:]' </dev/urandom | LC_CTYPE=C fold -w "${len}" | head -1)
-	echo "${randstr#0}"
+  len=${1:-15}
+  randstr=$(LC_CTYPE=C tr -dc '[:alnum:]' </dev/urandom | LC_CTYPE=C fold -w "${len}" | head -1)
+  echo "${randstr#0}"
 }
 
 function quickPass() {
-	x='.,!_-+:$'
-	i=$((RANDOM % ${#x}))
-	echo "$(random_string)${x:i:1}$(random_string $(((RANDOM % 10) + 5)))$(more_random 5)"
+  x='.,!_-+:$'
+  i=$((RANDOM % ${#x}))
+  echo "$(random_string)${x:i:1}$(random_string $(((RANDOM % 10) + 5)))$(more_random 5)"
 }
 
 function mkcd() {
-	if [[ -z $1 ]]; then
-		echo "Yeees?"
-	else
-		mkdir -p "$1" && cd "$_" || return
-	fi
+  if [[ -z $1 ]]; then
+    echo "Yeees?"
+  else
+    mkdir -p "$1" && cd "$_" || return
+  fi
 }
 
 function check_k8s() {
-	while :; do
-		clear
-		echo "# ================================================ > $(date)"
-		for resource in pod svc rs deployments; do
-			echo "${resource}"
-			kubectl get "${resource}"
-			echo
-		done
-		sleep 2
-	done
+  while :; do
+    clear
+    echo "# ================================================ > $(date)"
+    for resource in pod svc rs deployments; do
+      echo "${resource}"
+      kubectl get "${resource}"
+      echo
+    done
+    sleep 2
+  done
 }
 
 function archPaySlip() {
-	local destDir
-	destDir="${HOME}/Documents/Personal/Payslip/$(date +%Y)"
-	local PaySlipPasswd
-	PaySlipPasswd=$(getSecret PaySlipPasswd)
+  local destDir
+  destDir="${HOME}/Documents/Personal/Payslip/$(date +%Y)"
+  local PaySlipPasswd
+  PaySlipPasswd=$(getSecret PaySlipPasswd)
 
-	if [[ -z $1 ]]; then
-		source="${HOME}/Downloads/PaySlip.pdf"
-		if [[ ! -e ${source} ]]; then
-			source=$(ls ~/Downloads/Pay*)
-		fi
-	else
-		source=$1
-	fi
-	if [[ ! -e ${source} ]]; then
-		echo "Can't find ${source} sorry"
-		return
-	fi
-	if ! which -s qpdf; then
-		echo "Sorry, I need qpdf for this task but it's not here, see ya"
-		return
-	fi
+  if [[ -z $1 ]]; then
+    source="${HOME}/Downloads/PaySlip.pdf"
+    if [[ ! -e ${source} ]]; then
+      source=$(ls ~/Downloads/Pay*)
+    fi
+  else
+    source=$1
+  fi
+  if [[ ! -e ${source} ]]; then
+    echo "Can't find ${source} sorry"
+    return
+  fi
+  if ! which -s qpdf; then
+    echo "Sorry, I need qpdf for this task but it's not here, see ya"
+    return
+  fi
 
-	if [[ ! -d ${destDir} ]]; then
-		mkdir -p "${destDir}"
-	fi
+  if [[ ! -d ${destDir} ]]; then
+    mkdir -p "${destDir}"
+  fi
 
-	destination="${destDir}/$(date +%m_%B).pdf"
+  destination="${destDir}/$(date +%m_%B).pdf"
 
-	if [[ -e ${destination} ]]; then
-		echo "The destination file (${destination}) exist! I cowardly refuse to proceed"
-		return
-	fi
+  if [[ -e ${destination} ]]; then
+    echo "The destination file (${destination}) exist! I cowardly refuse to proceed"
+    return
+  fi
 
-	# shellcheck disable=SC2154
-	if qpdf --password="${PaySlipPasswd}" --decrypt "${source}" "${destination}"; then
-		echo "All the work is done! Everything is OK! You can check your payslip now"
-		printf "\n\nopen %s\n\n" "${destination}"
-	else
-		echo "Everything is fine... not. Something went south"
-		return
-	fi
+  # shellcheck disable=SC2154
+  if qpdf --password="${PaySlipPasswd}" --decrypt "${source}" "${destination}"; then
+    echo "All the work is done! Everything is OK! You can check your payslip now"
+    printf "\n\nopen %s\n\n" "${destination}"
+  else
+    echo "Everything is fine... not. Something went south"
+    return
+  fi
 }
 
 function bashman() { man bash | less -p "^       $1 "; }
 
 function sendToTelegram() {
-	local TELEGRAM_TOKEN CHAT_ID
-	TELEGRAM_TOKEN=$(getSecret TELEGRAM_TOKEN)
-	CHAT_ID=$(getSecret CHAT_ID)
-	return=$(curl -H 'Content-Type: application/json' \
-		-d "{\"chat_id\": \"${CHAT_ID}\", \
+  local TELEGRAM_TOKEN CHAT_ID
+  TELEGRAM_TOKEN=$(getSecret TELEGRAM_TOKEN)
+  CHAT_ID=$(getSecret CHAT_ID)
+  return=$(curl -H 'Content-Type: application/json' \
+    -d "{\"chat_id\": \"${CHAT_ID}\", \
           \"text\": \"${*}\", \
           \"disable_notification\": true}" \
-		"https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" -s)
-	status=$(echo "${return}" | jq .ok)
-	if ! ${status}; then
-		msg "Something wrong with the message"
-		echo "${return}" | jq
-	fi
+    "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" -s)
+  status=$(echo "${return}" | jq .ok)
+  if ! ${status}; then
+    msg "Something wrong with the message"
+    echo "${return}" | jq
+  fi
 }
 
 function sendToOSA() {
-	osascript -e "display notification \"${2}\" with title \"${1}\" sound name \"Submarine\""
+  osascript -e "display notification \"${2}\" with title \"${1}\" sound name \"Submarine\""
 }
 
 function check_last() {
-	if [[ $# -lt 1 ]]; then
-		echo "I need at least a condition and if you want a sleep period (default 1 sec)"
-		echo "Example:"
-		echo "check_last 'curl www.google.co.uk -I | grep HTTP'"
-		return
-	else
-		condition=${1}
-	fi
-	if [[ ${#} -gt 1 ]]; then
-		SLEEP=${2}
-	else
-		SLEEP=1
-	fi
+  if [[ $# -lt 1 ]]; then
+    echo "I need at least a condition and if you want a sleep period (default 1 sec)"
+    echo "Example:"
+    echo "check_last 'curl www.google.co.uk -I | grep HTTP'"
+    return
+  else
+    condition=${1}
+  fi
+  if [[ ${#} -gt 1 ]]; then
+    SLEEP=${2}
+  else
+    SLEEP=1
+  fi
 
-	case ${3} in
-	b) command=sendToOSA ;;
-	t) command=sendToTelegram ;;
-	s) command=say ;;
-	esac
+  case ${3} in
+    b) command=sendToOSA ;;
+    t) command=sendToTelegram ;;
+    s) command=say ;;
+  esac
 
-	count=1
-	last="${RANDOM}-${RANDOM}"
-	local before now
-	now=$(date +%s)
-	before=${now}
-	while :; do
-		result=$(eval "${condition}")
-		now=$(date +%s)
-		if [[ ${last} != "${result}" ]]; then
-			printf "%28s: %4d %s\n" "$(date)" "$((now - before))" "${result}"
-			if [[ -n ${command} ]] && [[ ${count} -gt 1 ]]; then
-				eval "$(${command} "${result}" "Change at $(date +%H) and $(date +%M) hours\!")"
-			fi
-			last=${result}
-			before=${now}
-		fi
-		count=$((count + 1))
-		sleep "${SLEEP}"
-	done
+  count=1
+  last="${RANDOM}-${RANDOM}"
+  local before now
+  now=$(date +%s)
+  before=${now}
+  while :; do
+    result=$(eval "${condition}")
+    now=$(date +%s)
+    if [[ ${last} != "${result}" ]]; then
+      printf "%28s: %4d %s\n" "$(date)" "$((now - before))" "${result}"
+      if [[ -n ${command} ]] && [[ ${count} -gt 1 ]]; then
+        eval "$(${command} "${result}" "Change at $(date +%H) and $(date +%M) hours\!")"
+      fi
+      last=${result}
+      before=${now}
+    fi
+    count=$((count + 1))
+    sleep "${SLEEP}"
+  done
 }
 
 function ren() {
-	if [[ -z ${1} ]]; then
-		echo 'yesss?'
-		return 1
-	fi
+  if [[ -z ${1} ]]; then
+    echo 'yesss?'
+    return 1
+  fi
 
-	if [[ -z ${2} ]]; then
-		ext=back
-	else
-		ext=${2}
-	fi
+  if [[ -z ${2} ]]; then
+    ext=back
+  else
+    ext=${2}
+  fi
 
-	mv -v "$1"{,."${ext}"}
+  mv -v "$1"{,."${ext}"}
 }
 
 function search_in_history() {
-	history_file=~/Documents/Personal/history/all_history
-	if [[ -z $1 ]]; then
-		echo "Let's try it again, what are you looking for?"
-		return 1
-	else
-		search=$1
-	fi
+  history_file=~/Documents/Personal/history/all_history
+  if [[ -z $1 ]]; then
+    echo "Let's try it again, what are you looking for?"
+    return 1
+  else
+    search=$1
+  fi
 
-	if [[ ! -e ${history_file} ]]; then
-		echo "Something horribly wrong happened and you lost all your memories"
-		return 2
-	fi
+  if [[ ! -e ${history_file} ]]; then
+    echo "Something horribly wrong happened and you lost all your memories"
+    return 2
+  fi
 
-	grep "${search}" ${history_file}
+  grep "${search}" ${history_file}
 }
 
 function brewup() {
-	# read -r m d sh sm <<< $(date  "+%b %d %H %M")
-	Start_Time=$(date +%s)
-	msgLong "Start updating brew"
-	for action in update upgrade cleanup; do
-		msgLong "${action}"
-		# shellcheck disable=SC2086
-		brew ${action}
-	done
+  printf "\n\n\n"
+  # read -r m d sh sm <<< $(date  "+%b %d %H %M")
+  Start_Time=$(date +%s)
+  msgLong "Start updating brew"
+  for action in update upgrade cleanup; do
+    msgLong "${action}"
+    # shellcheck disable=SC2086
+    brew ${action}
+  done
 
-	# msgLong "Removing cache dir"
-	# sudo rm -rf "$(brew --cache)"
-	# read -r eh em <<< $(date "+%H %M")
-	# msgLong "Updated Packages (From ${m} ${d} ${sh}:${sm} ${m} ${d} ${eh}:)"
-	# brew ls --formula -lt | sed -n -E "/${m}[[:space:]]*${d}[[:space:]]*${eh}:/,/${m}[[:space:]]*${d}[[:space:]]*${sh}:${sm}/p"
-	msgLong "That's it! The job took $(($(date +%s) - Start_Time)) seconds"
+  # msgLong "Removing cache dir"
+  # sudo rm -rf "$(brew --cache)"
+  # read -r eh em <<< $(date "+%H %M")
+  # msgLong "Updated Packages (From ${m} ${d} ${sh}:${sm} ${m} ${d} ${eh}:)"
+  # brew ls --formula -lt | sed -n -E "/${m}[[:space:]]*${d}[[:space:]]*${eh}:/,/${m}[[:space:]]*${d}[[:space:]]*${sh}:${sm}/p"
+  msgLong "That's it! The job took $(($(date +%s) - Start_Time)) seconds"
 }
 
 function sl() {
-	lock_file=~/.lockrsync
-	case ${1} in
-	-l) touch ${lock_file} ;;
-	-u) [[ ! -e ${lock_file} ]] || rm ${lock_file} ;;
-	esac
-	printf -- "-bash: sl: command not found"
-	if [[ -e ${lock_file} ]]; then
-		echo .
-	else
-		echo ,
-	fi
+  lock_file=~/.lockrsync
+  case ${1} in
+    -l) touch ${lock_file} ;;
+    -u) [[ ! -e ${lock_file} ]] || rm ${lock_file} ;;
+  esac
+  printf -- "-bash: sl: command not found"
+  if [[ -e ${lock_file} ]]; then
+    echo .
+  else
+    echo ,
+  fi
 }
 
 function clean_up_docker() {
-	ids=$(docker ps -q)
+  ids=$(docker ps -q)
 
-	if [[ -n ${ids} ]]; then
-		docker stop "${ids}"
-	fi
+  if [[ -n ${ids} ]]; then
+    docker stop "${ids}"
+  fi
 
-	ids=$(docker ps -qa)
+  ids=$(docker ps -qa)
 
-	if [[ -n ${ids} ]]; then
-		docker rm "${ids}"
-	fi
+  if [[ -n ${ids} ]]; then
+    docker rm "${ids}"
+  fi
 
-	msg "T"
+  msg "T"
 }
 
 function clean_docker_none_images() {
-	# shellcheck disable=SC2046
-	docker rmi $(docker images -f dangling=true -q)
+  # shellcheck disable=SC2046
+  docker rmi $(docker images -f dangling=true -q)
 }
 
 function rensrt() {
-	list="$(echo *.srt)"
-	if [[ ${#list} -gt 5 ]]; then
-		for s in *.srt; do
-			mv -v "${s}" "$(echo "${s}" | sed -E 's/(.*)\.[^.]+\.English.*srt/\1.eng.srt/')"
-		done
-	else
-		echo "Nothing to do man"
-	fi
+  list="$(echo *.srt)"
+  if [[ ${#list} -gt 5 ]]; then
+    for s in *.srt; do
+      mv -v "${s}" "$(echo "${s}" | sed -E 's/(.*)\.[^.]+\.English.*srt/\1.eng.srt/')"
+    done
+  else
+    echo "Nothing to do man"
+  fi
 }
 
 function give_me_some_space() {
-	NEW_LINES=${1:-50}
-	printf "%*s" "${NEW_LINES}" ' ' | tr ' ' '\n'
+  NEW_LINES=${1:-50}
+  printf "%*s" "${NEW_LINES}" ' ' | tr ' ' '\n'
 }
 
 # https://prefetch.net/blog/2020/07/14/decoding-json-web-tokens-jwts-from-the-linux-command-line/
 # https://zwbetz.com/passing-input-to-a-bash-function-via-arguments-or-stdin/
 function jwtd() {
-	if [[ -z ${1} ]]; then
-		input=$(cat -)
-	else
-		input=${1}
-	fi
-	if [[ -x $(command -v jq) ]]; then
-		jq -R 'split(".") | .[0],.[1] | @base64d | fromjson' <<<"${input}"
-	else
-		echo "Missing JQ, can't decode"
-	fi
+  if [[ -z ${1} ]]; then
+    input=$(cat -)
+  else
+    input=${1}
+  fi
+  if [[ -x $(command -v jq) ]]; then
+    jq -R 'split(".") | .[0],.[1] | @base64d | fromjson' <<<"${input}"
+  else
+    echo "Missing JQ, can't decode"
+  fi
 }
 
 function jwt_exp() {
-	[[ -z ${1} ]] && {
-		echo "I need a token"
-		return 1
-	}
-	jwtd "${1}" | jq '.exp | todate'
+  [[ -z ${1} ]] && {
+    echo "I need a token"
+    return 1
+  }
+  jwtd "${1}" | jq '.exp | todate'
 }
 
 function prog() {
-	out="${1}"
-	in=${2:-/dev/stdin}
-	counter=1
-	limit=60
-	printf "%s " "$(date) "
-	while read -r line; do
-		echo "${line}" >>"${out}"
-		if [[ ${counter} -eq ${limit} ]]; then
-			printf "\n%s " "$(date) "
-			counter=1
-		else
-			printf "."
-			counter=$((counter + 1))
-		fi
-	done <"${in}"
-	echo
+  out="${1}"
+  in=${2:-/dev/stdin}
+  counter=1
+  limit=60
+  printf "%s " "$(date) "
+  while read -r line; do
+    echo "${line}" >>"${out}"
+    if [[ ${counter} -eq ${limit} ]]; then
+      printf "\n%s " "$(date) "
+      counter=1
+    else
+      printf "."
+      counter=$((counter + 1))
+    fi
+  done <"${in}"
+  echo
 }
 
 function scpsrt() {
-	shopt -s nullglob
-	files=(*.srt)
-	[[ ${#files[@]} -gt 0 ]] && scp ./*.srt le:~/HD && rm -- *.srt
-	nfo=(*.nfo)
-	[[ ${#nfo[@]} -gt 0 ]] && rm -- *.nfo
+  shopt -s nullglob
+  files=(*.srt)
+  [[ ${#files[@]} -gt 0 ]] && scp ./*.srt le:~/HD && rm -- *.srt
+  nfo=(*.nfo)
+  [[ ${#nfo[@]} -gt 0 ]] && rm -- *.nfo
 }
 
 function srtunzip() {
-	for z in *eng*.zip; do
-		unzip "${z}" && rm "${z}"
-	done
-	scpsrt
-	shopt -s nullglob
-	files=(*.nfo)
-	[[ ${#files[@]} -gt 0 ]] && rm -- *.nfo
+  for z in *eng*.zip; do
+    unzip "${z}" && rm "${z}"
+  done
+  scpsrt
+  shopt -s nullglob
+  files=(*.nfo)
+  [[ ${#files[@]} -gt 0 ]] && rm -- *.nfo
 }
 
 function crosswords() {
-	pat=[${1}]
-	len=${2}
-	if [[ -z ${1} ]] || [[ -z ${2} ]]; then
-		msg "I need a set of letters and the lenght"
-		return 1
-	fi
-	awk -v pattern="${pat}{${len}}" -v len="${len}" '$0 ~ pattern && length == len' /usr/share/dict/words
+  pat=[${1}]
+  len=${2}
+  if [[ -z ${1} ]] || [[ -z ${2} ]]; then
+    msg "I need a set of letters and the lenght"
+    return 1
+  fi
+  awk -v pattern="${pat}{${len}}" -v len="${len}" '$0 ~ pattern && length == len' /usr/share/dict/words
 }
 
 function sendAllTMUX() {
-	if [[ -z ${1} ]]; then
-		echo "Say WAT?"
-		echo "A command to send on all the tmux windows/panes?"
-	fi
-	CMD="${*}"
-	tmux list-panes -a | awk -F: '{print $1":"$2}' | xargs -IX tmux send-keys -t X "${CMD}" C-m
+  if [[ -z ${1} ]]; then
+    echo "Say WAT?"
+    echo "A command to send on all the tmux windows/panes?"
+  fi
+  CMD="${*}"
+  tmux list-panes -a | awk -F: '{print $1":"$2}' | xargs -IX tmux send-keys -t X "${CMD}" C-m
 }
 
 # https://github.com/remind101/assume-role
 function ap() {
-	case ${1} in
-	-s | -S)
-		if [[ -n ${AWS_PROFILE} ]]; then echo "Profile set is: ${AWS_PROFILE}"; else echo "No Profile set"; fi
-		return
-		;;
-	-l | -L)
-		echo "Profiles available"
-		grep '\[' ~/.aws/credentials | tr -d '[]'
-		echo
-		return
-		;;
-	esac
-	# shellcheck disable=SC2046
-	unset $(env | awk -F = '/^AWS_/ {print $1}')
-	now=$(date +%s)
-	# Fake value just to accomodate old scripts
-	AWS_SESSION_EXPIRE_EPOCH=$((now + (3600 * 24)))
+  case ${1} in
+    -s | -S)
+      if [[ -n ${AWS_PROFILE} ]]; then echo "Profile set is: ${AWS_PROFILE}"; else echo "No Profile set"; fi
+      return
+      ;;
+    -l | -L)
+      echo "Profiles available"
+      grep '\[' ~/.aws/credentials | tr -d '[]'
+      echo
+      return
+      ;;
+  esac
+  # shellcheck disable=SC2046
+  unset $(env | awk -F = '/^AWS_/ {print $1}')
+  now=$(date +%s)
+  # Fake value just to accomodate old scripts
+  AWS_SESSION_EXPIRE_EPOCH=$((now + (3600 * 24)))
 
-	if [[ -z ${1} ]]; then
-		msg "I need a profile name"
-		return 1
-	fi
-	export AWS_PROFILE=${1}
-	export AWS_SESSION_EXPIRE_EPOCH
-	echo "$(date): Assumed Role ${AWS_PROFILE}"
+  if [[ -z ${1} ]]; then
+    msg "I need a profile name"
+    return 1
+  fi
+  export AWS_PROFILE=${1}
+  export AWS_SESSION_EXPIRE_EPOCH
+  echo "$(date): Assumed Role ${AWS_PROFILE}"
 }
 
 function wordle() {
-	pat=${1:-a-z}
-	awk -v pat="${pat}" '$0 ~ pat && length($0) == 5' /usr/share/dict/words
+  pat=${1:-a-z}
+  awk -v pat="${pat}" '$0 ~ pat && length($0) == 5' /usr/share/dict/words
 }
 
 function bak() {
-	for f in "$@"; do
-		cp "$f" "$f.$(date +%FT%H%M%S).bak"
-	done
+  for f in "$@"; do
+    cp "$f" "$f.$(date +%FT%H%M%S).bak"
+  done
 }
 
 function mtg() {
-	for f in "$@"; do
-		mv "$f" "${f//[^a-zA-Z0-9\.\-]/_}"
-	done
+  for f in "$@"; do
+    mv "$f" "${f//[^a-zA-Z0-9\.\-]/_}"
+  done
 }
 
 # https://gist.github.com/cdown/1163649
 function urlencode() {
-	# urlencode <string>
+  # urlencode <string>
 
-	old_lc_collate=$LC_COLLATE
-	LC_COLLATE=C
+  old_lc_collate=$LC_COLLATE
+  LC_COLLATE=C
 
-	local length="${#1}"
-	for ((i = 0; i < length; i++)); do
-		local c="${1:i:1}"
-		case $c in
-		[a-zA-Z0-9.~_-]) printf '%s' "$c" ;;
-		*) printf '%%%02X' "'$c" ;;
-		esac
-	done
+  local length="${#1}"
+  for ((i = 0; i < length; i++)); do
+    local c="${1:i:1}"
+    case $c in
+      [a-zA-Z0-9.~_-]) printf '%s' "$c" ;;
+      *) printf '%%%02X' "'$c" ;;
+    esac
+  done
 
-	LC_COLLATE=$old_lc_collate
+  LC_COLLATE=$old_lc_collate
 }
 
 function urldecode() {
-	# urldecode <string>
+  # urldecode <string>
 
-	local url_encoded="${1//+/ }"
-	printf '%b' "${url_encoded//%/\\x}"
+  local url_encoded="${1//+/ }"
+  printf '%b' "${url_encoded//%/\\x}"
 }
 
 function retStatus() {
-	ec=$?
-	if [[ ${ec} -eq 0 ]]; then
-		echo "🍀"
-	else
-		echo "🔥"
-	fi
+  ec=$?
+  if [[ ${ec} -eq 0 ]]; then
+    echo "🍀"
+  else
+    echo "🔥"
+  fi
 }
 
 function cdr() {
-	root=false
-	opwd=${PWD}
-	while ! ${root}; do
-		if [[ ${PWD} == "/" ]]; then
-			echo "Can't find .git, sorry"
-			cd "${opwd}" || err "Can't cd to ${opwd}"
-			return
-		fi
-		if [[ -d .git ]]; then
-			root=true
-			OLDPWD=${opwd}
-		else
-			cd ..
-		fi
-	done
+  root=false
+  opwd=${PWD}
+  while ! ${root}; do
+    if [[ ${PWD} == "/" ]]; then
+      echo "Can't find .git, sorry"
+      cd "${opwd}" || err "Can't cd to ${opwd}"
+      return 1
+    fi
+    if [[ -d .git ]]; then
+      root=true
+      OLDPWD=${opwd}
+    else
+      cd ..
+    fi
+  done
 }
 
 function restart_audio() {
-	# shellcheck disable=SC2046
-	sudo kill -9 $(pgrep 'coreaudio[a-z]')
+  # shellcheck disable=SC2046
+  sudo kill -9 $(pgrep 'coreaudio[a-z]')
 }
 
 function zapThisShit() {
-	if [[ ${1} == "-h" ]]; then
-		echo "${0} [-v]"
-		echo "-v for verbose output"
-		echo
-		return 0
-	fi
+  if [[ ${1} == "-h" ]]; then
+    echo "${0} [-v]"
+    echo "-v for verbose output"
+    echo
+    return 0
+  fi
 
-	if [[ ${1} == "-v" ]]; then
-		OPT=rfv
-	else
-		OPT=rf
-	fi
+  if [[ ${1} == "-v" ]]; then
+    OPT=rfv
+  else
+    OPT=rf
+  fi
 
-	prevDiskUse=$(df -k . | awk '$1 ~ /dev/ {print $3}')
-	find . \( -name '.terraform*' -o -name backend.tf \) -print0 | xargs -0 -IX -P 10 rm "-${OPT}" X
-	nowDiskUse=$(df -k . | awk '$1 ~ /dev/ {print $3}')
-	diffDiskUse=$((prevDiskUse - nowDiskUse))
-	echo
-	echo "Clean-up completed, freed ${diffDiskUse} Kb"
+  prevDiskUse=$(df -k . | awk '$1 ~ /dev/ {print $3}')
+  find . \( -name '.terraform*' -o -name backend.tf \) -print0 | xargs -0 -IX -P 10 rm "-${OPT}" X
+  nowDiskUse=$(df -k . | awk '$1 ~ /dev/ {print $3}')
+  diffDiskUse=$((prevDiskUse - nowDiskUse))
+  echo
+  echo "Clean-up completed, freed ${diffDiskUse} Kb"
 }
 
 function zipSrtToLe() {
-	for z in *eng*.zip; do
-		unzip "${z}" && rm "${z}"
-	done
-	rensrt && scpsrt
+  for z in *eng*.zip; do
+    unzip "${z}" && rm "${z}"
+  done
+  rensrt && scpsrt
 }
 
 function getSecret() {
-	if [[ -z ${1} ]]; then
-		err "Hey dude, I need a secret name"
-	fi
+  if [[ -z ${1} ]]; then
+    err "Hey dude, I need a secret name"
+  fi
 
-	local secret=${1}
-	local secrets=${HOME}/.secrets
-	local val
+  local secret=${1}
+  local secrets=${HOME}/.secrets
+  local val
 
-	if [[ ! -e ${secrets} ]]; then
-		err "Secrets file missing: <${secrets}>"
-	fi
+  if [[ ! -e ${secrets} ]]; then
+    err "Secrets file missing: <${secrets}>"
+  fi
 
-	val=$(awk -F= -v secret="${secret}" '$1 == secret {print $2}' "${secrets}")
-	if [[ -z ${val} ]]; then
-		err "Wrong secret name? <${secret}>"
-	fi
-	echo "${val}"
+  val=$(awk -F= -v secret="${secret}" '$1 == secret {print $2}' "${secrets}")
+  if [[ -z ${val} ]]; then
+    err "Wrong secret name? <${secret}>"
+  fi
+  echo "${val}"
 }
 
 function clgo() {
-	base=${HOME}/go/src
-	if [[ -z ${1} ]]; then
-		echo "I need a repo in format https://github.com/etc/etc"
-		return 1
-	else
-		repo=${1}
-	fi
-	tmp=${repo/*:\/\//}
-	user=${tmp%/*}
-	prj=${tmp##*/}
-	mkcd "${base}/${user}"
-	git clone "${repo}"
-	cd "${prj}" || err "Can't cd in ${prj}"
+  base=${HOME}/go/src
+  if [[ -z ${1} ]]; then
+    echo "I need a repo in format https://github.com/etc/etc"
+    return 1
+  else
+    repo=${1}
+  fi
+  tmp=${repo/*:\/\//}
+  user=${tmp%/*}
+  prj=${tmp##*/}
+  mkcd "${base}/${user}"
+  git clone "${repo}"
+  cd "${prj}" || err "Can't cd in ${prj}"
 }
 
 function git_tfmt() {
-	git ln ${1} | grep -E '.tf' | xargs -IX -P 10 terraform fmt X
+  git ln ${1} | grep -E '.tf' | xargs -IX -P 10 terraform fmt X
 }
 
 function lsext() {
-	file ./* | sort -k2 | awk '$2 != "directory" { if ($2 != prev) { print ""; prev = $2 }; print }'
+  file ./* | sort -k2 | awk '$2 != "directory" { if ($2 != prev) { print ""; prev = $2 }; print }'
 }
 
 function ced() {
-	chezmoi edit "${*}" --apply --verbose
+  chezmoi edit "${*}" --apply --verbose
 }
 
 function w2g() {
-	w="${*}"
-	if [[ ! -e "${w}" ]]; then
-		err "I mean, an existing file would be much more appreciated: ${w}"
-		return 1
-	fi
-	g=${w%.webp}.gif
-	convert "${w}" "${g}" && rm "${w}"
+  w="${*}"
+  if [[ ! -e "${w}" ]]; then
+    err "I mean, an existing file would be much more appreciated: ${w}"
+    return 1
+  fi
+  g=${w%.webp}.gif
+  convert "${w}" "${g}" && rm "${w}"
 }
-# ========================================================
-#
-#
-# function _devops_autocomplete() {
-#
-# 	BASE=/Users/matteomarchelli/Repo/devops-infrastructure
-#
-# 	shift
-# 	read -r -a COMMANDS <<<"$(find "${BASE}/accounts" -type file -name '*.tfvars' | sed -E 's/.*\/accounts\/.*\/([a-zA-Z0-9_-]*)\..*/\1/g' | sort -u | tr '\n' ' ')"
-#
-# 	if [[ -n ${COMP_LINE} ]]; then
-# 		for cmd in "${COMMANDS[@]}"; do
-# 			[[ ${cmd:0:${#1}} == "${1}" ]] && printf "%s " "${cmd}"
-# 		done
-# 		return
-# 	fi
-#
-# }
-#
-# function heyGPT() {
-#
-# 	while getopts ":hm:t:" opt; do
-# 		case ${opt} in
-# 		m) model=${OPTARG} ;;
-# 		h) echo "${0##/} [-m gpt-a, default gpt-3.5-turbo] [-t <float>, default 0.7] <question>" ;;
-# 		t) temperature=${OPTARG} ;;
-# 		:) err "Invalid option: $OPTARG requires an argument" 1>&2 ;;
-# 		*) checkLastHelp ;;
-# 		esac
-# 	done
-# 	shift $((OPTIND - 1))
-#
-# 	if [[ -z ${1} ]]; then
-# 		echo "Maybe a question?"
-# 		return 1
-# 	fi
-#
-# 	prompt="${*}"
-#
-# 	model=${model:=gpt-3.5-turbo}
-# 	temperature=${temperature:=0.7}
-# 	local answer
-# 	local chatURL=https://api.openai.com/v1/chat/completions
-# 	local OPENAI_KEY
-# 	local payload
-#
-# 	OPENAI_KEY=$(getSecret "OPENAI_KEY")
-# 	read -r -d '' payload <<EOF
-#     {
-#         "model": "${model}",
-#         "messages": [
-#             {
-#                 "role": "user",
-#                 "content": "${prompt}"
-#             }
-#         ],
-#         "temperature": ${temperature}
-#     }
-# EOF
-# 	if ! answer=$(curl "${chatURL}" -Ss \
-# 		-H "Content-Type: application/json" \
-# 		-H "Authorization: Bearer ${OPENAI_KEY}" \
-# 		-d "${payload}" 2>&1); then
-# 		echo "Something bad happened..."
-# 		echo "${answer}"
-# 		echo
-# 		return
-# 	fi
-# 	echo "${answer}" | jq -r '.choices[0].message.content'
-#
-# }
-#
-# function xkpass() {
-# 	local pass words
-# 	if [[ -n ${1} ]]; then
-# 		MAX_LEN=${1}
-# 	else
-# 		MAX_LEN=6
-# 	fi
-#
-# 	symb=',._!,+=%'
-# 	rand1=$((RANDOM % ${#symb}))
-# 	s1=${symb:rand1:1}
-#
-# 	for wl in eff_short_norm.txt fra_word_list_norm.txt ita_word_lista_norm.txt; do
-# 		word="$(xkcdpass --min 3 --max "${MAX_LEN}" -n 1 -w ~/.wordlist/${wl})"
-# 		word="$(tr '[:lower:]' '[:upper:]' <<<"${word:0:1}")${word:1}"
-# 		words+=("${word}")
-# 	done
-#
-# 	words+=("${s1}")
-# 	words+=("${RANDOM}")
-#
-# 	read -r -a pass <<<"$(echo "${words[*]}" | shuf)"
-#
-# 	echo "${pass[@]}" | tr -d ' '
-# }
-# function xkpass() {
-# 	local pass words
-# 	if [[ -n ${1} ]]; then
-# 		MAX_LEN=${1}
-# 	else
-# 		MAX_LEN=6
-# 	fi
-#
-# 	symb=',._!,+=%'
-# 	rand1=$((RANDOM % ${#symb}))
-# 	s1=${symb:rand1:1}
-#
-# 	for wl in eff_short_norm.txt fra_word_list_norm.txt ita_word_lista_norm.txt; do
-# 		word="$(xkcdpass --min 3 --max "${MAX_LEN}" -n 1 -w ~/.wordlist/${wl})"
-# 		word="$(tr '[:lower:]' '[:upper:]' <<<"${word:0:1}")${word:1}"
-# 		words+=("${word}")
-# 	done
-#
-# 	words+=("${s1}")
-# 	words+=("${RANDOM}")
-#
-# 	read -r -a pass <<<"$(echo "${words[*]}" | shuf)"
-#
-# 	echo "${pass[@]}" | tr -d ' '
-# }
-# function xkpass() {
-# 	local pass words
-# 	if [[ -n ${1} ]]; then
-# 		MAX_LEN=${1}
-# 	else
-# 		MAX_LEN=6
-# 	fi
-#
-# 	symb=',._!,+=%'
-# 	rand1=$((RANDOM % ${#symb}))
-# 	s1=${symb:rand1:1}
-#
-# 	for wl in eff_short_norm.txt fra_word_list_norm.txt ita_word_lista_norm.txt; do
-# 		word="$(xkcdpass --min 3 --max "${MAX_LEN}" -n 1 -w ~/.wordlist/${wl})"
-# 		word="$(tr '[:lower:]' '[:upper:]' <<<"${word:0:1}")${word:1}"
-# 		words+=("${word}")
-# 	done
-#
-# 	words+=("${s1}")
-# 	words+=("${RANDOM}")
-#
-# 	read -r -a pass <<<"$(echo "${words[*]}" | shuf)"
-#
-# 	echo "${pass[@]}" | tr -d ' '
-# }
-#
-# function urldecoder() {
-# 	: "${*//+/ }"
-# 	echo -e "${_//%/\\x}"
-# }
 
-#
+function coffee() {
+  waketime=${1:-480}
+  addMinutes=$((60 * waketime))
+  now=$(date +%s)
+  endAt=$((addMinutes + now))
+  endAtString="$(date -r ${endAt})"
+  clear
+  echo
+  echo "$(date): Starting, coffee will finish at ${endAtString}"
+  figlet -w 200 "Awake for ${waketime} minutes"
+  caffeinate -t $((60 * waketime)) -d -s
+  echo "$(date): Finished..."
+}
+
+function ytmp4() {
+  [[ -n ${1} ]] || (
+    echo "I need a video url (https://youtube.com/v=something)"
+    return 1
+  )
+  yt-dlp -f 137+140 --write-sub --extractor-args youtube:player_client=android "${1}"
+}
