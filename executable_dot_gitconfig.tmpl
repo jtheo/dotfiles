@@ -1,6 +1,7 @@
 [user]
 	name = Matteo Marchelli
 	email = matteo.marchelli@gmail.com
+  signingkey = ~/.ssh/keys/github.Apr.2021
 
 [includeIf "gitdir:~/repos/itv"]
     path = ~/repos/itv/gitconfig
@@ -11,11 +12,8 @@
   fileMode = true
   editor = vim
 
-[url "git@github.com:"]
-	insteadOf = "https://github.com/"
-
-[interactive]
-  diffFilter = delta --color-only
+#[interactive]
+#  diffFilter = delta --color-only
 
 [delta]
   navigate = true    # use n and N to move between diff sections

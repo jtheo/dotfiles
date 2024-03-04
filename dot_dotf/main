@@ -37,3 +37,7 @@ case ${SHELL##*/} in
   bash) loadIfExists "${BASE}/prompt" ;;
   *) echo "What Shell is this one? <${SHELL}>" ;;
 esac
+
+if grep -q itv.com /etc/resolv.conf; then
+  source ~/.dotf/itv
+fi

@@ -1,5 +1,6 @@
 #!/bin/env bash
 
+export PATH="${PATH}:/opt/homebrew/bin:/opt/homebrew/opt/openjdk/bin"
 export SHELL=/opt/homebrew/bin/bash
 
 # https://www.addictivetips.com/mac-os/hide-default-interactive-shell-is-now-zsh-in-terminal-on-macos/
@@ -43,7 +44,6 @@ else
 EoM
 fi
 # reset
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 echo
 # shellcheck disable=SC2046

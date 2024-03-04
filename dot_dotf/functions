@@ -597,3 +597,13 @@ function ytmp4() {
   )
   yt-dlp -f 137+140 --write-sub --extractor-args youtube:player_client=android "${1}"
 }
+
+function trimPlan() {
+  [[ -n ${1} ]] || (
+    echo "need a plan, mate..."
+    return 1
+  )
+
+  printf "\n%s\n\n" "${1}"
+  sed 's/\x1b[^m]*m//g' "${1}" | awk '/^(([ \t]+[\~\+\-] (resource|module|data) ")|(Plan|No changes|Changes))/'
+}
