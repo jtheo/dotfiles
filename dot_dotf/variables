@@ -4,15 +4,15 @@ runningOS=$(uname -s)
 arch=$(uname -m)
 
 if [[ "${runningOS}" == "Darwin" ]]; then
-	isMac=true
+  isMac=true
 else
-	isMac=false
+  isMac=false
 fi
 
 if [[ ${arch} == "arm64" ]]; then
-	isArm=true
+  isArm=true
 else
-	isArm=false
+  isArm=false
 fi
 
 export EDITOR=nvim
@@ -36,3 +36,7 @@ export PATH=${PATH}:${GOPATH}/bin:${HOME}/.bin:${DEVOPS_INFRA}/scripts:${DEVOPS_
 export GPG_TTY runningOS isMac isArm
 
 export LC_COLLATE=C
+
+if [[ -z ${SSH_AUTH_SOCK} ]]; then
+  eval $(ssh-agent -s)
+fi

@@ -124,23 +124,38 @@ wtf:
     hackernews:
       enabled: true
       focusChar: 2
-      numberOfStories: 25
+      numberOfStories: 20
       position:
         top: 5
         left: 1
-        height: 5
+        height: 3
         width: 1
       storyType: top
       refreshInterval: 2h
 
-    r-go:
+    r-pe:
       enabled: true
       focusChar: 3
-      numberOfPosts: 10
+      numberOfPosts: 20
+      position:
+        top: 8
+        left: 1
+        height: 2
+        width: 1
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "platform_engineering"
+      topTimePeriod: day
+      type: subreddit
+
+    r-go:
+      enabled: true
+      focusChar: 4
+      numberOfPosts: 20
       position:
         top: 0
         left: 2
-        height: 2
+        height: 4
         width: 1
       refreshInterval: 6h
       sortOrder: new
@@ -150,10 +165,10 @@ wtf:
 
     r-k8s:
       enabled: true
-      focusChar: 4
+      focusChar: 6
       numberOfPosts: 10
       position:
-        top: 2
+        top: 4
         left: 2
         height: 2
         width: 1
@@ -165,10 +180,10 @@ wtf:
 
     r-sre:
       enabled: true
-      focusChar: 5
+      focusChar: 8
       numberOfPosts: 10
       position:
-        top: 4
+        top: 6
         left: 2
         height: 2
         width: 1
@@ -180,10 +195,10 @@ wtf:
 
     r-terraform:
       enabled: true
-      focusChar: 6
+      focusChar: "b"
       numberOfPosts: 10
       position:
-        top: 6
+        top: 8
         left: 2
         height: 2
         width: 1
@@ -195,12 +210,12 @@ wtf:
 
     r-neovim:
       enabled: true
-      focusChar: 7
-      numberOfPosts: 10
+      focusChar: 5
+      numberOfPosts: 20
       position:
         top: 0
         left: 3
-        height: 2
+        height: 4
         width: 2
       refreshInterval: 6h
       sortOrder: new
@@ -210,10 +225,10 @@ wtf:
 
     r-linux:
       enabled: true
-      focusChar: 8
+      focusChar: 7
       numberOfPosts: 10
       position:
-        top: 2
+        top: 4
         left: 3
         height: 2
         width: 2
@@ -223,24 +238,24 @@ wtf:
       topTimePeriod: week
       type: subreddit
 
-    r-tmux:
-      enabled: true
-      focusChar: 9
-      numberOfPosts: 10
-      position:
-        top: 4
-        left: 3
-        height: 2
-        width: 2
-      refreshInterval: 6h
-      sortOrder: new
-      subreddit: "tmux"
-      topTimePeriod: week
-      type: subreddit
+    # r-tmux:
+    #   enabled: true
+    #   focusChar: 9
+    #   numberOfPosts: 10
+    #   position:
+    #     top: 4
+    #     left: 3
+    #     height: 2
+    #     width: 2
+    #   refreshInterval: 6h
+    #   sortOrder: new
+    #   subreddit: "tmux"
+    #   topTimePeriod: week
+    #   type: subreddit
 
     r-aws:
       enabled: true
-      focusChar: 0
+      focusChar: 9
       numberOfPosts: 10
       position:
         top: 6
@@ -255,7 +270,7 @@ wtf:
 
     r-wezterm:
       enabled: true
-      focusChar: 0
+      focusChar: a
       numberOfPosts: 10
       position:
         top: 8
@@ -268,17 +283,17 @@ wtf:
       topTimePeriod: week
       type: subreddit
 
-    r-rust:
-      enabled: true
-      focusChar: a
-      numberOfPosts: 10
-      position:
-        top: 8
-        left: 2
-        height: 2
-        width: 1
-      refreshInterval: 6h
-      sortOrder: new
-      subreddit: "rust"
-      topTimePeriod: week
-      type: subreddit
+    # r-rust:
+    #   enabled: true
+    #   focusChar: a
+    #   numberOfPosts: 10
+    #   position:
+    #     top: 8
+    #     left: 2
+    #     height: 2
+    #     width: 1
+    #   refreshInterval: 6h
+    #   sortOrder: new
+    #   subreddit: "rust"
+    #   topTimePeriod: week
+    #   type: subreddit
