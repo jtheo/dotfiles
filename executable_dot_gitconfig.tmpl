@@ -88,11 +88,18 @@
 [gpg]
 	program = /usr/local/bin/gpg
 	format = ssh
+[gpg "ssh"]
+  program = /usr/bin/ssh-keygen
 {{- end }}
 
 [commit]
 	gpgsign = true
+
+[tag]
+	gpgsign = true
+
 [fetch]
 	prune = true
+
 [init]
 	defaultBranch = main

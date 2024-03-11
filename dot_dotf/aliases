@@ -10,8 +10,10 @@ alias path='echo -e ${PATH//:/\\n}'
 alias now='date +"%T"'
 alias nowtime=now
 alias nowdate='date +"%d-%m-%Y"'
+alias v=vim
 alias vi=nvim
-alias vim=nvim
+# alias vim=nvim
+alias n=nvim
 
 # https://zeldor.biz/2014/07/mtr-for-mac-os-x/
 # added also /usr/local/sbin to the PATH variable

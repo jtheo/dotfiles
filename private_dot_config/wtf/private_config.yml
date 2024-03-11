@@ -124,7 +124,7 @@ wtf:
     hackernews:
       enabled: true
       focusChar: 2
-      numberOfStories: 20
+      numberOfStories: 15
       position:
         top: 5
         left: 1
@@ -136,7 +136,7 @@ wtf:
     r-pe:
       enabled: true
       focusChar: 3
-      numberOfPosts: 20
+      numberOfPosts: 10
       position:
         top: 8
         left: 1
