@@ -607,3 +607,11 @@ function trimPlan() {
   printf "\n%s\n\n" "${1}"
   sed 's/\x1b[^m]*m//g' "${1}" | awk '/^(([ \t]+[\~\+\-] (resource|module|data) ")|(Plan|No changes|Changes))/'
 }
+
+function pg() {
+  search=${*}
+  if [[ -z ${search} ]]; then
+    err "I need a search term and possibly also the options for grep"
+  fi
+  find . -type f | xargs -IX -P 20 grep ${search} X
+}
