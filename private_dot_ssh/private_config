@@ -33,6 +33,9 @@ Host *
 Host 127.* localhost
   NoHostAuthenticationForLocalhost yes
 
+Host *.tmate.io 
+  HostKeyAlgorithms rsa-sha2-512,rsa-sha2-256,ssh-rsa
+
 # Examples
 # Host internal
 #   Hostname 1.2.3.4

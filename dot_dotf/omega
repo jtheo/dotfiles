@@ -7,8 +7,8 @@ if command -v kubectl >/dev/null; then
 	complete -F __start_kubectl k
 fi
 
-if command -v terraform >/dev/null; then
-	complete -C /Users/jtheo/.bin/terraform terraform
+if TF=$(command -v terraform); then
+	complete -C "${TF}" terraform
 fi
 
 [[ -e '/usr/local/bin/aws_completer' ]] && complete -C '/usr/local/bin/aws_completer' aws
@@ -26,5 +26,3 @@ fi
 if [[ $(uname -s) == "Darwin" ]]; then
 	ulimit -n 25000
 fi
-
-#source ${HOME}/.dotf/${runningOS}
