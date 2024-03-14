@@ -74,7 +74,7 @@ return {
       },
       setup = {
         gopls = function(_, opts)
-          require("lazyvim.util").on_attach(function(client, _)
+          require("lazyvim.util").lsp.on_attach(function(client, _)
             if client.name == "gopls" then
               -- workaround for gopls not supporting semanticTokensProvider
               -- https://github.com/golang/go/issues/54531#issuecomment-1464982242

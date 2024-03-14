@@ -33,6 +33,7 @@ Host *
 Host 127.* localhost
   NoHostAuthenticationForLocalhost yes
 
+# Examples
 # Host internal
 #   Hostname 1.2.3.4
 #   IdentityFile ~/.ssh/mySecretKey
