@@ -605,7 +605,7 @@ function trimPlan() {
   )
 
   printf "\n%s\n\n" "${1}"
-  sed 's/\x1b[^m]*m//g' "${1}" | awk '/^(([ \t]+[\~\+\-] (resource|module|data) ")|(Plan|No changes|Changes))/'
+  sed 's/\x1b[^m]*m//g' "${1}" | awk '/^([ \t]*[\+\~\/\-]* (resource|module|data) ")|(Plan|No changes|Changes))/'
 }
 
 function pg() {
