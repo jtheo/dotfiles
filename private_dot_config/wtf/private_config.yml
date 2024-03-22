@@ -15,7 +15,8 @@ wtf:
       display: true
   term: "xterm-256color"
   grid:
-    columns: [40, 70, 70, 70]
+    # columns: [40, 70, 70, 70]
+    columns: [40, 80]
     rows: [5]
   refreshInterval: 5
   openUrlUtil:
@@ -71,7 +72,7 @@ wtf:
       position:
         top: 2
         left: 0
-        height: 4
+        height: 3
         width: 1
       refreshInterval: 15
       # sort: "alphabetical"
@@ -81,7 +82,7 @@ wtf:
       cpuCombined: false
       enabled: true
       position:
-        top: 6
+        top: 5
         left: 0
         height: 3
         width: 1
@@ -90,21 +91,6 @@ wtf:
       showMem: true
       showSwp: true
 
-    # textfile:
-    #   enabled: true
-    #   focusChar: 0
-    #   filePath: "~/.config/wtf/fortune.txt"
-    #   focusable: false
-    #   format: false
-    #   position:
-    #     top: 8
-    #     left: 2
-    #     height: 2
-    #     width: 1
-    #   refreshInterval: 1800
-    #   title: "Fortune"
-    #   formatStyle: "dracula"
-
     lobste:
       title: lobste.rs
       enabled: true
@@ -112,11 +98,11 @@ wtf:
       showSource: false
       feeds:
         - https://lobste.rs/newest.rss
-      feedLimit: 25
+      feedLimit: 20
       position:
         top: 0
         left: 1
-        height: 5
+        height: 4
         width: 1
       refreshInterval: 2h
       type: feedreader
@@ -124,21 +110,36 @@ wtf:
     hackernews:
       enabled: true
       focusChar: 2
-      numberOfStories: 15
+      numberOfStories: 20
       position:
-        top: 5
-        left: 1
-        height: 3
+        top: 0
+        left: 2
+        height: 4
         width: 1
       storyType: top
       refreshInterval: 2h
 
-    r-pe:
+    r-go:
       enabled: true
       focusChar: 3
+      numberOfPosts: 20
+      position:
+        top: 0
+        left: 3
+        height: 4
+        width: 1
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "golang"
+      topTimePeriod: day
+      type: subreddit
+
+    r-pe:
+      enabled: true
+      # focusChar: 4
       numberOfPosts: 10
       position:
-        top: 8
+        top: 4
         left: 1
         height: 2
         width: 1
@@ -148,24 +149,9 @@ wtf:
       topTimePeriod: day
       type: subreddit
 
-    r-go:
-      enabled: true
-      focusChar: 4
-      numberOfPosts: 20
-      position:
-        top: 0
-        left: 2
-        height: 4
-        width: 1
-      refreshInterval: 6h
-      sortOrder: new
-      subreddit: "golang"
-      topTimePeriod: day
-      type: subreddit
-
     r-k8s:
       enabled: true
-      focusChar: 6
+      # focusChar: 6
       numberOfPosts: 10
       position:
         top: 4
@@ -180,11 +166,11 @@ wtf:
 
     r-sre:
       enabled: true
-      focusChar: 8
+      # focusChar: 8
       numberOfPosts: 10
       position:
-        top: 6
-        left: 2
+        top: 4
+        left: 3
         height: 2
         width: 1
       refreshInterval: 6h
@@ -195,11 +181,11 @@ wtf:
 
     r-terraform:
       enabled: true
-      focusChar: "b"
+      # focusChar: "b"
       numberOfPosts: 10
       position:
         top: 8
-        left: 2
+        left: 1
         height: 2
         width: 1
       refreshInterval: 6h
@@ -208,15 +194,45 @@ wtf:
       topTimePeriod: week
       type: subreddit
 
+    r-devops:
+      enabled: true
+      # focusChar: "b"
+      numberOfPosts: 10
+      position:
+        top: 8
+        left: 2
+        height: 2
+        width: 1
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "devops"
+      topTimePeriod: week
+      type: subreddit
+
+    r-python:
+      enabled: true
+      # focusChar: "b"
+      numberOfPosts: 10
+      position:
+        top: 8
+        left: 3
+        height: 2
+        width: 1
+      refreshInterval: 6h
+      sortOrder: new
+      subreddit: "python"
+      topTimePeriod: week
+      type: subreddit
+
     r-neovim:
       enabled: true
-      focusChar: 5
-      numberOfPosts: 20
+      # focusChar: 5
+      numberOfPosts: 10
       position:
-        top: 0
+        top: 6
         left: 3
-        height: 4
-        width: 2
+        height: 2
+        width: 1
       refreshInterval: 6h
       sortOrder: new
       subreddit: "neovim"
@@ -225,75 +241,73 @@ wtf:
 
     r-linux:
       enabled: true
-      focusChar: 7
+      # focusChar: 7
       numberOfPosts: 10
       position:
-        top: 4
-        left: 3
+        top: 6
+        left: 1
         height: 2
-        width: 2
+        width: 1
       refreshInterval: 6h
       sortOrder: new
       subreddit: "linux"
       topTimePeriod: week
       type: subreddit
 
-    # r-tmux:
-    #   enabled: true
-    #   focusChar: 9
-    #   numberOfPosts: 10
-    #   position:
-    #     top: 4
-    #     left: 3
-    #     height: 2
-    #     width: 2
-    #   refreshInterval: 6h
-    #   sortOrder: new
-    #   subreddit: "tmux"
-    #   topTimePeriod: week
-    #   type: subreddit
-
     r-aws:
       enabled: true
-      focusChar: 9
+      # focusChar: 9
       numberOfPosts: 10
       position:
         top: 6
-        left: 3
+        left: 2
         height: 2
-        width: 2
+        width: 1
       refreshInterval: 6h
       sortOrder: new
       subreddit: "aws"
       topTimePeriod: week
       type: subreddit
 
-    r-wezterm:
+    cryptolive:
       enabled: true
-      focusChar: a
-      numberOfPosts: 10
+      focusChar: 0
       position:
         top: 8
-        left: 3
+        left: 0
         height: 2
-        width: 2
-      refreshInterval: 6h
-      sortOrder: new
-      subreddit: "wezterm"
-      topTimePeriod: week
-      type: subreddit
+        width: 1
+      updateInterval: 15
+      currencies:
+        BTC:
+          displayName: Bitcoin
+          to:
+            - USD
+        ETH:
+          displayName: Ethereum
+          to:
+            - USD
+        XRP:
+          displayName: XRP
+          to:
+            - USD
+        # LTC:
+        #   displayName: Litecoin
+        #   to:
+        #     - USD
+      colors:
+        from:
+          name: coral
+          displayName: grey
+        to:
+          name: white
+          price: green
+        top:
+          from:
+            name: grey
+            displayName: coral
+          to:
+            name: red
+            field: white
+            value: green
 
-    # r-rust:
-    #   enabled: true
-    #   focusChar: a
-    #   numberOfPosts: 10
-    #   position:
-    #     top: 8
-    #     left: 2
-    #     height: 2
-    #     width: 1
-    #   refreshInterval: 6h
-    #   sortOrder: new
-    #   subreddit: "rust"
-    #   topTimePeriod: week
-    #   type: subreddit
