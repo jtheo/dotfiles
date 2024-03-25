@@ -10,8 +10,6 @@ export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 
 [[ -f /usr/local/etc/profile.d/bash_completion.sh ]] && source /usr/local/etc/profile.d/bash_completion.sh
 
-. "$(brew --prefix asdf)/libexec/asdf.sh"
-
 alias gdu="${HOME}/go/bin/gdu"
 alias unrar=7z
 alias ls='ls -G'
