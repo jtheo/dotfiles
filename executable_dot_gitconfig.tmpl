@@ -83,13 +83,14 @@
   standfry  = log --author=Marchelli --since='9am 3 days ago' --oneline --all
   sw        = show -1 --format=%B--stat --word-diff=color
 
-{{- if eq .chezmoi.os "darwin" }}
-# gpg is present since git 2.34
 [gpg]
-	program = /usr/local/bin/gpg
+	# program = /usr/local/bin/gpg
+	program = gpg
 	format = ssh
+{{- if eq .chezmoi.os "darwin" }}
 [gpg "ssh"]
-  program = /usr/bin/ssh-keygen
+  # program = /usr/bin/ssh-keygen
+  program = ssh-keygen
 {{- end }}
 
 [commit]
