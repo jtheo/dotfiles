@@ -1,1 +1,3 @@
-[[ -e "${HOME}/.dotf/main" ]] && source "${HOME}/.dotf/main"
+if [ -n "${PS1}" ]; then
+	[[ -e "${HOME}/.dotf/main" ]] && source "${HOME}/.dotf/main"
+fi
