@@ -79,6 +79,7 @@ alias yt3="yt-dlp -f bestaudio --audio-quality 0 --audio-format mp3  --extract-a
 alias checkLine='networkQuality -v'
 
 alias cm=chezmoi
+alias cme="chezmoi edit --apply"
 
 alias startGo='printf "package main\n\nfunc main(){\n}\n" > main.go; go mod init; echo'
 
