@@ -282,19 +282,19 @@ wtf:
         BTC:
           displayName: Bitcoin
           to:
-            - USD
+            - GBP
         ETH:
           displayName: Ethereum
           to:
-            - USD
+            - GBP
         XRP:
           displayName: XRP
           to:
-            - USD
+            - GBP
         # LTC:
         #   displayName: Litecoin
         #   to:
-        #     - USD
+        #     - GBP
       colors:
         from:
           name: coral

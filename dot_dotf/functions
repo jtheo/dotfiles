@@ -604,8 +604,22 @@ function trimPlan() {
     return 1
   )
 
-  printf "\n%s\n\n" "${1}"
-  sed 's/\x1b[^m]*m//g' "${1}" | awk '/^([ \t]*[\+\~\/\-]* (resource|module|data) ")|(Plan|No changes|Changes))/'
+  layer=${1}
+
+  tmpFile=$(mktemp)
+
+  sed 's/\x1b[^m]*m//g' "${layer}" | awk '/^([ \t]*[<=\+\~\/\-]* (resource|module|data) ")|(Plan|No changes|Changes))/' >"${tmpFile}"
+  nChanges=$(wc -l <"${tmpFile}")
+  if [[ ${nChanges##* } -eq 0 ]]; then
+    message="No changes"
+  else
+    message="There are ${nChanges##* } changes"
+  fi
+
+  pathplan=$(awk '/Running plan in / {gsub(/.* in .*\/terraform\//,"", $0); print $0}' "${layer}")
+  printf "\n============== %s: %s\n" "${pathplan}" "${message}"
+  cat "${tmpFile}"
+  rm "${tmpFile}"
 }
 
 function pg() {

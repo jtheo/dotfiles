@@ -2,23 +2,23 @@ local wezterm = require("wezterm")
 local act = wezterm.action
 
 return {
+	term = "xterm-256color",
 	initial_rows = 60,
 	initial_cols = 240,
 	hide_tab_bar_if_only_one_tab = true,
 	font = wezterm.font("JetBrains Mono"),
-	-- color_scheme = 'Dark Pastel',
 	color_scheme = "Catppuccin Mocha", --  " Mocha", -- or Macchiato, Frappe, Latt
 	font_size = 14.0,
 
 	window_frame = {
+		-- border_top_height = '0.25cell',
 		border_left_width = "0.2cell",
 		border_right_width = "0.2cell",
 		border_bottom_height = "0.2cell",
-		-- border_top_height = '0.25cell',
+		-- border_top_color = 'lightGray',
 		border_left_color = "#2a2f3b",
 		border_right_color = "#2a2f3b",
 		border_bottom_color = "#2a2f3b",
-		-- border_top_color = 'lightGray',
 	},
 
 	keys = {
@@ -36,7 +36,8 @@ return {
 			action = act.SpawnCommandInNewTab({
 				cwd = os.getenv("WEZTERM_CONFIG_DIR"),
 				set_environment_variables = {
-					TERM = "screen-256color",
+					-- TERM = "screen-256color",
+					TERM = "xterm-256color",
 				},
 				args = {
 					"/opt/homebrew/bin/nvim",
