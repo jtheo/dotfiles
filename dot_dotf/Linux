@@ -1,3 +1,5 @@
+#!/bin/bash
+
 
 alias pbcopy="xsel --clipboard"
 alias open=xdg-open
@@ -5,7 +7,8 @@ alias kodimount='sshfs -o follow_symlinks  -o ro le:/storage/HD/ ${HOME}/Videos/
 alias r4mount='sshfs -o follow_symlinks  -o ro r4:/media/bck ${HOME}/Videos/r4/ && open ${HOME}/Videos/r4'
 
 
-PATH=${PATH}:/usr/local/go/bin
+export PATH=${PATH}:/usr/local/go/bin
+export TERM=xterm-256color
 
 
 alias ls='ls --color'
