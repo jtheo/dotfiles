@@ -2,6 +2,7 @@
 
 export PATH="/opt/homebrew/bin:/opt/homebrew/opt/openjdk/bin:${PATH}"
 export SHELL=/opt/homebrew/bin/bash
+export TERM=xterm-256color
 
 # https://www.addictivetips.com/mac-os/hide-default-interactive-shell-is-now-zsh-in-terminal-on-macos/
 # Unfucking belivable
@@ -48,7 +49,7 @@ EoM
 fi
 # reset
 
-echo
+# echo
 # shellcheck disable=SC2046
 # cowsay $(fortune)
 echo
