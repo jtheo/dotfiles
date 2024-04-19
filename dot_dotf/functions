@@ -617,7 +617,7 @@ function trimPlan() {
   fi
 
   pathplan=$(awk '/Running plan in / {gsub(/.* in .*\/terraform\//,"", $0); print $0}' "${layer}")
-  printf "\n============== %s: %s\n" "${pathplan}" "${message}"
+  printf "\n============== %s: %s\n" "${pathplan}" "${message} ( ${layer} )"
   cat "${tmpFile}"
   rm "${tmpFile}"
 }
