@@ -81,7 +81,7 @@ alias checkLine='networkQuality -v'
 alias cm=chezmoi
 alias cme="chezmoi edit --apply"
 
-alias startGo='printf "package main\n\nfunc main(){\n}\n" > main.go; go mod init; echo'
+alias startGo='printf "package main\n\nfunc main(){\n}\n" > main.go; go mod init; nvim main.go'
 
 alias kgn='kubectl get nodes -o custom-columns=NAME:.metadata.name,ROLE:.metadata.labels.itv-role,VER:.status.nodeInfo.kubeletVersion,AGE:.metadata.creationTimestamp,ID:.spec.providerID,Taint:.spec.taints,Type:".metadata.labels.beta\.kubernetes\.io/instance-type"'
 alias tmux='tmux -2'
