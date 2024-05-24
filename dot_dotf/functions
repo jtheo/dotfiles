@@ -14,7 +14,7 @@ function msg() {
 
 function err() {
   msg "${*}"
-  exit "${2:-1}"
+  return "${2:-1}"
 }
 
 # https://stackoverflow.com/a/17841619
@@ -628,4 +628,16 @@ function pg() {
     err "I need a search term and possibly also the options for grep"
   fi
   find . -type f -print0 | xargs -0 -IX -P 20 grep ${search} X
+}
+
+function ptr() {
+  while [[ ${proc} != "tmux" ]]; do
+    proc=$(ps -ef | awk -v p=$$ '$2 ~ p {print $8}')
+    if [[ ${proc} == "tmux" ]]; then
+      echo "I'm at the top"
+      return
+    else
+      exit
+    fi
+  done
 }
