@@ -641,3 +641,11 @@ function ptr() {
     fi
   done
 }
+
+function pods() {
+  [[ -n ${1} ]] || (
+    echo "I need a node..."
+    return 1
+  )
+  kubectl describe no ${1} | sed -n '/Namespace/,/Allocated resources:/p'
+}

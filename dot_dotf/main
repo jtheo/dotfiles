@@ -39,7 +39,9 @@ case ${SHELL##*/} in
 esac
 
 if grep -q itv.com /etc/resolv.conf; then
-  [[ -e ${BASE}/itv ]] && source ${BASE}/itv
+  [[ -e ${BASE}/itv ]] && source "${BASE}/itv"
 else
-  [[ -e ${BASE}/personal ]] && source ${BASE}/personal
+  [[ -e ${BASE}/personal ]] && source "${BASE}/personal"
 fi
+
+[[ -d ${HOME}/L ]] || mkdir -p "${HOME}/L"
