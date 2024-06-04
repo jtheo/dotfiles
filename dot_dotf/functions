@@ -647,5 +647,17 @@ function pods() {
     echo "I need a node..."
     return 1
   )
-  kubectl describe no ${1} | sed -n '/Namespace/,/Allocated resources:/p'
+  kubectl describe no "${1}" | sed -n '/Namespace/,/Allocated resources:/p' | grep -v kube-system
+}
+
+function freeIPs() {
+  tmpFile=$(mktemp)
+  if [[ -z ${AWS_VAULT} ]]; then
+    echo "missing AWS token"
+    return 1
+  fi
+
+  aws ec2 describe-subnets | jq -rc '.Subnets[] | select(.AvailableIpAddressCount < 5) | {AvailabilityZone, AvailableIpAddressCount, CidrBlock}' | tee "${tmpFile}"
+  echo "Total $(wc -l <"${tmpFile}")"
+  rm -f "${tmpFile}"
 }
