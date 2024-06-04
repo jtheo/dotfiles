@@ -112,3 +112,10 @@
   Output = ""
   Tag = ["asdf", "install", "kubectl", "version"]
   command = "asdf install kubectl 1.27.14"
+
+[[Snippets]]
+  Description = "get pod with custom columns name, from type and status"
+  Output = ""
+  Tag = ["kubectl", "name", "kind", "status"]
+  command = "kubectl -n prd get po -o custom-columns=Name:.metadata.name,Kind:.metadata.ownerReferences[].kind,Status:.status.phase"
+
