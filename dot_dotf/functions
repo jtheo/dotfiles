@@ -647,7 +647,9 @@ function pods() {
     echo "I need a node..."
     return 1
   )
-  kubectl describe no "${1}" | sed -n '/Namespace/,/Allocated resources:/p' | grep -v kube-system
+  kubectl get po -A -o custom-columns='Namespace:.metadata.namespace,Name:.metadata.name,Kind:.metadata.ownerReferences[].kind,Status:.status.phase,Node:.spec.nodeName' |
+    awk -v node="${1}" '$5 == node {print $1,$2,$3,$4}' | column -t
+  # kubectl describe no "${1}" | sed -n '/Namespace/,/Allocated resources:/p' | grep -v kube-system
 }
 
 function freeIPs() {
