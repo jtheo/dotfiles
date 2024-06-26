@@ -31,7 +31,7 @@ export GO111MODULE=on
 export DEVOPS_INFRA=${HOME}/Repo/devops-infrastructure
 export DEVOPS_SCRIPT=${HOME}/Repo/devops-scripts
 
-export PATH=${PATH}:${GOPATH}/bin:${HOME}/.bin:${DEVOPS_INFRA}/scripts:${DEVOPS_SCRIPT}/utilities:${HOME}/.krew/bin:${HOME}/.dotf/bin
+export PATH=${PATH}:${GOPATH}/bin:${HOME}/.bin:${DEVOPS_INFRA}/scripts:${DEVOPS_SCRIPT}/utilities:${HOME}/.krew/bin:${HOME}/.dotf/bin:${HOME}/repos/jtheo/k8sScripts
 
 export GPG_TTY runningOS isMac isArm
 
