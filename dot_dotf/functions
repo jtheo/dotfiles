@@ -643,13 +643,24 @@ function ptr() {
 }
 
 function pods() {
-  [[ -n ${1} ]] || (
+  if [[ -z ${1} ]]; then
     echo "I need a node..."
     return 1
-  )
+  fi
+  node=${1}
+  if [[ ! -e ./kube.config ]]; then
+    echo "Missing kube.config..."
+    return 1
+  fi
+
+  if [[ ${2} == "-d" ]]; then
+    filter="DaemonSet"
+  else
+    filter="xyz"
+  fi
+
   kubectl get po -A -o custom-columns='Namespace:.metadata.namespace,Name:.metadata.name,Kind:.metadata.ownerReferences[].kind,Status:.status.phase,Node:.spec.nodeName' |
-    awk -v node="${1}" '$5 == node {print $1,$2,$3,$4}' | column -t
-  # kubectl describe no "${1}" | sed -n '/Namespace/,/Allocated resources:/p' | grep -v kube-system
+    awk -v node="${node}" -v filter="${filter}" '$5 == node && $3 != filter {print $1,$2,$3,$4}' | column -t
 }
 
 function freeIPs() {
