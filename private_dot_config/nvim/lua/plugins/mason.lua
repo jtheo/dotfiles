@@ -9,6 +9,7 @@ return {
 				"shfmt",
 				"tfsec",
 				"prettier",
+				"zls",
 			},
 		},
 		{
