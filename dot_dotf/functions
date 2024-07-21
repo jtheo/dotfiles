@@ -253,6 +253,7 @@ function brewup() {
   # msgLong "Updated Packages (From ${m} ${d} ${sh}:${sm} ${m} ${d} ${eh}:)"
   # brew ls --formula -lt | sed -n -E "/${m}[[:space:]]*${d}[[:space:]]*${eh}:/,/${m}[[:space:]]*${d}[[:space:]]*${sh}:${sm}/p"
   msgLong "That's it! The job took $(($(date +%s) - Start_Time)) seconds"
+  printf "\n\n"
 }
 
 function sl() {
