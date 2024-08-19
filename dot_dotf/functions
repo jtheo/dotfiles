@@ -578,7 +578,7 @@ function w2g() {
 }
 
 function coffee() {
-  waketime=${1:-480}
+  waketime=${1:-450}
   addMinutes=$((60 * waketime))
   now=$(date +%s)
   endAt=$((addMinutes + now))

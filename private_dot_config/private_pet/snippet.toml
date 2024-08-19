@@ -119,3 +119,9 @@
   Tag = ["kubectl", "name", "kind", "status"]
   command = "kubectl -n prd get po -o custom-columns=Name:.metadata.name,Kind:.metadata.ownerReferences[].kind,Status:.status.phase"
 
+[[Snippets]]
+  Description = "check status eks cluster k8s kubernetes"
+  Output = ""
+  Tag = ["eks", "k8s", "pod", "pods", "nodes", "check", "status"]
+  command = "e=${PWD##*/}; e=${e#*-}; while :; do clear; echo \"$(date): Checking ${e}\"; echo \"Deployment not in sync\"; k -n \"${e}\" get deployments --no-headers  | awk '$3 != $4'; printf \"\\nPods not in Running State\\n\"; k get po --no-headers -A | grep -vE 'Running|Complete'; printf \"\\nChecking Nodes Status\\n\" ; check_nodes.sh ; sleep 5; done"
+
