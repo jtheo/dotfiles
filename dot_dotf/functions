@@ -559,7 +559,7 @@ function git_tfmt() {
   git ln ${1} | grep -E '.tf' | xargs -IX -P 10 terraform fmt X
 }
 
-function lsext() {
+function oldlsext() {
   file ./* | sort -k2 | awk '$2 != "directory" { if ($2 != prev) { print ""; prev = $2 }; print }'
 }
 
