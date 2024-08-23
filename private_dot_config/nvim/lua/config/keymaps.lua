@@ -3,3 +3,5 @@
 -- Add any additional keymaps here
 
 vim.keymap.set("n", "<leader>ug", ":Glow<CR>", { desc = "Preview Markdown with Glow" })
+vim.keymap.set("n", "x", '"_x')
+-- vim.keymap.set("n", "<C-A>", "gg<S-v>G")
