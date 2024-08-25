@@ -675,3 +675,13 @@ function freeIPs() {
   echo "Total $(wc -l <"${tmpFile}")"
   rm -f "${tmpFile}"
 }
+
+function x265Tox264() {
+  src="${1}"
+  tmp="${src}-tmp.mp4"
+
+  mv "${src}" "${tmp}"
+
+  ffmpeg -i "${tmp}" -map 0 -c:v libx264 -crf 18 -vf format=yuv420p -c:a copy "${src}"
+  rm "${tmp}"
+}
