@@ -1,0 +1,20 @@
+gha_build: {{
+    COMPONENT_CONFIG["data"]["main_config"]["gha_build"]
+  }}
+
+
+{% if COMPONENT_CONFIG["data"]["main_config"]["gha_build"] == "true" %}
+gha_build is true
+{% else %}
+gha_build is not true
+{% endif %}
+
+
+          git_branch: {{ COMPONENT_CONFIG["data"]["main_config"]["branch"] }}
+          git_repo: {{ COMPONENT_CONFIG["data"]["main_config"]["gitRepo"] }}
+
+
+{{ COMPONENT_CONFIG["ecosystems"]["dev"] }}
+
+{{ COMPONENT_CONFIG["data"]["main_config"]["branch"]}}
+

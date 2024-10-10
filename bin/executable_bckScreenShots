@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+function log() {
+	echo "$(date): $*"
+}
+
+BASE=${1:-$HOME}
+BCKPATH="${BASE}/Downloads/Screenshots"
+DSTPATH="${BCKPATH}/$(date +%Y)/$(date +%m)"
+
+read -r -a files <<<"$(find "${BCKPATH}" -maxdepth 1 -type f \( -name "?creenshot*" -o -name "Screen Recording*" \) -mmin +30)"
+
+if [[ ${#files[@]} -eq 0 ]]; then
+	exit 0
+fi
+
+if [[ ! -d "${DSTPATH}" ]]; then
+	mkdir -p "${DSTPATH}"
+fi
+
+log "Starting Moving"
+
+for f in "${files[@]}"; do
+	mv -v "${f}" "${DSTPATH}"
+done
+
+log "Ending Moving"
+echo

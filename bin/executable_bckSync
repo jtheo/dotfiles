@@ -1,0 +1,85 @@
+#!/bin/bash
+
+function msg() {
+  echo "$(date): ${*}"
+}
+
+function err() {
+  msg "${*}"
+  exit 1
+}
+
+function helpMe() {
+  cat <<EOF
+
+  $0 
+  -l lock Sync
+  -u unlock Sync
+  -p path
+  -b base
+
+EOF
+}
+
+function diffTime() {
+  local start=${1}
+  stop=$(date +%s)
+  diff=$((stop - start))
+  if [[ ${diff} -gt 3600 ]]; then
+    hours=$((diff / 3600))
+  fi
+  rest=$((diff % 3600))
+  mins=$((rest / 60))
+  secs=$((rest - (mins * 60)))
+}
+
+function Sync() {
+  /usr/bin/rsync -avz --delete --ignore-errors --stats --no-perms --omit-dir-times \
+    --exclude-from="${excludeList}" \
+    --include-from="${includeList}" \
+    "${fullPath}/." "${DST}/${path}"
+}
+
+while getopts ":hlup:b:" opt; do
+  case ${opt} in
+    l) touch "${LOCK}" && err "Locked Sync" ;;
+    u)
+      [[ -e "${LOCK}" ]] && rm "${LOCK}"
+      msg "Lock Removed"
+      ;;
+    p) path=${OPTARG} ;;
+    b) base=${OPTARG} ;;
+    h) helpMe ;;
+    :) err "Invalid option: ${OPTARG} requires an argument" 1>&2 ;;
+    \?) helpMe ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+[[ -n "${path}" ]] || err "I need the path to start like /Users/jtheo"
+
+DST=r4:/media/bck/itv_m2
+LOCK=/Users/jtheo/.lockrsync
+hours=0
+mins=0
+secs=0
+
+base=${base=$HOME}
+fullPath=${base}/${path}
+includeList=${base}/.includeList
+excludeList=${base}/.excludeList
+
+if [[ -e "${LOCK}" ]]; then
+  err "Rsync Locked"
+else
+  msg "Start SYNC to ${DST}"
+  start=$(date +%s)
+  if ! Sync; then
+    msg "Something horrible happened!!! Check the error log"
+  fi
+
+  diffTime "${start}"
+
+  msg "Stop SYNC to ${DST} (It took ${hours} hours, ${mins} minutes and ${secs} seconds)"
+  printf "%*s\n" 120 " " | tr ' ' '='
+fi

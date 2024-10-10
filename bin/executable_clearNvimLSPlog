@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+lspLogFile=${HOME}/.local/state/nvim/lsp.log
+nvimInstances=$(ps | awk '/[n]vim/ {c++} END {print c}')
+
+if [[ ${nvimInstances} -eq 0 ]]; then
+  true >"${lspLogFile}"
+fi

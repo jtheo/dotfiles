@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+trap cleanup SIGQUIT SIGINT EXIT
+
+function cleanup() {
+  now=$(date +%s)
+  diffTime=$((now - start))
+  [[ -e ${lock} ]] && rm "${lock}"
+  log "Cleanup Executed"
+  echo
+}
+
+function log() {
+  echo "$(date): $*"
+}
+
+function banner() {
+  LINE=$(printf "%*s" 100 ' ' | tr ' ' '=')
+  echo
+  echo "${LINE}"
+  log "${*}"
+  echo "${LINE}"
+  echo
+}
+
+function err() {
+  log "[ERROR]: ${*}"
+  exit 1
+}
+
+start=$(date +%s)
+
+key="${HOME}/.ssh/keys/itv-sync"
+# homer4=192.168.0.4
+SSH=/opt/homebrew/bin/ssh
+RSYNC=/opt/homebrew/bin/rsync
+lock=/tmp/rsync.r4.lock
+
+[[ -e ${lock} ]] && err "Lock found: $(cat ${lock})"
+cd "${HOME}" || err "Can't cd ${HOME}"
+
+# nc -z -w 1 "${homer4}" 22 >/dev/null 2>&1 || err "Not at home closing"
+
+ssh -F "${HOME}/.ssh/config" -o ConnectTimeout=1 r4 .bin/hc 2>/dev/null || err "Not at home"
+
+# if ! nc -z -w 1 "${homer4}" 22 >/dev/null 2>&1; then
+#   err "Not at home closing"
+# fi
+
+banner "Starting..."
+date >"${lock}"
+log "Lock Created: $(cat ${lock})"
+
+if ! "${RSYNC}" -e "${SSH} -i ${key} -F /dev/null -l jtheo" \
+  -avz \
+  --compress \
+  --delete \
+  --ignore-errors \
+  --ignore-missing-args \
+  --no-perms \
+  --omit-dir-times \
+  --secluded-args \
+  --stats \
+  --exclude-from="${HOME}/.excludeList" \
+  --log-file="${HOME}/logs/rsync.log" \
+  ./ 192.168.0.4:/media/bck/mac/itv_m2/; then
+  err "rsync failed!!!"
+fi
+
+log "Sync completed, executed in ${diffTime} seconds"

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+b=$(git rev-parse --abbrev-ref HEAD)
+
+if [[ -z ${b} ]] || [[ ${b} == "main" ]] || [[ ${b} == "master" ]]; then
+  echo "Nothing to do here, see ya!"
+  exit 0
+fi
+
+git co main && git pull && git br -d "${b}"
+

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if ! git status >/dev/null 2>&1; then
+	echo "${PWD##*/}"
+	exit
+fi
+
+cdr
+
+b=${PWD}
+cd "${OLDPWD}" || exit 1
+echo "${b##*/}"
