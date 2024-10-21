@@ -8,6 +8,7 @@ return {
 				"shellcheck",
 				"shfmt",
 				"tfsec",
+				"pylint",
 				"prettier",
 				"zls",
 			},
