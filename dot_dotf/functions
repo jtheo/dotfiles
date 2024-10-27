@@ -352,7 +352,8 @@ function prog() {
 function scpsrt() {
   shopt -s nullglob
   files=(*.srt)
-  [[ ${#files[@]} -gt 0 ]] && scp ./*.srt le:~/HD && rm -- *.srt
+  [[ ${#files[@]} -gt 0 ]] && scp ./*.srt jf:~/aaa/Parking/ && rm -- *.srt
+
   nfo=(*.nfo)
   [[ ${#nfo[@]} -gt 0 ]] && rm -- *.nfo
 }
