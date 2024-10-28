@@ -2,7 +2,7 @@ local wezterm = require("wezterm")
 local act = wezterm.action
 
 return {
-	term = "xterm-256color",
+	term = "screen-256color",
 	initial_rows = 60,
 	initial_cols = 240,
 	hide_tab_bar_if_only_one_tab = true,
@@ -36,8 +36,7 @@ return {
 			action = act.SpawnCommandInNewTab({
 				cwd = os.getenv("WEZTERM_CONFIG_DIR"),
 				set_environment_variables = {
-					-- TERM = "screen-256color",
-					TERM = "xterm-256color",
+					TERM = "screen-256color",
 				},
 				args = {
 					"/opt/homebrew/bin/nvim",
@@ -48,16 +47,6 @@ return {
 	},
 
 	window_background_opacity = 0.9,
-
-	-- colors = {
-	-- 	-- Make the selection text color fully transparent.
-	-- 	-- When fully transparent, the current text color will be used.
-	-- 	selection_fg = "none",
-	-- 	-- Set the selection background color with alpha.
-	-- 	-- When selection_bg is transparent, it will be alpha blended over
-	-- 	-- the current cell background color, rather than replace it
-	-- 	selection_bg = "rgba(50% 50% 50% 50%)",
-	-- },
 
 	automatically_reload_config = true,
 }
