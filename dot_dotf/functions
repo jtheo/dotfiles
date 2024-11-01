@@ -676,3 +676,14 @@ function freeIPs() {
   echo "Total $(wc -l <"${tmpFile}")"
   rm -f "${tmpFile}"
 }
+
+function startGo() {
+  if [[ ! -e main.go ]]; then
+    printf "package main\n\nfunc main(){\n}\n" >main.go
+    go mod init
+    nvim main.go
+  else
+    echo "Main.Go already there, Knucklehead"
+    nvim main.go
+  fi
+}

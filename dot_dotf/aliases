@@ -61,7 +61,7 @@ alias updatedb="sudo /usr/libexec/locate.updatedb"
 
 alias tempcpu="sudo powermetrics  --sample-count 1 --sample-rate=1 --samplers smc | sort | grep -E '^(CPU die temperature|Fan: [0-9]+)' | tr '\n' ' '; echo"
 
-alias wtf="GODEBUG=http2client=0 wtfutil"
+alias wtf="GODEBUG=http2client=0 wtfutil; clear"
 # shellcheck disable=SC2139
 alias editwtf="vi ${HOME}/.config/wtf/config.yml"
 alias deMacMyAss="xattr -c"
@@ -80,8 +80,6 @@ alias checkLine='networkQuality -v'
 
 alias cm=chezmoi
 alias cme="chezmoi edit --apply"
-
-alias startGo='printf "package main\n\nfunc main(){\n}\n" > main.go; go mod init; nvim main.go'
 
 alias kgn='kubectl get nodes -o custom-columns=NAME:.metadata.name,ROLE:.metadata.labels.itv-role,VER:.status.nodeInfo.kubeletVersion,AGE:.metadata.creationTimestamp,ID:.spec.providerID,Taint:.spec.taints,Type:".metadata.labels.beta\.kubernetes\.io/instance-type"'
 alias tmux='tmux -2'
