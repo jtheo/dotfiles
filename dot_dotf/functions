@@ -588,7 +588,7 @@ function coffee() {
   echo
   echo "$(date): Starting, coffee will finish at ${endAtString}"
   figlet -w 200 "Awake for ${waketime} minutes"
-  caffeinate -t $((60 * waketime)) -d -s
+  caffeinate -t ${addMinutes} -d -s
   echo "$(date): Finished..."
 }
 
