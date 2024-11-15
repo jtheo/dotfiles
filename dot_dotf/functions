@@ -610,6 +610,7 @@ function trimPlan() {
 
   tmpFile=$(mktemp)
 
+  [[ -e "${layer}" ]] || err "Missing log file ${layer}"
   sed 's/\x1b[^m]*m//g' "${layer}" | awk '/^([ \t]*[<=\+\~\/\-]* (resource|module|data) ")|(Plan|No changes|Changes))/' >"${tmpFile}"
   nChanges=$(wc -l <"${tmpFile}")
   if [[ ${nChanges##* } -eq 0 ]]; then
