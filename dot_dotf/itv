@@ -1,0 +1,295 @@
+#!/usr/bin/env bash
+# ------------------------------- Alias-CP-Tools
+# Bundler
+alias be="bundle exec"
+alias bi="bundle install"
+alias bu="bundle update"
+alias ber="bundle exec rake"
+alias bert="bundle exec rake test"
+alias berti="bundle exec rake terraform:install"
+alias berpi="bundle exec rake puppet:install"
+alias berkey="bundle exec rake"
+alias bed="bundle exec dome"
+alias bek="bundle exec kitchen"
+
+#ssm
+alias ssm="cp-ssm ssh --instance-id"
+alias ssml="cp-ssm list"
+
+# Dome
+alias domep="bed --plan"
+alias domea="bed --apply"
+alias domea-a="bed -a --apply"
+alias dometip="berti && bed --plan"
+
+# aws-vault
+# Usage: ave shows-prd-pe
+alias ave="unset AWS_VAULT && aws-vault exec"
+alias avl="aws-vault login"
+
+alias pac="source ~/repos/jtheo/localpy/bin/activate"
+
+export KUBECTL_VERSION="1.24"
+export AWS_VAULT_KEYCHAIN_NAME=login
+export DOCKER_HOST=unix://${HOME}/.colima/default/docker.sock
+export KUBECONFIG=./kube.config
+
+export PATH=${PATH}:/usr/local/bin:${HOME}/bin:${HOME}/go/bin:${HOME}/repos/itv/cp-tools/bin:${HOME}/.cargo/bin:${KREW_ROOT:-$HOME/.krew}/bin
+
+tmpPATH=/tmp/tmpPATHfile
+echo "${PATH}" | tr ':' '\n' | sort -u >"${tmpPATH}"
+newPATH=$( (
+  grep -v "${USER}" "${tmpPATH}"
+  grep "${USER}" "${tmpPATH}"
+) | tr '\n' ':')
+
+export PATH=${newPATH%:}
+
+export HISTSIZE=10000
+
+eval "$(rbenv init -)"
+# ------------------------- -------------------------
+alias tfPath='tree -d -I plans -I params'
+
+function tee_file() {
+  while getopts ":hac:" opt; do
+    case ${opt} in
+      a) action=${OPTARG} ;;
+      c) teeFileCounter=${OPTARG}_ ;;
+      h) checkLastHelp ;;
+      :) err "Invalid option: $OPTARG requires an argument" 1>&2 ;;
+      *) checkLastHelp ;;
+    esac
+  done
+  shift $((OPTIND - 1))
+
+  local b
+  b=${PWD/\/Users\/*\/repos\/itv\/*-infra\/terraform\//}
+  b=${b//\//_}
+  b=${teeFileCounter}${action}_${b}_$(date +%y%m%d_%H%M)
+
+  echo "${b}"
+}
+
+function svc() {
+  [[ -n ${1} ]] || (
+    echo "Say what?"
+    return 1
+  )
+  product=${1%%/*}
+  subpath=${1#*/}
+  if [[ ${subpath} == "${product}" ]]; then
+    subpath=""
+  fi
+  d=${HOME}/repos/itv/${product}-infra-services/${subpath}
+  [[ -d ${d} ]] || (
+    echo "No dir ${d}?"
+    return 1
+  )
+
+  cd "${d}" || (
+    echo "Something wrong when cd to ${d}"
+    return 1
+  )
+}
+
+function inf() {
+  [[ -n ${1} ]] || (
+    echo "Say what?"
+    return 1
+  )
+  product=${1%%/*}
+  subpath=${1#*/}
+  if [[ ${subpath} == "${product}" ]]; then
+    subpath=""
+  fi
+  d=${HOME}/repos/itv/${product}-infra/${subpath}
+  [[ -d ${d} ]] || (
+    echo "No dir ${d}?"
+    return 1
+  )
+
+  cd "${d}" || (
+    echo "Something wrong when cd to ${d}"
+    return 1
+  )
+}
+
+function gc() {
+  if [[ -z ${1} ]]; then
+    echo "I need a repo"
+    return 1
+  fi
+  base=${HOME}/repos/itv
+  repo=${1%/}
+  dir=${repo##*/}
+  if ! { [[ ${repo} =~ ^git@ ]] || [[ ${repo} =~ ^https: ]]; }; then
+    repo=git@github.com:ITV/${repo}
+  fi
+  cd "${base}" || err "can't cd to ${base}"
+  if [[ -d ${dir} ]]; then
+    echo "I can see ${dir}, so ${repo} looks like already cloned... moving there"
+  else
+    if ! git clone "${repo}"; then
+      echo "Trouble in paradise? git clone failed"
+      return 1
+    fi
+  fi
+
+  cd "${dir}" || err "Can't cd to ${dir}"
+}
+
+function d() {
+  if [[ -n ${AWS_VAULT} ]]; then
+    msg "You ar running in an existing aws-vault: ${AWS_VAULT}, unsetting it and the other AWS_ keys"
+    unset AWS_VAULT
+    unset $(env | awk -F= '/^AWS_(ACCESS|SECRET|CRED|SESSION)/ {print $1}')
+  fi
+  local want=${1,,}
+  local logDir=${HOME}/L
+  local teeFile base prefix
+  base=${PWD/\/Users\/*\/repos\/itv\/*-infra\/terraform\//}
+  base=${base//\//_}
+
+  case ${want} in
+    p | plan)
+      action=-pu
+      prefix=plan
+      ;;
+    a | apply)
+      action=-au
+      prefix=apply
+      ;;
+    *)
+      echo "Don't know what you want from me, sorry..."
+      return 1
+      ;;
+  esac
+
+  teeFile=${logDir}/${prefix}_${base}_$(date +%y%m%d_%H%M)
+
+  LINE=$(printf "%*s" 100 ' ' | tr ' ' '-')
+
+  [[ -d ${logDir} ]] || mkdir -p "${logDir}"
+
+  echo
+  echo "${LINE}"
+  echo "$(date): Logging to ${teeFile}"
+
+  (
+    echo "$(date): Running ${prefix} in ${PWD}"
+    bundle exec dome "${action}" 2>&1
+  ) | tee -a "${teeFile}"
+
+  echo
+  trimPlan "${teeFile}"
+  echo
+  echo
+}
+
+function debugT() {
+  cat <<-EOF
+
+		  Product:   ${product}
+		  Service:   ${service}
+		  Ecosystem: ${ecosystem}
+		  Layer:     ${layer}
+		  Action:    ${action}
+		  GitRoot:   ${git_root}
+		  tmp:       ${tmp}
+		  InfraService: ${infraService}
+
+	EOF
+  exit
+}
+
+function t() {
+  case ${1} in
+    a | apply) action=apply ;;
+    p | plan) action=plan ;;
+    i | init) action=init ;;
+    debug) action=debug ;;
+    *) echo "I don't know action '${1}'" && return 1 ;;
+  esac
+  source "${HOME}/repos/jtheo/localpy/bin/activate"
+
+  cdr
+  git_root=${PWD}
+  infraService=${git_root##*/}
+  cd "${OLDPWD}" || err "Can't cd to OLDPWD: ${OLDPWD}"
+
+  tmp=${PWD##*/"${infraService}"/}
+  product=${infraService%%-*}
+
+  read -r service ecosystem _ <<<"${tmp//\// }"
+
+  layer=${PWD#*"${infraService}"/}
+  layer=${layer//\//_}
+
+  log_file="${HOME}/L/tg_${action}_${layer}_$(date +%y%m%d_%H%M)"
+
+  if [[ ${1} == "debug" ]]; then
+    debugT
+  fi
+  unset AWS_VAULT
+
+  msg "Assumint ${product}-${ecosystem}-root role"
+  eval $(aws-vault export "${product}-${ecosystem}-root" | awk '{printf "export %s\n", $0}')
+
+  msg "Executing 'Terragrunt ${action}' on ${infraService}/${service}"
+  if [[ ${action} == "init" ]]; then
+    terragrunt init -upgrade
+    return
+  fi
+
+  terragrunt "${action}" 2>&1 | tee "${log_file}"
+  echo
+  trimPlan "${log_file}"
+  echo
+  msg "Done, msg in ${log_file}"
+}
+
+function aveCheck() {
+  prefix="AVE"
+  if [[ -n ${AWS_VAULT} ]]; then
+    prefix="${AWS_VAULT}"
+  fi
+  pppid=$(ps -ef | awk -v p=${PPID} '$2 == p {print $3}')
+  if [[ ${pppid} -ne 1 ]]; then
+    echo "${prefix} "
+  else
+    echo ""
+  fi
+}
+
+function itv() {
+  itvr=${HOME}/repos/itv
+  cd "${itvr}/${1}" || (
+    echo "${itvr}/${1} doesn't exists..."
+    return 1
+  )
+}
+
+function _itv_completion() {
+  local dirs
+  cd ~/repos/itv/ || err "repos/itv doesn't exist!"
+  mapfile -t dirs < <(echo *)
+  mapfile -t COMPREPLY < <(compgen -W "${dirs[@]}" "${COMP_WORDS[1]}")
+}
+
+complete -o nospace -F _itv_completion itv
+
+function showPath() {
+  if [[ ${PWD} =~ "repos/itv" ]]; then
+    d=${PWD/*\/repos\/itv\//}
+    d=${d/terraform\//}
+    echo "${d}"
+  else
+    echo "${PWD##*/}"
+  fi
+}
+
+PS1="\[\e[1;31m\]$(aveCheck)\[\e[1;37m\]${PS1}"
+export PS1
+
+export -f showPath
