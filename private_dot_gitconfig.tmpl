@@ -1,27 +1,22 @@
-[user]
-	name = Matteo Marchelli
-	email = matteo.marchelli@gmail.com
-  signingkey = ~/.ssh/keys/github.Apr.2021
-
-[includeIf "gitdir:~/repos/itv"]
+[includeIf "gitdir:~/repos/itv/**"]
     path = ~/repos/itv/gitconfig
 
-[includeIf "gitdir:~/repos/jtheo"]
+[includeIf "gitdir:~/repos/jtheo/**"]
     path = ~/repos/jtheo/gitconfig
 
+[includeIf "gitdir:~/go/src/**"]
+    path = ~/repos/jtheo/gitconfig
+
+[includeIf "gitdir:~/.local/share/chezmoi/**"]
+    path = ~/repos/jtheo/gitconfig
+
+[url "git@github.com:"]
+   insteadOf = "https://github.com/"
 
 [core]
   pager = less -x1,5
-#  pager = delta
   fileMode = true
   editor = vim
-
-#[interactive]
-#  diffFilter = delta --color-only
-
-[delta]
-  navigate = true    # use n and N to move between diff sections
-  light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
 
 [diff]
   tool = meld
@@ -108,3 +103,7 @@
 
 [init]
 	defaultBranch = main
+
+[pull]
+	rebase = true
+	# ff = only

@@ -506,11 +506,17 @@ function zapThisShit() {
   fi
 
   prevDiskUse=$(df -k . | awk '$1 ~ /dev/ {print $3}')
-  find . \( -name '.terraform*' -o -name backend.tf \) -print0 | xargs -0 -IX -P 10 rm "-${OPT}" X
+  # find . \( -name '.terraform*' -o -name backend.tf \) -print0 | xargs -0 -IX -P 10 rm "-${OPT}" X
+  find . \( -type f -name .terraform.lock.hcl \) -o \( -type d -name .terraform \) -print0 | xargs -0 -P 5 -IX rm "-${OPT}" X
   nowDiskUse=$(df -k . | awk '$1 ~ /dev/ {print $3}')
   diffDiskUse=$((prevDiskUse - nowDiskUse))
+  SIZE=KB
+  if [[ ${diffDiskUse} -gt 1024 ]]; then
+    diffDiskUse=$((diffDiskUse / 1024))
+    SIZE=MB
+  fi
   echo
-  echo "Clean-up completed, freed ${diffDiskUse} Kb"
+  echo "Clean-up completed, freed ${diffDiskUse} ${SIZE}"
 }
 
 function zipSrtToLe() {
