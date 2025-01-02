@@ -622,7 +622,7 @@ function trimPlan() {
     return
   fi
   sed 's/\x1b[^m]*m//g' "${layer}" | awk '/^([ \t]*[<=\+\~\/\-]* (resource|module|data) ")|(Plan|No changes|Changes)/' >"${tmpFile}"
-  nChanges=$(wc -l <"${tmpFile}")
+  nChanges=$(grep -c "No changes" "${tmpFile}")
   if [[ ${nChanges##* } -eq 0 ]]; then
     message="No changes"
   else

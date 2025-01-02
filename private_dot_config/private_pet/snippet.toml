@@ -1,161 +1,150 @@
 
 [[Snippets]]
   Description = "To fetch the Puppet private key for the product that you're working on, run the following command:"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["infra", "terraform", "puppet", "hiera"]
   command = "bundle install && bundle exec rake puppet:get_hiera_private_key"
 
 [[Snippets]]
   Description = "Download the terraform modules based on the version defined in the Terrafile"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["terraform", "module", "version", "install"]
   command = "bundle exec rake terraform:install"
 
 [[Snippets]]
   Description = "get kubernetes nodes with name, role, version, instanceID and taint"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["k8s", "kubernetes", "node", "nodes", "no", "get"]
   command = "kubectl get nodes -o custom-columns='NAME:.metadata.name, ROLE:.metadata.labels.itv-role, VER:.status.nodeInfo.kubeletVersion, AGE:.metadata.creationTimestamp, ID:.spec.providerID, Taint:.spec.taints'"
 
 [[Snippets]]
   Description = "get nodes with name, role, version, started,  instance id and IP"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["k8s", "kubernetes", "node", "nodes", "no", "get"]
   command = "kubectl get no -o custom-columns='NAME:.metadata.name, ROLE:.metadata.labels.itv-role, VER:.status.nodeInfo.kubeletVersion, AGE:.metadata.creationTimestamp, ID:.spec.providerID, IP:.status.addresses[0].address'"
 
 [[Snippets]]
   Description = "GHA Runner in Terminating for ever. TL;DR there's a `finalizer` set that died and the runner needed to be patched to remove the remains"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["k8s", "gha", "github", "action", "runner", "terminating", "patch", "finalizer"]
   command = "kubectl -n infradev get po | awk '$3 ~ /Terminating/ {print $1}' | xargs -IX kubectl -n infradev patch po X -p '{\"metadata\":{\"finalizers\":null}}'"
 
 [[Snippets]]
   Description = "wait for pod to be ready"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["k8s", "pod", "wait", "ready"]
   command = "kubectl wait --namespace metallb-system --for=condition=ready pod --selector=app=metallb --timeout=90s"
 
 [[Snippets]]
   Description = "list kind of pod running on a node per role"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["k8s", "kind", "role", "no", "node", "nodes", "pod", "daemonset", "replicaset"]
   command = "for node in $(kubectl get nodes -l itv-role=eksworker-infra -ojsonpath='{.items[*].metadata.name}'); do echo \"Node: ${node}\"; kubectl get pods -A --field-selector spec.nodeName=$node -o=custom-columns='NAME:.metadata.name, KIND:.metadata.ownerReferences[0].kind'; echo; done"
 
 [[Snippets]]
   Description = "Remove all the pods in Completed status"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["k8s", "pod", "Succeeded", "Completed"]
   command = "kubectl delete pods -A --field-selector=status.phase=Succeeded"
 
 [[Snippets]]
   Description = "remove a set of resources in EKS left after decommissioning a job"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["k8s", "secrets", "service", "decommission", "left-over"]
   command = "for resource in secrets serviceaccounts probes servicemonitors; do echo \"${resource}\"; kubectl -n sit delete \"${resource}\" $(kubectl get -n prd ${r} | awk '$1 ~ /^cupid/ {print $1}'); echo; done"
 
 [[Snippets]]
   Description = "loki query looking for status code > 304 and printing only status code an uri"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["loki", "query", "filter"]
   command = "{app=\"config\"} | json |  __error__ != \"JSONParserErr\" | message_status > 304 | line_format \"{{ .message_status }} | {{ .message_url }}\""
 
 [[Snippets]]
   Description = "update encryption for objects in s3"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["aws", "s3", "encryption", "AES256"]
   command = "export BUCKET=your-s3-bucket; aws s3 cp --recursive --sse AES256 s3://${BUCKET} s3://${BUCKET}"
 
 [[Snippets]]
   Description = "look for orphans resources in k8s"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["k8s", "resources", "delete", "orphans"]
   command = "svc=janus-preview; echo \"Looking for ${svc} resources\"; kubectl api-resources --no-headers | sort | awk '$0 !~ /events/ {print $1}' | while read -r res; do found=$(kubectl get \"${res}\" -A 2>/dev/null | awk -v svc=\"${svc}\" -v res=\"${res}\" '$0 ~ svc { ns[$1]=sprintf(\"%s %s\",$2,ns[$1]) } END {for (n in ns) printf \"kubectl -n %s delete %s %s \\n\",n,res,ns[n]}'); if [[ -n ${found} ]]; then echo \"${found}\"; fi; done"
 
 [[Snippets]]
   Description = "delete secret from secretsmanager immediately"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["aws", "cli", "secret", "secretmanager", "ssm", "delete", "danger"]
   command = "aws secretsmanager delete-secret --force-delete-without-recovery --secret-id path/to/my/secret"
 
 [[Snippets]]
   Description = "countdown to 10"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["bash", "countdown", "progress"]
   command = "for i in {10..1}; do printf \"Countdown: %-2d\\r\" \"${i}\"; sleep 1; done"
 
 [[Snippets]]
   Description = "get kubernetes nodes with instance type"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["k8s", "kubectl", "kubernetes", "instance", "type", "AWS"]
   command = "kubectl get node --label-columns beta.kubernetes.io/instance-type"
 
 [[Snippets]]
   Description = "get node with role and instance-type"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["k8s", "kubectl", "kubernetes", "aws", "role", "instance", "type"]
   command = "kubectl get nodes -o custom-columns='NAME:.metadata.name, ROLE:.metadata.labels.itv-role, Type:.metadata.labels.node\\.kubernetes\\.io/instance-type'"
 
 [[Snippets]]
   Description = "puppet console interactive ssh"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["puppet", "console", "interactive", "ssh"]
   command = "puppet-masterless-console"
 
 [[Snippets]]
   Description = "search for the latest minor version of kubectl provided by asdf for a specific version"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["kubectl", "asdf", "version"]
   command = "asdf latest kubectl 1.27"
 
 [[Snippets]]
   Description = "install specific version of kubectl via asdf"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["asdf", "install", "kubectl", "version"]
   command = "asdf install kubectl 1.27.14"
 
 [[Snippets]]
   Description = "get pod with custom columns name, from type and status"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["kubectl", "name", "kind", "status"]
   command = "kubectl -n prd get po -o custom-columns=Name:.metadata.name,Kind:.metadata.ownerReferences[].kind,Status:.status.phase"
 
 [[Snippets]]
   Description = "check status eks cluster k8s kubernetes"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["eks", "k8s", "pod", "pods", "nodes", "check", "status"]
   command = "e=${PWD##*/}; e=${e#*-}; while :; do clear; echo \"$(date): Checking ${e}\"; echo \"Deployment not in sync\"; k -n \"${e}\" get deployments --no-headers  | awk '$3 != $4'; printf \"\\nPods not in Running State\\n\"; k get po --no-headers -A | grep -vE 'Running|Complete'; printf \"\\nChecking Nodes Status\\n\" ; check_nodes.sh ; sleep 5; done"
 
 [[Snippets]]
   Description = "Count kubernetes nodes in Grafana"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["k8s", "kubernetes", "grafana", "prometheus", "nodes"]
   command = "count(node_boot_time_seconds)"
 
 [[Snippets]]
   Description = "Count pods running in Kubernetes in Grafana"
-  Filename = "/Users/mattmar1/.config/pet/snippet.toml"
   Output = ""
   Tag = ["k8s", "kubernetes", "pod", "pods", "count", "grafana", "prometheus"]
   command = "count(kube_pod_info)"
+
+[[Snippets]]
+  Description = "force delete job in Github Action that got stuck"
+  Output = ""
+  Tag = ["github", "action", "GHA", "stuck", "job", "delete", "force"]
+  command = "gh api   --method POST   -H \"Accept: application/vnd.github+json\"   -H \"X-GitHub-Api-Version: 2022-11-28\"   /repos/itv/${repo}/actions/runs/${run_id}/force-cancel"
+
+[[Snippets]]
+  Description = "Stop github action job by ID, you need to be in the repo dir"
+  Output = ""
+  Tag = ["GHA", "github", "action", "stop", "job"]
+  command = "gh run cancel ${run_id}"
