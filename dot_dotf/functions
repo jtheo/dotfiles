@@ -698,3 +698,16 @@ function startGo() {
     nvim main.go
   fi
 }
+
+function ghForceCancel() {
+  repo=${1}
+  runID=${2}
+  if [[ -z ${repo} ]] || [[ -z ${runID} ]]; then
+    err "I need a owner/repo and the runID"
+  fi
+  gh api \
+    --method POST \
+    -H "Accept: application/vnd.github+json" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    "/repos/${repo}/actions/runs/${runID}/force-cancel"
+}
