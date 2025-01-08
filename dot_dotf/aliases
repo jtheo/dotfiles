@@ -79,7 +79,6 @@ alias yt3="yt-dlp -f bestaudio --audio-quality 0 --audio-format mp3  --extract-a
 alias checkLine='networkQuality -v'
 
 alias cm=chezmoi
-alias cme="chezmoi edit --apply"
 
 alias kgn='kubectl get nodes -o custom-columns=NAME:.metadata.name,ROLE:.metadata.labels.itv-role,VER:.status.nodeInfo.kubeletVersion,AGE:.metadata.creationTimestamp,ID:.spec.providerID,Taint:.spec.taints,Type:".metadata.labels.beta\.kubernetes\.io/instance-type"'
 alias tmux='tmux -2'

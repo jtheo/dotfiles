@@ -237,11 +237,12 @@ function search_in_history() {
 }
 
 function brewup() {
+  tmpFiles=$(mktemp)
   printf "\n\n\n"
-  # read -r m d sh sm <<< $(date  "+%b %d %H %M")
   Start_Time=$(date +%s)
   msgLong "Start updating brew"
-  for action in update upgrade cleanup; do
+  brew outdated >"${tmpFiles}"
+  for action in update upgrade "cleanup --prune=all"; do
     msgLong "${action}"
     # shellcheck disable=SC2086
     brew ${action}
@@ -253,7 +254,12 @@ function brewup() {
   # msgLong "Updated Packages (From ${m} ${d} ${sh}:${sm} ${m} ${d} ${eh}:)"
   # brew ls --formula -lt | sed -n -E "/${m}[[:space:]]*${d}[[:space:]]*${eh}:/,/${m}[[:space:]]*${d}[[:space:]]*${sh}:${sm}/p"
   msgLong "That's it! The job took $(($(date +%s) - Start_Time)) seconds"
+  msgLong "Packages Updated..."
+  cat "${tmpFiles}"
   printf "\n\n"
+
+  msgLong "Plugins updates"
+  updPlugins
 }
 
 function sl() {
@@ -710,4 +716,36 @@ function ghForceCancel() {
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     "/repos/${repo}/actions/runs/${runID}/force-cancel"
+}
+
+function cme() {
+  if [[ -z ${1} ]]; then
+    err "I need a file to edit..."
+  fi
+  fn=${1}
+  if [[ ! -e ${fn} ]]; then
+    touch "${fn}" && cm add "${fn}"
+  fi
+  chezmoi edit --apply "${fn}"
+}
+
+function updPlugins() {
+  # stolen from: https://github.com/iainsimmons/dotfiles/blob/main/bin/u
+  tmpFile=$(mktemp)
+  if type -p tmux >/dev/null; then
+    echo " Updating tpm plugins"
+    if ! ~/.tmux/plugins/tpm/bin/update_plugins all >"${tmpFile}"; then
+      echo "Error! See the log"
+      cat "${tmpFile}"
+    fi
+  fi
+
+  if type -p nvim >/dev/null; then
+    echo "💤 Updating Neovim Lazy packages"
+    if ! nvim --headless "+Lazy! sync" +qa >"${tmpFile}"; then
+      echo "Error! See the log"
+      cat "${tmpFile}"
+    fi
+  fi
+
 }
