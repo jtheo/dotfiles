@@ -733,19 +733,21 @@ function updPlugins() {
   # stolen from: https://github.com/iainsimmons/dotfiles/blob/main/bin/u
   tmpFile=$(mktemp)
   if type -p tmux >/dev/null; then
-    echo " Updating tpm plugins"
+    msg " Updating tpm plugins"
     if ! ~/.tmux/plugins/tpm/bin/update_plugins all >"${tmpFile}"; then
-      echo "Error! See the log"
+      msg "Error! See the log"
       cat "${tmpFile}"
     fi
   fi
 
   if type -p nvim >/dev/null; then
-    echo "💤 Updating Neovim Lazy packages"
+    msg "💤 Updating Neovim Lazy packages"
     if ! nvim --headless "+Lazy! sync" +qa >"${tmpFile}"; then
-      echo "Error! See the log"
+      msg "Error! See the log"
       cat "${tmpFile}"
     fi
   fi
-
+  echo
+  msg "Done..."
+  echo
 }
