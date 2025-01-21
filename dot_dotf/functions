@@ -254,8 +254,11 @@ function brewup() {
   # msgLong "Updated Packages (From ${m} ${d} ${sh}:${sm} ${m} ${d} ${eh}:)"
   # brew ls --formula -lt | sed -n -E "/${m}[[:space:]]*${d}[[:space:]]*${eh}:/,/${m}[[:space:]]*${d}[[:space:]]*${sh}:${sm}/p"
   msgLong "That's it! The job took $(($(date +%s) - Start_Time)) seconds"
-  msgLong "Packages Updated..."
-  cat "${tmpFiles}"
+  if [[ -s ${tmpFiles} ]]; then
+    echo
+    msgLong "Packages Updated..."
+    cat "${tmpFiles}" | xargs -P 10 -IX sh -c 'pkg=X; echo " - ${pkg}:  $(brew info ${pkg} | sed -n 2p)"'
+  fi
   printf "\n\n"
 
   msgLong "Plugins updates"

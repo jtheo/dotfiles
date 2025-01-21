@@ -37,8 +37,9 @@ export KUBECONFIG=./kube.config
 export PATH=${PATH}:/usr/local/bin:${HOME}/bin:${HOME}/go/bin:${HOME}/repos/itv/cp-tools/bin:${HOME}/.cargo/bin:${KREW_ROOT:-$HOME/.krew}/bin
 
 tmpPATH=/tmp/tmpPATHfile
-echo "${PATH}" | tr ':' '\n' | sort -u >"${tmpPATH}"
+echo "${PATH}" | tr ':' '\n' | sort -iu >"${tmpPATH}"
 newPATH=$( (
+  grep brew "${tmpPATH}"
   grep -v "${USER}" "${tmpPATH}"
   grep "${USER}" "${tmpPATH}"
 ) | tr '\n' ':')
