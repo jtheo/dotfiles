@@ -241,7 +241,7 @@ function brewup() {
   printf "\n\n\n"
   Start_Time=$(date +%s)
   msgLong "Start updating brew"
-  brew outdated >"${tmpFiles}"
+  brew outdated --json >"${tmpFiles}"
   for action in update upgrade "cleanup --prune=all"; do
     msgLong "${action}"
     # shellcheck disable=SC2086
@@ -257,7 +257,8 @@ function brewup() {
   if [[ -s ${tmpFiles} ]]; then
     echo
     msgLong "Packages Updated..."
-    cat "${tmpFiles}" | xargs -P 10 -IX sh -c 'pkg=X; echo " - ${pkg}:  $(brew info ${pkg} | sed -n 2p)"'
+    jq -r '.formulae[] | .name + ";" + .current_version + " -> " + (.installed_versions | join(" "))' "${tmpFiles}" |
+      xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
   fi
   printf "\n\n"
 
