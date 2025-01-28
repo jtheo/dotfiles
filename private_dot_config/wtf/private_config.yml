@@ -102,7 +102,7 @@ wtf:
       position:
         top: 0
         left: 1
-        height: 4
+        height: 5
         width: 1
       refreshInterval: 2h
       type: feedreader
@@ -114,7 +114,7 @@ wtf:
       position:
         top: 0
         left: 2
-        height: 4
+        height: 5
         width: 1
       storyType: top
       refreshInterval: 2h
@@ -126,7 +126,7 @@ wtf:
       position:
         top: 0
         left: 3
-        height: 4
+        height: 5
         width: 1
       refreshInterval: 6h
       sortOrder: new
@@ -139,9 +139,9 @@ wtf:
       # focusChar: 4
       numberOfPosts: 10
       position:
-        top: 4
+        top: 5
         left: 1
-        height: 2
+        height: 3
         width: 1
       refreshInterval: 6h
       sortOrder: new
@@ -149,48 +149,18 @@ wtf:
       topTimePeriod: day
       type: subreddit
 
-    r-k8s:
-      enabled: true
-      # focusChar: 6
-      numberOfPosts: 10
-      position:
-        top: 6
-        left: 2
-        height: 2
-        width: 1
-      refreshInterval: 15m
-      sortOrder: new
-      subreddit: "kubernetes"
-      topTimePeriod: week
-      type: subreddit
-
     r-sre:
       enabled: true
       # focusChar: 8
       numberOfPosts: 10
       position:
-        top: 4
+        top: 5
         left: 3
-        height: 2
+        height: 3
         width: 1
       refreshInterval: 6h
       sortOrder: new
       subreddit: "sre"
-      topTimePeriod: week
-      type: subreddit
-
-    r-terraform:
-      enabled: true
-      # focusChar: "b"
-      numberOfPosts: 10
-      position:
-        top: 8
-        left: 1
-        height: 2
-        width: 1
-      refreshInterval: 6h
-      sortOrder: new
-      subreddit: "terraform"
       topTimePeriod: week
       type: subreddit
 
@@ -199,28 +169,13 @@ wtf:
       # focusChar: "b"
       numberOfPosts: 10
       position:
-        top: 4
+        top: 5
         left: 2
-        height: 2
+        height: 3
         width: 1
       refreshInterval: 6h
       sortOrder: new
       subreddit: "devops"
-      topTimePeriod: week
-      type: subreddit
-
-    r-python:
-      enabled: true
-      # focusChar: "b"
-      numberOfPosts: 10
-      position:
-        top: 8
-        left: 3
-        height: 2
-        width: 1
-      refreshInterval: 6h
-      sortOrder: new
-      subreddit: "python"
       topTimePeriod: week
       type: subreddit
 
@@ -229,13 +184,28 @@ wtf:
       # focusChar: 5
       numberOfPosts: 10
       position:
-        top: 6
+        top: 8
         left: 3
-        height: 2
+        height: 3
         width: 1
       refreshInterval: 6h
       sortOrder: new
       subreddit: "neovim"
+      topTimePeriod: week
+      type: subreddit
+
+    r-k8s:
+      enabled: true
+      # focusChar: 6
+      numberOfPosts: 10
+      position:
+        top: 8
+        left: 2
+        height: 3
+        width: 1
+      refreshInterval: 15m
+      sortOrder: new
+      subreddit: "kubernetes"
       topTimePeriod: week
       type: subreddit
 
@@ -244,28 +214,13 @@ wtf:
       # focusChar: 7
       numberOfPosts: 10
       position:
-        top: 6
+        top: 8
         left: 1
-        height: 2
+        height: 3
         width: 1
       refreshInterval: 6h
       sortOrder: new
       subreddit: "linux"
-      topTimePeriod: week
-      type: subreddit
-
-    r-aws:
-      enabled: true
-      # focusChar: 9
-      numberOfPosts: 10
-      position:
-        top: 8
-        left: 2
-        height: 2
-        width: 1
-      refreshInterval: 6h
-      sortOrder: new
-      subreddit: "aws"
       topTimePeriod: week
       type: subreddit
 
