@@ -243,7 +243,7 @@ function t() {
     return
   fi
 
-  terragrunt "${action}" 2>&1 | tee "${log_file}"
+  terragrunt "${action}" "${2}" 2>&1 | tee "${log_file}"
   echo
   trimPlan "${log_file}"
   echo
