@@ -257,7 +257,7 @@ function brewup() {
   if [[ -s ${tmpFiles} ]]; then
     echo
     msgLong "Packages Updated..."
-    jq -r '.formulae[] | .name + ";" + .current_version + " -> " + (.installed_versions | join(" "))' "${tmpFiles}" |
+    jq -r '.formulae[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${tmpFiles}" |
       xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
   fi
   printf "\n\n"
@@ -510,14 +510,11 @@ function zapThisShit() {
   fi
 
   if [[ ${1} == "-v" ]]; then
-    OPT=rfv
-  else
-    OPT=rf
+    VERBOSE=v
   fi
 
   prevDiskUse=$(df -k . | awk '$1 ~ /dev/ {print $3}')
-  # find . \( -name '.terraform*' -o -name backend.tf \) -print0 | xargs -0 -IX -P 10 rm "-${OPT}" X
-  find . \( -type f -name .terraform.lock.hcl \) -o \( -type d -name .terraform \) -print0 | xargs -0 -P 5 -IX rm "-${OPT}" X
+  find . \( \( -type f -name .terraform.lock.hcl \) -o \( -type d -name .terraform \) -o \( -type d -name .vendor \) \) -print0 | xargs -0 -P 5 -IX rm "-${VERBOSE}" X
   nowDiskUse=$(df -k . | awk '$1 ~ /dev/ {print $3}')
   diffDiskUse=$((prevDiskUse - nowDiskUse))
   SIZE=KB
@@ -592,6 +589,21 @@ function w2g() {
   fi
   g=${w%.webp}.gif
   convert "${w}" "${g}" && rm "${w}"
+}
+
+function mov2gif {
+  mov=${1}
+  if [[ -z ${mov} ]]; then
+    err "I need a file to convert"
+  fi
+  if [[ ! -e ${mov} ]]; then
+    err "The file you're trying to conver (${mov}) doesn't exist"
+  fi
+
+  if ! ffmpeg -i "${mov}" -pix_fmt rgb24 "${mov%.mov}.gif"; then
+    err "Something bad happened during the conversion, check the errors above"
+  fi
+  msg "File converted: ${mov%.mov}.gif"
 }
 
 function coffee() {
