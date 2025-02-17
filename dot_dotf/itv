@@ -214,6 +214,11 @@ function t() {
   esac
   source "${HOME}/repos/jtheo/localpy/bin/activate"
 
+  if [[ ! -e terragrunt.hcl ]]; then
+    echo "I can't see a terragrunt.hcl, I'll exit cowardly"
+    return 1
+  fi
+
   cdr
   git_root=${PWD}
   infraService=${git_root##*/}
