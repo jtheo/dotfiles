@@ -42,3 +42,5 @@ if [[ -z ${SSH_AUTH_SOCK} ]]; then
 fi
 
 export GAT_THEME=catppuccin-macchiato
+
+export LESS='FRIX'
