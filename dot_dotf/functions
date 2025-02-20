@@ -237,28 +237,28 @@ function search_in_history() {
 }
 
 function brewup() {
-  tmpFiles=$(mktemp)
+  tmpFile=$(mktemp)
   printf "\n\n\n"
   Start_Time=$(date +%s)
   msgLong "Start updating brew"
-  brew outdated --json >"${tmpFiles}"
+  brew outdated --json >"${tmpFile}"
   for action in update upgrade "cleanup --prune=all"; do
     msgLong "${action}"
     # shellcheck disable=SC2086
     brew ${action}
   done
 
-  # msgLong "Removing cache dir"
-  # sudo rm -rf "$(brew --cache)"
-  # read -r eh em <<< $(date "+%H %M")
-  # msgLong "Updated Packages (From ${m} ${d} ${sh}:${sm} ${m} ${d} ${eh}:)"
-  # brew ls --formula -lt | sed -n -E "/${m}[[:space:]]*${d}[[:space:]]*${eh}:/,/${m}[[:space:]]*${d}[[:space:]]*${sh}:${sm}/p"
+  [[ -d ${HOME}/logs ]] || mkdir -p "${HOME}/logs"
+
   msgLong "That's it! The job took $(($(date +%s) - Start_Time)) seconds"
-  if [[ -s ${tmpFiles} ]]; then
-    echo
-    msgLong "Packages Updated..."
-    jq -r '.formulae[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${tmpFiles}" |
-      xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
+  if [[ -s ${tmpFile} ]]; then
+    (
+      echo
+      msgLong "Packages Updated..."
+      jq -r '.formulae[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${tmpFile}" |
+        xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
+    ) | tee -A ~/logs/brewup.log
+    rm "${tmpFile}"
   fi
   printf "\n\n"
 
