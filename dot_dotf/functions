@@ -236,6 +236,15 @@ function search_in_history() {
   grep "${search}" ${history_file}
 }
 
+function brewUpdateInfo() {
+  src=${1}
+  echo
+  msgLong "Packages Updated... "
+  jq -r '.formulae[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
+    xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
+
+}
+
 function brewup() {
   tmpFile=$(mktemp -t "${FUNCNAME[0]}")
   printf "\n\n\n"
@@ -247,17 +256,8 @@ function brewup() {
     # shellcheck disable=SC2086
     brew ${action}
   done
-  numUpdates=$(jq '(.formula | length) + (.casks | length)' "${tmpFile}")
-  # if [[ ${numUpdates} -gt 0 ]]; then
   [[ -d ${HOME}/logs ]] || mkdir -p "${HOME}/logs"
-  (
-    echo
-    msgLong "Packages Updated... (${tmpFile})"
-    jq -r '.formulae[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${tmpFile}" |
-      xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
-  ) | tee -a ~/logs/brewup.log
-  # rm "${tmpFile}"
-  # fi
+  brewUpdateInfo "${tmpFile}" | tee -a ~/logs/brewup.log
   printf "\n\n"
 
   msgLong "Plugins updates"
