@@ -237,7 +237,7 @@ function search_in_history() {
 }
 
 function brewup() {
-  tmpFile=$(mktemp)
+  tmpFile=$(mktemp -t "${FUNCNAME[0]}")
   printf "\n\n\n"
   Start_Time=$(date +%s)
   msgLong "Start updating brew"
@@ -247,23 +247,23 @@ function brewup() {
     # shellcheck disable=SC2086
     brew ${action}
   done
-
+  numUpdates=$(jq '(.formula | length) + (.casks | length)' "${tmpFile}")
+  # if [[ ${numUpdates} -gt 0 ]]; then
   [[ -d ${HOME}/logs ]] || mkdir -p "${HOME}/logs"
-
-  msgLong "That's it! The job took $(($(date +%s) - Start_Time)) seconds"
-  if [[ -s ${tmpFile} ]]; then
-    (
-      echo
-      msgLong "Packages Updated..."
-      jq -r '.formulae[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${tmpFile}" |
-        xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
-    ) | tee -A ~/logs/brewup.log
-    rm "${tmpFile}"
-  fi
+  (
+    echo
+    msgLong "Packages Updated... (${tmpFile})"
+    jq -r '.formulae[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${tmpFile}" |
+      xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
+  ) | tee -a ~/logs/brewup.log
+  # rm "${tmpFile}"
+  # fi
   printf "\n\n"
 
   msgLong "Plugins updates"
   updPlugins
+  echo
+  msgLong "That's it! The job took $(($(date +%s) - Start_Time)) seconds"
 }
 
 function sl() {
@@ -636,14 +636,21 @@ function trimPlan() {
 
   layer=${1}
 
-  tmpFile=$(mktemp)
+  tmpFile=$(mktemp -t "${FUNCNAME[0]}")
 
   [[ -e "${layer}" ]] || err "Missing log file ${layer}"
-  if errFound=$(grep 'Error: ' "${layer}"); then
+  if errFound=$(grep ' Error: ' "${layer}"); then
     echo "Error found in ${pathplan} - ${layer}: ${errFound}"
     return
   fi
-  sed 's/\x1b[^m]*m//g' "${layer}" | awk '/^([ \t]*[<=\+\~\/\-]* (resource|module|data) ")|(Plan|No changes|Changes)/' >"${tmpFile}"
+  # sed 's/\x1b[^m]*m//g'
+  awk '{
+  if (/ # [A-Za-z]*/) {
+    printf "%s: ",$0
+  } else if ($0 ~ /([ \t]*[<=\+\~\/\-]* (resource|module|data) ")|(Plan:|No changes\.)/) {
+    printf "%s\n\n",$0
+    }
+}' "${layer}" >"${tmpFile}"
   nChanges=$(grep -c "No changes" "${tmpFile}")
   if [[ ${nChanges##* } -eq 0 ]]; then
     message="No changes"
@@ -699,7 +706,7 @@ function pods() {
 }
 
 function freeIPs() {
-  tmpFile=$(mktemp)
+  tmpFile=$(mktemp -t "${FUNCNAME[0]}")
   if [[ -z ${AWS_VAULT} ]]; then
     echo "missing AWS token"
     return 1
@@ -719,6 +726,7 @@ function startGo() {
     echo "Main.Go already there, Knucklehead"
     nvim main.go
   fi
+  go mod tidy
 }
 
 function ghForceCancel() {
@@ -747,7 +755,7 @@ function cme() {
 
 function updPlugins() {
   # stolen from: https://github.com/iainsimmons/dotfiles/blob/main/bin/u
-  tmpFile=$(mktemp)
+  tmpFile=$(mktemp -t "${FUNCNAME[0]}")
   if type -p tmux >/dev/null; then
     msg " Updating tpm plugins"
     if ! ~/.tmux/plugins/tpm/bin/update_plugins all >"${tmpFile}"; then
@@ -764,6 +772,6 @@ function updPlugins() {
     fi
   fi
   echo
-  msg "Done..."
-  echo
+  # msg "Done..."
+  # echo
 }
