@@ -239,10 +239,11 @@ function search_in_history() {
 function brewUpdateInfo() {
   src=${1}
   echo
-  msgLong "Packages Updated... "
+  msgLong "Packages Updated... (${src})"
   jq -r '.formulae[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
     xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
-
+  jq -r '.casks[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
+    xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
 }
 
 function brewup() {

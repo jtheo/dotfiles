@@ -144,6 +144,7 @@ function d() {
   if [[ -n ${AWS_VAULT} ]]; then
     msg "You ar running in an existing aws-vault: ${AWS_VAULT}, unsetting it and the other AWS_ keys"
     unset AWS_VAULT
+    # shellcheck disable=SC2046
     unset $(env | awk -F= '/^AWS_(ACCESS|SECRET|CRED|SESSION)/ {print $1}')
   fi
   local want=${1,,}
@@ -208,7 +209,7 @@ function t() {
   case ${1} in
     a | apply) action=apply ;;
     p | plan) action=plan ;;
-    i | init) action=init ;;
+    i | init) action="init -upgrade" ;;
     debug) action=debug ;;
     *) echo "I don't know action '${1}'" && return 1 ;;
   esac
@@ -240,15 +241,13 @@ function t() {
   unset AWS_VAULT
 
   msg "Assumint ${product}-${ecosystem}-root role"
+  # shellcheck disable=SC2046
   eval $(aws-vault export "${product}-${ecosystem}-root" | awk '{printf "export %s\n", $0}')
 
-  msg "Executing 'Terragrunt ${action}' on ${infraService}/${service}"
-  if [[ ${action} == "init" ]]; then
-    terragrunt init -upgrade
-    return
-  fi
+  msg "Executing 'Terragrunt ${action}' on ${infraService}/${service}/${PWD##*/}"
 
-  terragrunt "${action}" "${2}" 2>&1 | tee "${log_file}"
+  # shellcheck disable=SC2086
+  terragrunt ${action} ${2} 2>&1 | tee "${log_file}"
   echo
   trimPlan "${log_file}"
   echo
@@ -285,15 +284,15 @@ function _itv_completion() {
 
 complete -o nospace -F _itv_completion itv
 
-function showPath() {
-  if [[ ${PWD} =~ "repos/itv" ]]; then
-    d=${PWD/*\/repos\/itv\//}
-    d=${d/terraform\//}
-    echo "${d}"
-  else
-    echo "${PWD##*/}"
-  fi
-}
+# function showPath() {
+#   if [[ ${PWD} =~ "repos/itv" ]]; then
+#     d=${PWD/*\/repos\/itv\//}
+#     d=${d/terraform\//}
+#     echo "${d}"
+#   else
+#     echo "${PWD##*/}"
+#   fi
+# }
 
 function ghForceCancel() {
   repo=${1}
@@ -311,4 +310,4 @@ function ghForceCancel() {
 PS1="\[\e[1;31m\]$(aveCheck)\[\e[1;37m\]${PS1}"
 export PS1
 
-export -f showPath
+# export -f showPath
