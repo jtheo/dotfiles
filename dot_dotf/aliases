@@ -75,6 +75,7 @@ alias dewitch='hash -d'
 alias wtfEd='subl ${HOME}/.config/wtf/config.yml'
 
 alias yt3="yt-dlp -f bestaudio --audio-quality 0 --audio-format mp3  --extract-audio  -o '%(title)s.%(ext)s'"
+alias yt4="yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'"
 
 alias checkLine='networkQuality -v'
 
