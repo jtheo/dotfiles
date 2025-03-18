@@ -37,7 +37,7 @@ lock=/tmp/rsync.r4.lock
 [[ -e ${lock} ]] && err "Lock found: $(cat ${lock})"
 cd "${HOME}" || err "Can't cd ${HOME}"
 
-ssh -F "${HOME}/.ssh/config" sync .bin/hc 2>/dev/null || err "Not at home. Exit: ${?}"
+ssh -F "${HOME}/.ssh/config" sync bin/hc 2>/dev/null || err "Not at home. Exit: ${?}"
 
 banner "Starting..."
 date >"${lock}"

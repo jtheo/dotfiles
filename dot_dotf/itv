@@ -174,6 +174,9 @@ function d() {
 
   [[ -d ${logDir} ]] || mkdir -p "${logDir}"
 
+  [[ -n ${GITHUB_TOKEN} ]] || GITHUB_TOKEN=$(gh auth token)
+  export GITHUB_TOKEN
+
   echo
   echo "${LINE}"
   echo "$(date): Logging to ${teeFile}"
@@ -222,6 +225,8 @@ function t() {
 
   cdr
   git_root=${PWD}
+  root_hcl=${git_root}/root.hcl
+  sed -i.bak 's/lock\-timeout=20m/lock\-timeout=1m/g' "${root_hcl}" && rm "${root_hcl}.bak"
   infraService=${git_root##*/}
   cd "${OLDPWD}" || err "Can't cd to OLDPWD: ${OLDPWD}"
 
@@ -252,6 +257,7 @@ function t() {
   trimPlan "${log_file}"
   echo
   msg "Done, msg in ${log_file}"
+  sed -i.bak 's/lock\-timeout=1m/lock\-timeout=20m/g' "${root_hcl}" && rm "${root_hcl}.bak"
 }
 
 function aveCheck() {

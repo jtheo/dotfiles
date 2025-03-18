@@ -17,7 +17,7 @@ alias n=nvim
 
 # https://zeldor.biz/2014/07/mtr-for-mac-os-x/
 # added also /usr/local/sbin to the PATH variable
-alias mtr='sudo /usr/local/sbin/mtr'
+alias mtr='sudo $(which mtr)'
 alias grep='grep --color'
 
 alias lsd='ls -l | grep ^d'
@@ -89,4 +89,6 @@ alias p='fzf --preview="gat -c {}"'
 
 alias colimaUnfuck='rm -rf ~/.colima/_lima/_networks/user-v2'
 
+alias byebye="cd ${HOME}/.tmux/plugins/tmux-resurrect/scripts; ./save/sh; tmux kill-server"
 # alias zapTF='find . \( -type f -name .terraform.lock.hcl \) -o \( -type d -name .terraform \) | xargs -P 5 -IX rm -rf X'
+#

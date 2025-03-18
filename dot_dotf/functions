@@ -9,7 +9,7 @@ function repeat() {
 }
 
 function msg() {
-  echo "$(date): ${*}"
+  printf "%(%a %d %b %Y %H:%M:%S %Z)T: ${*}\n"
 }
 
 function err() {
