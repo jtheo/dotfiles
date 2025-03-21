@@ -148,3 +148,9 @@
   Output = ""
   Tag = ["GHA", "github", "action", "stop", "job"]
   command = "gh run cancel ${run_id}"
+
+[[Snippets]]
+  Description = "get deployed helm chart manifest"
+  Output = ""
+  Tag = ["kubernetes", "helm", "chart", "manifest", "render", "template", "namespace", "ns"]
+  command = "helm -n istio-system get manifest istio-gateway-internal-okta-ingress"

@@ -150,6 +150,8 @@ function d() {
   local want=${1,,}
   local logDir=${HOME}/L
   local teeFile base prefix
+  local start
+  start=$(printf "%(%s)T")
   base=${PWD/\/Users\/*\/repos\/itv\/*-infra\/terraform\//}
   base=${base//\//_}
 
@@ -184,6 +186,9 @@ function d() {
   (
     echo "$(date): Running ${prefix} in ${PWD}"
     bundle exec dome "${action}" 2>&1
+    now=$(printf "%(%s)T")
+    echo
+    echo "Executed in $((now - start)) seconds"
   ) | tee -a "${teeFile}"
 
   echo
