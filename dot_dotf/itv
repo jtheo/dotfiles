@@ -322,11 +322,22 @@ function ghForceCancel() {
 }
 
 function ak() {
-  if [[ -e kube.config ]] && [[ ${PWD} =~ .*\/[a-z]*-infra\/.* ]]; then
-    ave "${PWD##*/}-root"
-  else
+  local action=${1:-e}
+  local role="${PWD##*/}-root"
+  if [[ ! ${PWD} =~ .*\/[a-z]*-infra\/.* ]]; then
     echo "You're in the wrong place: ${PWD}"
+    return 1
   fi
+  case ${action} in
+    e)
+      if [[ ! -e kube.config ]]; then
+        echo "Can't see kube.config here"
+        return 1
+      fi
+      ave "${role}"
+      ;;
+    l) avl "${role}" ;;
+  esac
 }
 
 PS1="\[\e[1;31m\]$(aveCheck)\[\e[1;37m\]${PS1}"
