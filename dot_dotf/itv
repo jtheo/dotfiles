@@ -257,7 +257,10 @@ function t() {
   msg "Executing 'Terragrunt ${action}' on ${infraService}/${service}/${PWD##*/}"
 
   # shellcheck disable=SC2086
-  terragrunt ${action} ${2} 2>&1 | tee "${log_file}"
+  (
+    echo "Running ${action} in ${PWD}"
+    terragrunt ${action} ${2} 2>&1
+  ) | tee "${log_file}"
   echo
   trimPlan "${log_file}"
   echo
@@ -316,6 +319,14 @@ function ghForceCancel() {
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     "/repos/itv/${repo}/actions/runs/${runID}/force-cancel"
+}
+
+function ak() {
+  if [[ -e kube.config ]] && [[ ${PWD} =~ .*\/[a-z]*-infra\/.* ]]; then
+    ave "${PWD##*/}-root"
+  else
+    echo "You're in the wrong place: ${PWD}"
+  fi
 }
 
 PS1="\[\e[1;31m\]$(aveCheck)\[\e[1;37m\]${PS1}"

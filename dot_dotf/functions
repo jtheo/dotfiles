@@ -644,24 +644,25 @@ function trimPlan() {
     echo "Error found in ${pathplan} - ${layer}: ${errFound}"
     return
   fi
-  # sed 's/\x1b[^m]*m//g'
+
   awk '{
   if (/ # [A-Za-z]*/) {
     printf "%s: ",$0
   } else if ($0 ~ /([ \t]*[<=\+\~\/\-]* (resource|module|data) ")|(Plan:|No changes\.)/) {
-    printf "%s\n\n",$0
+    printf "===> %s\n",$0
     }
-}' "${layer}" >"${tmpFile}"
-  nChanges=$(grep -c "No changes" "${tmpFile}")
-  if [[ ${nChanges##* } -eq 0 ]]; then
-    message="No changes"
-  else
-    message="There are ${nChanges##* } changes"
-  fi
+}' "${layer}" | sed -E 's/[[:digit:]]+:.+STDOUT.+terraform: //g' >"${tmpFile}"
 
-  pathplan=$(awk '/Running plan in / {gsub(/.* in .*\/terraform\//,"", $0); print $0}' "${layer}")
-  printf "\n============== %s: %s\n" "${pathplan}" "${message} ( ${layer} )"
-  cat "${tmpFile}"
+  # pathplan=$(awk '/Running plan in / {gsub(/.* in .*\/terraform\//,"", $0); print $0}' "${layer}")
+  pathplan=$(awk '/Running plan in /' "${layer}")
+  printf "\n============== %s\n" "${pathplan}"
+  awk '{if ($0 ~ /Plan:|No changes/) {printf "\n\n%s\n",$0; exit}; print}' "${tmpFile}"
+  echo
+  # if grep -q "No changes" "${tmpFile}"; then
+  #   message="There are changes"
+  # else
+  #   message="No changes"
+  # fi
   rm "${tmpFile}"
 }
 
