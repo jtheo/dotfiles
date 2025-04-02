@@ -756,7 +756,7 @@ function cme() {
 
 function updPlugins() {
   # stolen from: https://github.com/iainsimmons/dotfiles/blob/main/bin/u
-  tmpFile=$(mktemp -t "${FUNCNAME[0]}")
+  tmpFile=$(mktemp -t "${FUNCNAME[0]}_XXXXX")
   if type -p tmux >/dev/null; then
     msg " Updating tpm plugins"
     if ! ~/.tmux/plugins/tpm/bin/update_plugins all >"${tmpFile}"; then
