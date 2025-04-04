@@ -630,10 +630,8 @@ function coffee() {
 # }
 
 function trimPlan() {
-  [[ -n ${1} ]] || (
-    echo "need a plan, mate..."
-    return 1
-  )
+  [[ -n ${1} ]] || err "need a plan, mate..."
+  [[ -e ${1} ]] || err "The plan MUST exists"
 
   layer=${1}
 
@@ -651,13 +649,15 @@ function trimPlan() {
   } else if ($0 ~ /([ \t]*[<=\+\~\/\-]* (resource|module|data) ")|(Plan:|No changes\.)/) {
     printf "===> %s\n",$0
     }
-}' "${layer}" | sed -E 's/[[:digit:]]+:.+STDOUT.+terraform: //g' >"${tmpFile}"
+}' "${layer}" | sed -E -e 's/.{2}:.{2}:.{2}\..{3}//g' -e 's/STDOUT//g' -e 's/terraform://g' >"${tmpFile}"
 
   # pathplan=$(awk '/Running plan in / {gsub(/.* in .*\/terraform\//,"", $0); print $0}' "${layer}")
   pathplan=$(awk '/Running plan in /' "${layer}")
-  printf "\n============== %s\n" "${pathplan}"
+  printf "============== '%s' '%s'\n" "${pathplan}" "${layer}"
   awk '{if ($0 ~ /Plan:|No changes/) {printf "\n\n%s\n",$0; exit}; print}' "${tmpFile}"
   echo
+  grep -A3 'Error:' "${layer}"
+
   # if grep -q "No changes" "${tmpFile}"; then
   #   message="There are changes"
   # else
