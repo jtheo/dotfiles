@@ -287,9 +287,18 @@ function aveCheck() {
 
 function itv() {
   itvr=${HOME}/repos/itv
+  ans=n
   cd "${itvr}/${1}" || (
-    echo "${itvr}/${1} doesn't exists..."
-    return 1
+    echo "${itvr}/${1} doesn't exists... Do you want to clone it? [Y/n] "
+    read -r -n 1 -t 5 ans
+    case ${ans} in
+      y | Y) gc "${1}" ;;
+      *)
+        echo "Ok, see ya"
+        return
+        ;;
+    esac
+    return
   )
 }
 
@@ -348,3 +357,4 @@ PS1="\[\e[1;31m\]$(aveCheck)\[\e[1;37m\]${PS1}"
 export PS1
 
 # export -f showPath
+export -f gc itv ak
