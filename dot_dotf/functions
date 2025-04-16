@@ -240,10 +240,12 @@ function brewUpdateInfo() {
   src=${1}
   echo
   msgLong "Packages Updated... (${src})"
-  jq -r '.formulae[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
-    xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
-  jq -r '.casks[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
-    xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
+  (
+    jq -r '.formulae[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
+      xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
+    jq -r '.casks[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
+      xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
+  ) | sort
 }
 
 function brewup() {
@@ -657,12 +659,6 @@ function trimPlan() {
   awk '{if ($0 ~ /Plan:|No changes/) {printf "\n\n%s\n",$0; exit}; print}' "${tmpFile}"
   echo
   grep -A3 'Error:' "${layer}"
-
-  # if grep -q "No changes" "${tmpFile}"; then
-  #   message="There are changes"
-  # else
-  #   message="No changes"
-  # fi
   rm "${tmpFile}"
 }
 
@@ -776,4 +772,25 @@ function updPlugins() {
   echo
   # msg "Done..."
   # echo
+}
+
+# https://techhub.social/@diazona/113854120227811584
+#@caleb Incidentally, I was tweaking this to my particular setup and along the way I found some alterations/simplifications:
+
+function __gcb_diff() {
+  local base_branch="${1}" target_branch="${2}"
+  git diff --color=always "${base_branch}...${target_branch}"
+}
+
+export -f __gcb_diff
+
+function gcb() {
+  local base
+  for base in origin/main origin/master; do
+    if git show-ref --verify --quiet "refs/remotes/${base}"; then
+      break
+    fi
+  done
+  base="refs/remotes/${base:?Unable to determine primary remote}"
+  git branch --no-merged "${base}" | fzf --preview="__gcb_diff '${base}' {-1}" | cut -c 3- | xargs --no-run-if-empty git switch --no-guess
 }

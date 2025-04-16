@@ -217,11 +217,15 @@ function t() {
   case ${1} in
     a | apply) action=apply ;;
     p | plan) action=plan ;;
+    d | destroy) action=destroy ;;
     i | init) action="init -upgrade" ;;
     debug) action=debug ;;
     *) echo "I don't know action '${1}'" && return 1 ;;
   esac
   source "${HOME}/repos/jtheo/localpy/bin/activate"
+  shift
+
+  arguments="${*}"
 
   if [[ ! -e terragrunt.hcl ]]; then
     echo "I can't see a terragrunt.hcl, I'll exit cowardly"
@@ -259,7 +263,7 @@ function t() {
   # shellcheck disable=SC2086
   (
     echo "Running ${action} in ${PWD}"
-    terragrunt ${action} ${2} 2>&1
+    terragrunt ${action} ${arguments} 2>&1
   ) | tee "${log_file}"
   echo
   trimPlan "${log_file}"
