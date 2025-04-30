@@ -247,7 +247,7 @@ function t() {
   layer=${PWD#*"${infraService}"/}
   layer=${layer//\//_}
 
-  log_file="${HOME}/L/tg_${action}_${layer}_$(date +%y%m%d_%H%M)"
+  log_file="${HOME}/L/tg_${action% *}_${layer}_$(date +%y%m%d_%H%M)"
 
   if [[ ${1} == "debug" ]]; then
     debugT

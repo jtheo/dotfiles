@@ -99,8 +99,8 @@ function check_k8s() {
 function archPaySlip() {
   local destDir
   destDir="${HOME}/Documents/Personal/Payslip/$(date +%Y)"
-  local PaySlipPasswd
-  PaySlipPasswd=$(getSecret PaySlipPasswd)
+  # local PaySlipPasswd
+  # PaySlipPasswd=$(getSecret PaySlipPasswd)
 
   if [[ -z $1 ]]; then
     source="${HOME}/Downloads/PaySlip.pdf"
@@ -130,14 +130,17 @@ function archPaySlip() {
     return
   fi
 
-  # shellcheck disable=SC2154
-  if qpdf --password="${PaySlipPasswd}" --decrypt "${source}" "${destination}"; then
-    echo "All the work is done! Everything is OK! You can check your payslip now"
-    printf "\n\nopen %s\n\n" "${destination}"
-  else
-    echo "Everything is fine... not. Something went south"
+  if ! mv -vi "${source}" "${destination}"; then
     return
   fi
+
+  # # shellcheck disable=SC2154
+  # if ! qpdf --password="${PaySlipPasswd}" --decrypt "${source}" "${destination}"; then
+  #   echo "Everything is fine... not. Something went south"
+  #   return
+  # fi
+  # echo "All the work is done! Everything is OK! You can check your payslip now"
+  printf "\n\nopen %s\n\n" "${destination}"
 }
 
 function bashman() { man bash | less -p "^       $1 "; }
