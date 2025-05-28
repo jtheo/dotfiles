@@ -800,3 +800,25 @@ function gcb() {
 	base="refs/remotes/${base:?Unable to determine primary remote}"
 	git branch --no-merged "${base}" | fzf --preview="__gcb_diff '${base}' {-1}" | cut -c 3- | xargs --no-run-if-empty git switch --no-guess
 }
+
+function tumbd() {
+	if [[ -z ${1} ]]; then
+		err "I need a url (eg: https://foobar.tumblr.com/post/1234abc"
+	fi
+
+	url=${1}
+
+	cd "${HOME}/storage/downloads"
+
+	if ! html=$(curl -sSL "${url}"); then
+		err "Can't download ${url}: ${html}"
+	fi
+
+	mp4URL=$(echo "${html}" | sed -nE '/source src=/ s/.* src="([^"]+.mp4)" .*/\1/p')
+
+	if ! curl -sSLO "${mp4URL}"; then
+		err "Can't Download {mp4URL}"
+	fi
+
+	msg "Safely downloaded ${mp4URL##*/}"
+}
