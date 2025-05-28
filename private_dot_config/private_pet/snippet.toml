@@ -154,3 +154,9 @@
   Output = ""
   Tag = ["kubernetes", "helm", "chart", "manifest", "render", "template", "namespace", "ns"]
   command = "helm -n istio-system get manifest istio-gateway-internal-okta-ingress"
+
+[[Snippets]]
+  Description = "query for gha-runner API error limit exceeded"
+  Output = ""
+  Tag = ["grafana", "loki", "gha", "runner", "scaleset", "self-hosted", "github"]
+  command = "count(rate({component=\"runner-scale-set-listener\"} |= `API rate limit exceeded` [1m]))"

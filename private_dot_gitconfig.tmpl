@@ -10,7 +10,6 @@
 [includeIf "gitdir:~/.local/share/chezmoi/**"]
     path = ~/repos/jtheo/gitconfig
 
-
 [core]
   pager = less -x1,5
   fileMode = true
@@ -81,7 +80,6 @@
   sw        = show -1 --format=%B--stat --word-diff=color
 
 [gpg]
-	# program = /usr/local/bin/gpg
 	program = gpg
 	format = ssh
 {{- if eq .chezmoi.os "darwin" }}

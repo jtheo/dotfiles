@@ -91,4 +91,5 @@ alias colimaUnfuck='rm -rf ~/.colima/_lima/_networks/user-v2'
 
 alias byebye="cd ${HOME}/.tmux/plugins/tmux-resurrect/scripts; ./save.sh; tmux kill-server"
 # alias zapTF='find . \( -type f -name .terraform.lock.hcl \) -o \( -type d -name .terraform \) | xargs -P 5 -IX rm -rf X'
-#
+
+alias tinychat='docker run -p 8080:8080 -v chat-data:/app/data ghcr.io/anishgowda21/tiny-ollama-chat:latest'

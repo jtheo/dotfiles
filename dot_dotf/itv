@@ -39,9 +39,9 @@ export PATH=${PATH}:/usr/local/bin:${HOME}/bin:${HOME}/go/bin:${HOME}/repos/itv/
 tmpPATH=/tmp/tmpPATHfile
 echo "${PATH}" | tr ':' '\n' | sort -iu >"${tmpPATH}"
 newPATH=$( (
-  grep brew "${tmpPATH}"
-  grep -v "${USER}" "${tmpPATH}"
-  grep "${USER}" "${tmpPATH}"
+	grep brew "${tmpPATH}"
+	grep -v "${USER}" "${tmpPATH}"
+	grep "${USER}" "${tmpPATH}"
 ) | tr '\n' ':')
 
 export PATH=${newPATH%:}
@@ -53,152 +53,152 @@ eval "$(rbenv init -)"
 alias tfPath='tree -d -I plans -I params'
 
 function tee_file() {
-  while getopts ":hac:" opt; do
-    case ${opt} in
-      a) action=${OPTARG} ;;
-      c) teeFileCounter=${OPTARG}_ ;;
-      h) checkLastHelp ;;
-      :) err "Invalid option: $OPTARG requires an argument" 1>&2 ;;
-      *) checkLastHelp ;;
-    esac
-  done
-  shift $((OPTIND - 1))
+	while getopts ":hac:" opt; do
+		case ${opt} in
+		a) action=${OPTARG} ;;
+		c) teeFileCounter=${OPTARG}_ ;;
+		h) checkLastHelp ;;
+		:) err "Invalid option: $OPTARG requires an argument" 1>&2 ;;
+		*) checkLastHelp ;;
+		esac
+	done
+	shift $((OPTIND - 1))
 
-  local b
-  b=${PWD/\/Users\/*\/repos\/itv\/*-infra\/terraform\//}
-  b=${b//\//_}
-  b=${teeFileCounter}${action}_${b}_$(date +%y%m%d_%H%M)
+	local b
+	b=${PWD/\/Users\/*\/repos\/itv\/*-infra\/terraform\//}
+	b=${b//\//_}
+	b=${teeFileCounter}${action}_${b}_$(date +%y%m%d_%H%M)
 
-  echo "${b}"
+	echo "${b}"
 }
 
 function svc() {
-  [[ -n ${1} ]] || (
-    echo "Say what?"
-    return 1
-  )
-  product=${1%%/*}
-  subpath=${1#*/}
-  if [[ ${subpath} == "${product}" ]]; then
-    subpath=""
-  fi
-  d=${HOME}/repos/itv/${product}-infra-services/${subpath}
-  [[ -d ${d} ]] || (
-    echo "No dir ${d}?"
-    return 1
-  )
+	[[ -n ${1} ]] || (
+		echo "Say what?"
+		return 1
+	)
+	product=${1%%/*}
+	subpath=${1#*/}
+	if [[ ${subpath} == "${product}" ]]; then
+		subpath=""
+	fi
+	d=${HOME}/repos/itv/${product}-infra-services/${subpath}
+	[[ -d ${d} ]] || (
+		echo "No dir ${d}?"
+		return 1
+	)
 
-  cd "${d}" || (
-    echo "Something wrong when cd to ${d}"
-    return 1
-  )
+	cd "${d}" || (
+		echo "Something wrong when cd to ${d}"
+		return 1
+	)
 }
 
 function inf() {
-  [[ -n ${1} ]] || (
-    echo "Say what?"
-    return 1
-  )
-  product=${1%%/*}
-  subpath=${1#*/}
-  if [[ ${subpath} == "${product}" ]]; then
-    subpath=""
-  fi
-  d=${HOME}/repos/itv/${product}-infra/${subpath}
-  [[ -d ${d} ]] || (
-    echo "No dir ${d}?"
-    return 1
-  )
+	[[ -n ${1} ]] || (
+		echo "Say what?"
+		return 1
+	)
+	product=${1%%/*}
+	subpath=${1#*/}
+	if [[ ${subpath} == "${product}" ]]; then
+		subpath=""
+	fi
+	d=${HOME}/repos/itv/${product}-infra/${subpath}
+	[[ -d ${d} ]] || (
+		echo "No dir ${d}?"
+		return 1
+	)
 
-  cd "${d}" || (
-    echo "Something wrong when cd to ${d}"
-    return 1
-  )
+	cd "${d}" || (
+		echo "Something wrong when cd to ${d}"
+		return 1
+	)
 }
 
 function gc() {
-  if [[ -z ${1} ]]; then
-    echo "I need a repo"
-    return 1
-  fi
-  base=${HOME}/repos/itv
-  repo=${1%/}
-  dir=${repo##*/}
-  if ! { [[ ${repo} =~ ^git@ ]] || [[ ${repo} =~ ^https: ]]; }; then
-    repo=git@github.com:ITV/${repo}
-  fi
-  cd "${base}" || err "can't cd to ${base}"
-  if [[ -d ${dir} ]]; then
-    echo "I can see ${dir}, so ${repo} looks like already cloned... moving there"
-  else
-    if ! git clone "${repo}"; then
-      echo "Trouble in paradise? git clone failed"
-      return 1
-    fi
-  fi
+	if [[ -z ${1} ]]; then
+		echo "I need a repo"
+		return 1
+	fi
+	base=${HOME}/repos/itv
+	repo=${1%/}
+	dir=${repo##*/}
+	if ! { [[ ${repo} =~ ^git@ ]] || [[ ${repo} =~ ^https: ]]; }; then
+		repo=git@github.com:ITV/${repo}
+	fi
+	cd "${base}" || err "can't cd to ${base}"
+	if [[ -d ${dir} ]]; then
+		echo "I can see ${dir}, so ${repo} looks like already cloned... moving there"
+	else
+		if ! git clone "${repo}"; then
+			echo "Trouble in paradise? git clone failed"
+			return 1
+		fi
+	fi
 
-  cd "${dir}" || err "Can't cd to ${dir}"
+	cd "${dir}" || err "Can't cd to ${dir}"
 }
 
 function d() {
-  if [[ -n ${AWS_VAULT} ]]; then
-    msg "You ar running in an existing aws-vault: ${AWS_VAULT}, unsetting it and the other AWS_ keys"
-    unset AWS_VAULT
-    # shellcheck disable=SC2046
-    unset $(env | awk -F= '/^AWS_(ACCESS|SECRET|CRED|SESSION)/ {print $1}')
-  fi
-  local want=${1,,}
-  local logDir=${HOME}/L
-  local teeFile base prefix
-  local start
-  start=$(printf "%(%s)T")
-  base=${PWD/\/Users\/*\/repos\/itv\/*-infra\/terraform\//}
-  base=${base//\//_}
+	if [[ -n ${AWS_VAULT} ]]; then
+		msg "You ar running in an existing aws-vault: ${AWS_VAULT}, unsetting it and the other AWS_ keys"
+		unset AWS_VAULT
+		# shellcheck disable=SC2046
+		unset $(env | awk -F= '/^AWS_(ACCESS|SECRET|CRED|SESSION)/ {print $1}')
+	fi
+	local want=${1,,}
+	local logDir=${HOME}/L
+	local teeFile base prefix
+	local start
+	start=$(printf "%(%s)T")
+	base=${PWD/\/Users\/*\/repos\/itv\/*-infra\/terraform\//}
+	base=${base//\//_}
 
-  case ${want} in
-    p | plan)
-      action=-pu
-      prefix=plan
-      ;;
-    a | apply)
-      action=-au
-      prefix=apply
-      ;;
-    *)
-      echo "Don't know what you want from me, sorry..."
-      return 1
-      ;;
-  esac
+	case ${want} in
+	p | plan)
+		action=-pu
+		prefix=plan
+		;;
+	a | apply)
+		action=-au
+		prefix=apply
+		;;
+	*)
+		echo "Don't know what you want from me, sorry..."
+		return 1
+		;;
+	esac
 
-  teeFile=${logDir}/${prefix}_${base}_$(date +%y%m%d_%H%M)
+	teeFile=${logDir}/${prefix}_${base}_$(date +%y%m%d_%H%M)
 
-  LINE=$(printf "%*s" 100 ' ' | tr ' ' '-')
+	LINE=$(printf "%*s" 100 ' ' | tr ' ' '-')
 
-  [[ -d ${logDir} ]] || mkdir -p "${logDir}"
+	[[ -d ${logDir} ]] || mkdir -p "${logDir}"
 
-  [[ -n ${GITHUB_TOKEN} ]] || GITHUB_TOKEN=$(gh auth token)
-  export GITHUB_TOKEN
+	[[ -n ${GITHUB_TOKEN} ]] || GITHUB_TOKEN=$(gh auth token)
+	export GITHUB_TOKEN
 
-  echo
-  echo "${LINE}"
-  echo "$(date): Logging to ${teeFile}"
+	echo
+	echo "${LINE}"
+	echo "$(date): Logging to ${teeFile}"
 
-  (
-    echo "$(date): Running ${prefix} in ${PWD}"
-    bundle exec dome "${action}" 2>&1
-    now=$(printf "%(%s)T")
-    echo
-    echo "Executed in $((now - start)) seconds"
-  ) | tee -a "${teeFile}"
+	(
+		echo "$(date): Running ${prefix} in ${PWD}"
+		bundle exec dome "${action}" 2>&1
+		now=$(printf "%(%s)T")
+		echo
+		echo "Executed in $((now - start)) seconds"
+	) | tee -a "${teeFile}"
 
-  echo
-  trimPlan "${teeFile}"
-  echo
-  echo
+	echo
+	trimPlan "${teeFile}"
+	echo
+	echo
 }
 
 function debugT() {
-  cat <<-EOF
+	cat <<-EOF
 
 		  Product:   ${product}
 		  Service:   ${service}
@@ -210,103 +210,103 @@ function debugT() {
 		  InfraService: ${infraService}
 
 	EOF
-  exit
+	exit
 }
 
 function t() {
-  case ${1} in
-    a | apply) action=apply ;;
-    p | plan) action=plan ;;
-    d | destroy) action=destroy ;;
-    i | init) action="init -upgrade" ;;
-    debug) action=debug ;;
-    *) echo "I don't know action '${1}'" && return 1 ;;
-  esac
-  source "${HOME}/repos/jtheo/localpy/bin/activate"
-  shift
+	case ${1} in
+	a | apply) action=apply ;;
+	p | plan) action=plan ;;
+	d | destroy) action=destroy ;;
+	i | init) action="init -upgrade" ;;
+	debug) action=debug ;;
+	*) echo "I don't know action '${1}'" && return 1 ;;
+	esac
+	source "${HOME}/repos/jtheo/localpy/bin/activate"
+	shift
 
-  arguments="${*}"
+	arguments="${*}"
 
-  if [[ ! -e terragrunt.hcl ]]; then
-    echo "I can't see a terragrunt.hcl, I'll exit cowardly"
-    return 1
-  fi
+	if [[ ! -e terragrunt.hcl ]]; then
+		echo "I can't see a terragrunt.hcl, I'll exit cowardly"
+		return 1
+	fi
 
-  cdr
-  git_root=${PWD}
-  root_hcl=${git_root}/root.hcl
-  sed -i.bak 's/lock\-timeout=20m/lock\-timeout=1m/g' "${root_hcl}" && rm "${root_hcl}.bak"
-  infraService=${git_root##*/}
-  cd "${OLDPWD}" || err "Can't cd to OLDPWD: ${OLDPWD}"
+	cdr
+	git_root=${PWD}
+	root_hcl=${git_root}/root.hcl
+	sed -i.bak 's/lock\-timeout=20m/lock\-timeout=1m/g' "${root_hcl}" && rm "${root_hcl}.bak"
+	infraService=${git_root##*/}
+	cd "${OLDPWD}" || err "Can't cd to OLDPWD: ${OLDPWD}"
 
-  tmp=${PWD##*/"${infraService}"/}
-  product=${infraService%%-*}
+	tmp=${PWD##*/"${infraService}"/}
+	product=${infraService%%-*}
 
-  read -r service ecosystem _ <<<"${tmp//\// }"
+	read -r service ecosystem _ <<<"${tmp//\// }"
 
-  layer=${PWD#*"${infraService}"/}
-  layer=${layer//\//_}
+	layer=${PWD#*"${infraService}"/}
+	layer=${layer//\//_}
 
-  log_file="${HOME}/L/tg_${action% *}_${layer}_$(date +%y%m%d_%H%M)"
+	log_file="${HOME}/L/tg_${action% *}_${layer}_$(date +%y%m%d_%H%M)"
 
-  if [[ ${1} == "debug" ]]; then
-    debugT
-  fi
-  unset AWS_VAULT
+	if [[ ${1} == "debug" ]]; then
+		debugT
+	fi
+	unset AWS_VAULT
 
-  msg "Assumint ${product}-${ecosystem}-root role"
-  # shellcheck disable=SC2046
-  eval $(aws-vault export "${product}-${ecosystem}-root" | awk '{printf "export %s\n", $0}')
+	msg "Assumint ${product}-${ecosystem}-root role"
+	# shellcheck disable=SC2046
+	eval $(aws-vault export "${product}-${ecosystem}-root" | awk '{printf "export %s\n", $0}')
 
-  msg "Executing 'Terragrunt ${action}' on ${infraService}/${service}/${PWD##*/}"
+	msg "Executing 'Terragrunt ${action}' on ${infraService}/${service}/${PWD##*/}"
 
-  # shellcheck disable=SC2086
-  (
-    echo "Running ${action} in ${PWD}"
-    terragrunt ${action} ${arguments} 2>&1
-  ) | tee "${log_file}"
-  echo
-  trimPlan "${log_file}"
-  echo
-  msg "Done, msg in ${log_file}"
-  sed -i.bak 's/lock\-timeout=1m/lock\-timeout=20m/g' "${root_hcl}" && rm "${root_hcl}.bak"
+	# shellcheck disable=SC2086
+	(
+		echo "Running ${action} in ${PWD}"
+		terragrunt ${action} ${arguments} 2>&1
+	) | tee "${log_file}"
+	echo
+	trimPlan "${log_file}"
+	echo
+	msg "Done, msg in ${log_file}"
+	sed -i.bak 's/lock\-timeout=1m/lock\-timeout=20m/g' "${root_hcl}" && rm "${root_hcl}.bak"
 }
 
 function aveCheck() {
-  prefix="AVE"
-  if [[ -n ${AWS_VAULT} ]]; then
-    prefix="${AWS_VAULT}"
-  fi
-  pppid=$(ps -ef | awk -v p=${PPID} '$2 == p {print $3}')
-  if [[ ${pppid} -ne 1 ]]; then
-    echo "${prefix} "
-  else
-    echo ""
-  fi
+	prefix="AVE"
+	if [[ -n ${AWS_VAULT} ]]; then
+		prefix="${AWS_VAULT}"
+	fi
+	pppid=$(ps -ef | awk -v p=${PPID} '$2 == p {print $3}')
+	if [[ ${pppid} -ne 1 ]]; then
+		echo "${prefix} "
+	else
+		echo ""
+	fi
 }
 
 function itv() {
-  itvr=${HOME}/repos/itv
-  ans=n
-  cd "${itvr}/${1}" || (
-    echo "${itvr}/${1} doesn't exists... Do you want to clone it? [Y/n] "
-    read -r -n 1 -t 5 ans
-    case ${ans} in
-      y | Y) gc "${1}" ;;
-      *)
-        echo "Ok, see ya"
-        return
-        ;;
-    esac
-    return
-  )
+	itvr=${HOME}/repos/itv
+	ans=n
+	cd "${itvr}/${1}" || (
+		echo "${itvr}/${1} doesn't exists... Do you want to clone it? [Y/n] "
+		read -r -n 1 -t 5 ans
+		case ${ans} in
+		y | Y) gc "${1}" ;;
+		*)
+			echo "Ok, see ya"
+			return
+			;;
+		esac
+		return
+	)
 }
 
 function _itv_completion() {
-  local dirs
-  cd ~/repos/itv/ || err "repos/itv doesn't exist!"
-  mapfile -t dirs < <(echo *)
-  mapfile -t COMPREPLY < <(compgen -W "${dirs[@]}" "${COMP_WORDS[1]}")
+	local dirs
+	cd ~/repos/itv/ || err "repos/itv doesn't exist!"
+	mapfile -t dirs < <(echo *)
+	mapfile -t COMPREPLY < <(compgen -W "${dirs[@]}" "${COMP_WORDS[1]}")
 }
 
 complete -o nospace -F _itv_completion itv
@@ -322,35 +322,35 @@ complete -o nospace -F _itv_completion itv
 # }
 
 function ghForceCancel() {
-  repo=${1}
-  runID=${2}
-  if [[ -z ${repo} ]] || [[ -z ${runID} ]]; then
-    err "I need a owner/repo and the runID"
-  fi
-  gh api \
-    --method POST \
-    -H "Accept: application/vnd.github+json" \
-    -H "X-GitHub-Api-Version: 2022-11-28" \
-    "/repos/itv/${repo}/actions/runs/${runID}/force-cancel"
+	repo=${1}
+	runID=${2}
+	if [[ -z ${repo} ]] || [[ -z ${runID} ]]; then
+		err "I need a owner/repo and the runID"
+	fi
+	gh api \
+		--method POST \
+		-H "Accept: application/vnd.github+json" \
+		-H "X-GitHub-Api-Version: 2022-11-28" \
+		"/repos/itv/${repo}/actions/runs/${runID}/force-cancel"
 }
 
 function ak() {
-  local action=${1:-e}
-  local role="${PWD##*/}-root"
-  if [[ ! ${PWD} =~ .*\/[a-z]*-infra\/.* ]]; then
-    echo "You're in the wrong place: ${PWD}"
-    return 1
-  fi
-  case ${action} in
-    e)
-      if [[ ! -e kube.config ]]; then
-        echo "Can't see kube.config here"
-        return 1
-      fi
-      ave "${role}"
-      ;;
-    l) avl "${role}" ;;
-  esac
+	local action=${1:-e}
+	local role="${PWD##*/}-root"
+	if [[ ! ${PWD} =~ .*\/[a-z]*-infra\/.* ]]; then
+		echo "You're in the wrong place: ${PWD}"
+		return 1
+	fi
+	case ${action} in
+	e)
+		if [[ ! -e kube.config ]]; then
+			echo "Can't see kube.config here"
+			return 1
+		fi
+		ave "${role}"
+		;;
+	l) avl "${role}" ;;
+	esac
 }
 
 PS1="\[\e[1;31m\]$(aveCheck)\[\e[1;37m\]${PS1}"
@@ -358,3 +358,7 @@ export PS1
 
 # export -f showPath
 export -f gc itv ak
+
+aws_profiles="$(grep '\[profile' ~/.aws/config | sed -E 's/\[profile (.*)\]$/\1/g' | tr '\n' ' ')"
+complete -W "${aws_profiles}" ave
+complete -W "${aws_profiles}" avl

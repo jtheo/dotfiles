@@ -52,3 +52,4 @@ go/pkg
 .config
 .kube
 .tmux
+.ollama

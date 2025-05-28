@@ -660,7 +660,12 @@ function trimPlan() {
 	awk '{if ($0 ~ /Plan:|No changes/) {printf "\n\n%s\n",$0; exit}; print}' "${tmpFile}"
 	grep -A3 'Error:' "${layer}"
 	printf "\n\n"
+	exitCode=2
+	if grep -q 'No changes' "${tmpFile}"; then
+		exitCode=0
+	fi
 	rm "${tmpFile}"
+	return "${exitCode}"
 }
 
 function pg() {

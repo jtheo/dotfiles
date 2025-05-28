@@ -46,7 +46,7 @@ return {
 		},
 	},
 
-	window_background_opacity = 0.9,
+	window_background_opacity = 0.8,
 
 	automatically_reload_config = true,
 }
