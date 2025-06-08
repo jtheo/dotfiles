@@ -12,8 +12,8 @@ export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 [[ -f /usr/local/etc/profile.d/bash_completion.sh ]] && source /usr/local/etc/profile.d/bash_completion.sh
 
 if [[ -e $(brew --prefix asdf) ]]; then
-  export ASDF_DATA_DIR=${HOME}/.asdf
-  source <(asdf completion bash)
+	export ASDF_DATA_DIR=${HOME}/.asdf
+	source <(asdf completion bash)
 fi
 
 alias gdu="${HOME}/go/bin/gdu"
@@ -28,17 +28,19 @@ alias la='ls -la'
 # echo ${x%%/*}
 # shows
 # echo ${x#*/}
+# shellcheck disable=SC2139
+alias ctop="export DOCKER_HOST=unix:///${HOME}/.colima/docker.sock; ctop"
 
 if [[ -e /opt/homebrew/bin/ssh ]]; then
-  alias ssh=/opt/homebrew/bin/ssh
-  alias ssh-add=/opt/homebrew/bin/ssh-add
-  alias ssh-agent=/opt/homebrew/bin/ssh-agent
-  alias ssh-copy-id=/opt/homebrew/bin/ssh-copy-id
-  alias ssh-keygen=/opt/homebrew/bin/ssh-keygen
-  alias ssh-keyscan=/opt/homebrew/bin/ssh-keyscan
+	alias ssh=/opt/homebrew/bin/ssh
+	alias ssh-add=/opt/homebrew/bin/ssh-add
+	alias ssh-agent=/opt/homebrew/bin/ssh-agent
+	alias ssh-copy-id=/opt/homebrew/bin/ssh-copy-id
+	alias ssh-keygen=/opt/homebrew/bin/ssh-keygen
+	alias ssh-keyscan=/opt/homebrew/bin/ssh-keyscan
 else
-  # shellcheck disable=SC2263
-  cat <<EoM
+	# shellcheck disable=SC2263
+	cat <<EoM
     Hey jtheo
     You're using default ssh that it's probably missing the Yubikey suport"
     To solve this problem, do:

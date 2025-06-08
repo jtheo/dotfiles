@@ -359,6 +359,17 @@ export PS1
 # export -f showPath
 export -f gc itv ak
 
-aws_profiles="$(grep '\[profile' ~/.aws/config | sed -E 's/\[profile (.*)\]$/\1/g' | tr '\n' ' ')"
+aws_profiles="$(awk '/\[profile/ && $0 !~ /\-sso/ {gsub(/\]/, "", $2); printf "%s ", $2}' ~/.aws/config)"
 complete -W "${aws_profiles}" ave
 complete -W "${aws_profiles}" avl
+
+_kubectl_pon_complete() {
+	local curr_arg prev_arg
+	curr_arg="${COMP_WORDS[COMP_CWORD]}"
+	prev_arg="${COMP_WORDS[COMP_CWORD - 1]}"
+
+	# Only propose node names as completions after "kubectl pon"
+	if [[ ${COMP_WORDS[1]} == "pon" && $COMP_CWORD -eq 2 ]]; then
+		COMPREPLY=($(compgen -W "$(kubectl get no --no-headers -o jsonpath='{.items[*].metadata.name}')" -- "$curr_arg"))
+	fi
+}
