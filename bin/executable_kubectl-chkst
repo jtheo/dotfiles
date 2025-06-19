@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+go run ~/repos/itv/cp-tools/go/check_status.go
