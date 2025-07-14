@@ -79,7 +79,7 @@ alias checkLine='networkQuality -v'
 alias cm=chezmoi
 
 alias kgn='kubectl get nodes -o custom-columns=NAME:.metadata.name,ROLE:.metadata.labels.itv-role,VER:.status.nodeInfo.kubeletVersion,AGE:.metadata.creationTimestamp,ID:.spec.providerID,Taint:.spec.taints,Type:".metadata.labels.beta\.kubernetes\.io/instance-type"'
-alias tmux='tmux -2'
+alias tmux='tmux -2; beforeSunDown'
 
 # it requires gat: https://github.com/koki-develop/gat
 alias p='fzf --preview="gat -c {}"'

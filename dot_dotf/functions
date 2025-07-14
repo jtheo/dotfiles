@@ -242,13 +242,39 @@ function search_in_history() {
 function brewUpdateInfo() {
 	src=${1}
 	echo
-	msgLong "Packages Updated... (${src})"
+
+	formulaePin=$(jq -rc '.formulae[] | select(.pinned | not) | length' "${src}")
+	casksPin=$(jq -rc '.formulae[] | select(.pinned | not) | length' "${src}")
+	pinned=$((formulaePin + casksPin))
+
+	if [[ ${pinned} -gt 0 ]]; then
+		msgLong "Packages Updated... (${src})"
+		(
+			jq -r '.formulae[] | select(.pinned | not) | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
+				xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
+			jq -r '.casks[] | select(.pinned | not) | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
+				xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
+		) | sort
+	fi
+
+	formulaePin=$(jq -rc '.formulae[] | select(.pinned) | length' "${src}")
+	casksPin=$(jq -rc '.formulae[] | select(.pinned) | length' "${src}")
+	pinned=$((formulaePin + casksPin))
+
+	if [[ ${pinned} -eq 0 ]]; then
+		[[ -s ~/logs/pinned ]] && rm ~/logs/pinned
+		return
+	fi
+
+	echo
+	msgLong "Packages Pinned... (${src})"
 	(
-		jq -r '.formulae[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
+		jq -r '.formulae[] | select(.pinned ) | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
 			xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
-		jq -r '.casks[] | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
+
+		jq -r '.casks[] | select(.pinned) | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
 			xargs -P 10 -IX sh -c 'line="X"; pkg=${line%%;*}; version=${line##*;}; echo " - ${pkg}: ${version}  $(brew info ${pkg} | sed -n 2p)"'
-	) | sort
+	) | sort | tee ~/logs/pinned
 }
 
 function brewup() {
@@ -821,4 +847,11 @@ function tumbd() {
 	fi
 
 	msg "Safely downloaded ${mp4URL##*/}"
+}
+
+function beforeSunDown() {
+	if [[ -s ~/logs/pinned ]]; then
+		msg "Don't forget to upgrade the pinned packages!"
+		cat ~/logs/pinned
+	fi
 }
