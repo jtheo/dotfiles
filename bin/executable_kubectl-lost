@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-go run ~/repos/itv/cp-tools/go/lost-in-k8s.go "${1}"
+go run ~/repos/itv/cp-tools/go/lost-in-k8s.go ${@}
