@@ -243,8 +243,8 @@ function brewUpdateInfo() {
 	src=${1}
 	echo
 
-	formulaePin=$(jq -rc '.formulae[] | select(.pinned | not) | length' "${src}")
-	casksPin=$(jq -rc '.formulae[] | select(.pinned | not) | length' "${src}")
+	formulaePin=$(jq -rc '[.formulae[] | select(.pinned | not)] | length' "${src}")
+	casksPin=$(jq -rc '[.formulae[] | select(.pinned | not)] | length' "${src}")
 	pinned=$((formulaePin + casksPin))
 
 	if [[ ${pinned} -gt 0 ]]; then
@@ -257,8 +257,8 @@ function brewUpdateInfo() {
 		) | sort
 	fi
 
-	formulaePin=$(jq -rc '.formulae[] | select(.pinned) | length' "${src}")
-	casksPin=$(jq -rc '.formulae[] | select(.pinned) | length' "${src}")
+	formulaePin=$(jq -rc '[.formulae[] | select(.pinned)] | length' "${src}")
+	casksPin=$(jq -rc '[.formulae[] | select(.pinned)] | length' "${src}")
 	pinned=$((formulaePin + casksPin))
 
 	if [[ ${pinned} -eq 0 ]]; then
