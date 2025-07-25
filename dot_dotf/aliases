@@ -47,7 +47,7 @@ alias bckitup="restic -r sftp:r4:/media/bck/restic_ymd --verbose --exclude-file 
 
 alias bashfmt="shfmt -s -i 2 -ci -sr -kp -w"
 
-alias lsextold="file * | grep -v directory | awk -f ~/.bin/lsext.awk"
+alias lsextold="file * | grep -v directory | awk -f ~/bin/lsext.awk"
 
 alias colstart="colima start --cpu 1 --memory 3 --disk 16 --mount /Users/jtheo/Downloads/:w"
 alias colcont="colima start --runtime containerd --cpu 1 --memory 3 --disk 16 --mount /Users/jtheo/Downloads/:w"
@@ -79,14 +79,15 @@ alias checkLine='networkQuality -v'
 alias cm=chezmoi
 
 alias kgn='kubectl get nodes -o custom-columns=NAME:.metadata.name,ROLE:.metadata.labels.itv-role,VER:.status.nodeInfo.kubeletVersion,AGE:.metadata.creationTimestamp,ID:.spec.providerID,Taint:.spec.taints,Type:".metadata.labels.beta\.kubernetes\.io/instance-type"'
-alias tmux='tmux -2; beforeSunDown'
 
 # it requires gat: https://github.com/koki-develop/gat
 alias p='fzf --preview="gat -c {}"'
 
 alias colimaUnfuck='rm -rf ~/.colima/_lima/_networks/user-v2'
 
-alias byebye="cd ${HOME}/.tmux/plugins/tmux-resurrect/scripts; ./save.sh; tmux kill-server"
+alias byebye="cd ${HOME}/.tmux/plugins/tmux-resurrect/scripts; ./save.sh; /opt/homebrew/bin/tmux kill-server"
 # alias zapTF='find . \( -type f -name .terraform.lock.hcl \) -o \( -type d -name .terraform \) | xargs -P 5 -IX rm -rf X'
 
 alias tinychat='docker run -p 8080:8080 -v chat-data:/app/data ghcr.io/anishgowda21/tiny-ollama-chat:latest'
+
+alias tmux='tmux -2'

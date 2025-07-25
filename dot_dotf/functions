@@ -855,3 +855,11 @@ function beforeSunDown() {
 		cat ~/logs/pinned
 	fi
 }
+
+# function tmux(){
+#   opts="${*}"
+#   tmux -2 ${opts}
+#
+#   beforeSunDown'
+#
+# }
