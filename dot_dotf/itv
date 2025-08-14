@@ -373,3 +373,14 @@ _kubectl_pon_complete() {
 		COMPREPLY=($(compgen -W "$(kubectl get no --no-headers -o jsonpath='{.items[*].metadata.name}')" -- "$curr_arg"))
 	fi
 }
+
+function trimChanges() {
+	[[ -n ${1} ]] || return 1
+	pattern=(${@})
+	for f in ${pattern[@]}; do
+		if ! trimPlan ${f} >out 2>&1; then
+			cat out
+		fi
+	done
+	rm out
+}
