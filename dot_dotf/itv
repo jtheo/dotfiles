@@ -375,7 +375,10 @@ _kubectl_pon_complete() {
 }
 
 function trimChanges() {
-	[[ -n ${1} ]] || return 1
+	if [[ -z ${1} ]]; then
+		echo "I need a pattern, like plan_*"
+		return 1
+	fi
 	pattern=(${@})
 	for f in ${pattern[@]}; do
 		if ! trimPlan ${f} >out 2>&1; then
