@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+phase=${1:-Succeeded}
+
+echo "Cleaning Pods in ${phase} phase"
+kubectl delete pods -A --field-selector="status.phase=${phase}"

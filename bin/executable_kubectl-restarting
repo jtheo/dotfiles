@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+kubectl get po -A | awk '$5 > 0'
