@@ -24,6 +24,6 @@ for dir in "${listDir[@]}"; do
 	printf "\n\n\n\n"
 done
 now=$(date +%s)
-echo "Executed in $((now - start)) seconds"
+echo "${0} Executed in $((now - start)) seconds"
 # shellcheck disable=SC2164
 cd "${base}"

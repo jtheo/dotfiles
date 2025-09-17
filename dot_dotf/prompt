@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 
 # https://www.dwarmstrong.org/bashrc/
-shopt -s histappend     # Require prompt write to history after every command and append to the history file, don’t overwrite it …
-shopt -s checkwinsize   # When resizing a terminal emulator, check the window size after each command and, if necessary, update the values of LINES and COLUMNS …
-shopt -s cmdhist        # Save all lines of a multiple-line command in the same history entry …
-shopt -s histreedit     # Re-edit a history substitution line if it failed ...
-shopt -s histverify     # Edit a recalled history line before executing ...
-
+shopt -s histappend   # Require prompt write to history after every command and append to the history file, don’t overwrite it …
+shopt -s checkwinsize # When resizing a terminal emulator, check the window size after each command and, if necessary, update the values of LINES and COLUMNS …
+shopt -s cmdhist      # Save all lines of a multiple-line command in the same history entry …
+shopt -s histreedit   # Re-edit a history substitution line if it failed ...
+shopt -s histverify   # Edit a recalled history line before executing ...
 
 # export PROMPT_COMMAND="history -a;history -c;history -r;${PROMPT_COMMAND}"
 
@@ -18,7 +17,6 @@ export HISTFILESIZE=500000
 
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 # export PROMPT_COMMAND='printf "\033]0;%s at %s\007" "jtheo" "MAC"'
-
 
 # Colour codes
 # https://www.circuidipity.com/bashrc/
@@ -33,12 +31,13 @@ MAGENTA="\\[\\e[1;35m\\]"
 # shellcheck disable=SC2034
 RESET="\\[\\e[0m\\]"
 
-
 # shellcheck disable=2154
-if ${isMac}; then
-    HOST=mac
+if grep -q itv.com /etc/resolv.conf; then
+	HOST=itv
+elif ${isMac}; then
+	HOST=mac
 else
-    HOST=${HOSTNAME}
+	HOST=${HOSTNAME}
 fi
 
 # https://wiki.archlinux.org/title/Bash/Prompt_customization

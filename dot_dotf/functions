@@ -242,12 +242,13 @@ function search_in_history() {
 function brewUpdateInfo() {
 	src=${1}
 	echo
+	msg "Processing ${src}"
 
 	formulaePin=$(jq -rc '[.formulae[] | select(.pinned | not)] | length' "${src}")
 	casksPin=$(jq -rc '[.casks[] | select(.pinned | not)] | length' "${src}")
-	pinned=$((formulaePin + casksPin))
+	updated=$((formulaePin + casksPin))
 
-	if [[ ${pinned} -gt 0 ]]; then
+	if [[ ${updated} -gt 0 ]]; then
 		msgLong "Packages Updated... (${src})"
 		(
 			jq -r '.formulae[] | select(.pinned | not) | .name + ";" +  (.installed_versions | join(" ")) + " -> "  + .current_version' "${src}" |
@@ -262,7 +263,7 @@ function brewUpdateInfo() {
 	pinned=$((formulaePin + casksPin))
 
 	if [[ ${pinned} -eq 0 ]]; then
-		[[ -s ~/logs/pinned ]] && rm ~/logs/pinned
+		# [[ -s ~/logs/pinned ]] && rm ~/logs/pinned
 		return
 	fi
 
@@ -282,8 +283,9 @@ function brewup() {
 	printf "\n\n\n"
 	Start_Time=$(date +%s)
 	msgLong "Start updating brew"
+	brew update -q
 	brew outdated --json >"${tmpFile}"
-	for action in update upgrade "cleanup --prune=all"; do
+	for action in upgrade "cleanup --prune=all"; do
 		msgLong "${action}"
 		# shellcheck disable=SC2086
 		brew ${action}

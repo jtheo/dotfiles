@@ -3,6 +3,7 @@
 source "${HOME}/.dotf/itv"
 source "${HOME}/.dotf/functions"
 
+start=$(date +%s)
 base=${PWD}
 for dir in */; do
 	dir=${dir%/}
@@ -16,3 +17,6 @@ for dir in */; do
 done
 # shellcheck disable=SC2164
 cd "${base}"
+
+now=$(date +%s)
+echo "${0} Executed in $((now - start)) seconds"
