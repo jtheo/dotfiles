@@ -387,3 +387,7 @@ function trimChanges() {
 	done
 	rm out
 }
+
+# Let's see if it wokrs...
+# From: https://stackoverflow.com/a/71571521
+export GODEBUG=asyncpreemptoff=1
