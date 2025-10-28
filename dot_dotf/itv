@@ -164,8 +164,12 @@ function d() {
 		action=-au
 		prefix=apply
 		;;
+	i | init)
+		action=-i
+		prefix=init
+		;;
 	*)
-		echo "Don't know what you want from me, sorry..."
+		echo "Don't know what you want from me, sorry... (action is '${want}'"
 		return 1
 		;;
 	esac

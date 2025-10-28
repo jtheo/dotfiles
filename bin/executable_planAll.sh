@@ -20,6 +20,9 @@ for dir in "${listDir[@]}"; do
 	dest=${base}/${dir}
 	printf "\n\n%s ==================== > %s < ===============\n\n" "$(date)" "${dir}"
 	cd "${dest}" || (echo "Can't enter in ${dest}" exit 1)
+	if [[ ${1} == "-i" ]]; then
+		d init
+	fi
 	d plan
 	printf "\n\n\n\n"
 done

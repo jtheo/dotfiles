@@ -16,7 +16,7 @@ wtf:
   term: "xterm-256color"
   grid:
     # columns: [40, 70, 70, 70]
-    columns: [35, 80]
+    columns: [35, 35, 80]
     rows: [5]
   refreshInterval: 5
   openUrlUtil:
@@ -33,7 +33,7 @@ wtf:
       font: bigfont
       hourFormat: 24
       position:
-        top: 0
+        top: 5
         left: 0
         height: 2
         width: 1
@@ -70,7 +70,7 @@ wtf:
         Tokyo: "Asia/Tokyo"
         Vancouver: "America/Vancouver"
       position:
-        top: 2
+        top: 7
         left: 0
         height: 3
         width: 1
@@ -83,7 +83,7 @@ wtf:
       enabled: true
       position:
         top: 5
-        left: 0
+        left: 1
         height: 3
         width: 1
       refreshInterval: 10
@@ -101,9 +101,9 @@ wtf:
       feedLimit: 20
       position:
         top: 0
-        left: 1
+        left: 0
         height: 5
-        width: 1
+        width: 2
       refreshInterval: 2h
       type: feedreader
 
@@ -140,7 +140,7 @@ wtf:
       numberOfPosts: 10
       position:
         top: 5
-        left: 1
+        left: 2
         height: 3
         width: 1
       refreshInterval: 6h
@@ -164,20 +164,20 @@ wtf:
       topTimePeriod: week
       type: subreddit
 
-    r-devops:
-      enabled: true
-      # focusChar: "b"
-      numberOfPosts: 10
-      position:
-        top: 5
-        left: 2
-        height: 3
-        width: 1
-      refreshInterval: 6h
-      sortOrder: new
-      subreddit: "devops"
-      topTimePeriod: week
-      type: subreddit
+    # r-devops:
+    #   enabled: true
+    #   # focusChar: "b"
+    #   numberOfPosts: 10
+    #   position:
+    #     top: 5
+    #     left: 2
+    #     height: 3
+    #     width: 1
+    #   refreshInterval: 6h
+    #   sortOrder: new
+    #   subreddit: "devops"
+    #   topTimePeriod: week
+    #   type: subreddit
 
     r-neovim:
       enabled: true
@@ -209,27 +209,27 @@ wtf:
       topTimePeriod: week
       type: subreddit
 
-    r-linux:
-      enabled: true
-      # focusChar: 7
-      numberOfPosts: 10
-      position:
-        top: 8
-        left: 1
-        height: 3
-        width: 1
-      refreshInterval: 6h
-      sortOrder: new
-      subreddit: "linux"
-      topTimePeriod: week
-      type: subreddit
+    # r-linux:
+    #   enabled: true
+    #   # focusChar: 7
+    #   numberOfPosts: 10
+    #   position:
+    #     top: 8
+    #     left: 1
+    #     height: 3
+    #     width: 1
+    #   refreshInterval: 6h
+    #   sortOrder: new
+    #   subreddit: "linux"
+    #   topTimePeriod: week
+    #   type: subreddit
 
     cryptolive:
       enabled: true
       focusChar: 0
       position:
         top: 8
-        left: 0
+        left: 1
         height: 2
         width: 1
       updateInterval: 15

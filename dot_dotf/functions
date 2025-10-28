@@ -548,7 +548,8 @@ function zapThisShit() {
 	fi
 
 	prevDiskUse=$(df -k . | awk '$1 ~ /dev/ {print $3}')
-	find . \( \( -type f -name .terraform.lock.hcl \) -o \( -type d -name .terraform \) -o \( -type d -name .vendor \) \) -print0 | xargs -0 -P 5 -IX rm "-rf${VERBOSE}" X
+	find . \( \( -type f -name .terraform.lock.hcl \) -o \( -type d -name .terraform \) -o \( -type d -name .vendor \) -o \( -type f -name 'tg_*.tf' \) \) -print0 | xargs -0 -P 5 -IX rm "-rf${VERBOSE}" X
+	find . -name plans -type d | xargs -IX find X -name '*.tf' | xargs -IY -P 10 rm Y
 	nowDiskUse=$(df -k . | awk '$1 ~ /dev/ {print $3}')
 	diffDiskUse=$((prevDiskUse - nowDiskUse))
 	SIZE=KB
