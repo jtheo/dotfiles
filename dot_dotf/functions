@@ -799,7 +799,7 @@ function updPlugins() {
 
 	if type -p nvim >/dev/null; then
 		msg "💤 Updating Neovim Lazy packages"
-		if ! nvim --headless -c "TSUpdateSync" -c "MasonUpdateAll" "+Lazy! sync" +qa >"${tmpFile}"; then
+		if ! nvim --headless -c "MasonUpdateAll" "+Lazy! sync" +qa >"${tmpFile}"; then
 			msg "Error! See the log"
 			cat "${tmpFile}"
 		fi
@@ -859,14 +859,6 @@ function beforeSunDown() {
 	fi
 }
 
-# function tmux(){
-#   opts="${*}"
-#   tmux -2 ${opts}
-#
-#   beforeSunDown'
-#
-# }
-#
 function loadingBar() {
 	max=${1:-60}
 	i=1
@@ -879,4 +871,14 @@ function loadingBar() {
 		i=$((i + 1))
 		sleep 1
 	done
+}
+
+function binTheNode() {
+	no=${1}
+	id=${2}
+	if [[ -z ${no} ]] || [[ -z ${id} ]]; then
+		echo "I need nodeName and ID"
+		return
+	fi
+	taint.sh ${no} && kubectl delete no ${no} && aws ec2 terminate-instances --instance-ids ${id}
 }
