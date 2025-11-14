@@ -385,6 +385,7 @@ function trimChanges() {
 	fi
 	pattern=(${@})
 	for f in ${pattern[@]}; do
+		[[ -f ${f} ]] || continue
 		if ! trimPlan ${f} >out 2>&1; then
 			cat out
 		fi

@@ -880,5 +880,11 @@ function binTheNode() {
 		echo "I need nodeName and ID"
 		return
 	fi
-	taint.sh ${no} && kubectl delete no ${no} && aws ec2 terminate-instances --instance-ids ${id}
+	taint.sh ${no}
+	while [[ $(kubectl pon ${no} -d | wc -l) -gt 1 ]]; do
+		loadingBar 5
+	done
+	echo
+	timeout 30 kubectl delete no ${no}
+	aws ec2 terminate-instances --instance-ids ${id} | jq -r '.TerminatingInstances[] | .InstanceId + " " + .CurrentState.Name'
 }
