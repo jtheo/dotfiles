@@ -396,7 +396,7 @@ function prog() {
 function scpsrt() {
 	shopt -s nullglob
 	files=(*.srt)
-	[[ ${#files[@]} -gt 0 ]] && scp ./*.srt jf:~/aaa/Parking/ && rm -- *.srt
+	[[ ${#files[@]} -gt 0 ]] && scp ./*.srt djf:~/aaa/Parking/ && rm -- *.srt
 
 	nfo=(*.nfo)
 	[[ ${#nfo[@]} -gt 0 ]] && rm -- *.nfo
@@ -748,6 +748,14 @@ function freeIPs() {
 	aws ec2 describe-subnets | jq -rc '.Subnets[] | select(.AvailableIpAddressCount < 5) | {AvailabilityZone, AvailableIpAddressCount, CidrBlock}' | tee "${tmpFile}"
 	echo "Total $(wc -l <"${tmpFile}")"
 	rm -f "${tmpFile}"
+}
+
+# Work in progress...
+function g() {
+	[[ -e go.mod ]] || go mod init ${PWD##*/}
+	[[ -e main.go ]] || printf "package main\n\nfunc main(){\n}\n" >main.go
+
+	n main.go
 }
 
 function startGo() {
