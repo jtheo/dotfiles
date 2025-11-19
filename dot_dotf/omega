@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 if command -v kubectl >/dev/null; then
-  # shellcheck source=/dev/null
-  source <(kubectl completion bash)
-  alias k=kubectl
-  complete -F __start_kubectl k
+	# shellcheck source=/dev/null
+	source <(kubectl completion bash)
+	alias k=kubectl
+	complete -F __start_kubectl k
 fi
 
 if TF=$(command -v terraform); then
-  complete -C "${TF}" terraform
+	complete -C "${TF}" terraform
 fi
 
 [[ -e '/usr/local/bin/aws_completer' ]] && complete -C '/usr/local/bin/aws_completer' aws
@@ -20,12 +20,16 @@ stty -ixon
 #https://twitter.com/nil0x42/status/1323949856067637248
 #https://cirw.in/blog/bracketed-paste
 if ! grep -q "set enable-bracketed-paste" ~/.inputrc; then
-  echo "set enable-bracketed-paste" >>~/.inputrc && bind -f ~/.inputrc
+	echo "set enable-bracketed-paste" >>~/.inputrc && bind -f ~/.inputrc
 fi
 
 if [[ $(uname -s) == "Darwin" ]]; then
-  ulimit -n 25000
+	ulimit -n 25000
 fi
 
 TFPLUGINS_CACHE_DIR=${HOME}/.terraform.d/plugin-cache
 [[ -d ${TFPLUGINS_CACHE_DIR} ]] || mkdir -p "${TFPLUGINS_CACHE_DIR}"
+
+[[ -f ${HOME}/.linuxbrew/bin/brew ]] && eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
+
+[[ -f /home/linuxbrew/.linuxbrew/bin/brew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
