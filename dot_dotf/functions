@@ -242,6 +242,7 @@ function search_in_history() {
 function brewUpdateInfo() {
 	src=${1}
 	echo
+	printf "\n\n\n|----------------------------------------------------------------------------------------------------------------\n\n"
 	msg "Processing ${src}"
 
 	formulaePin=$(jq -rc '[.formulae[] | select(.pinned | not)] | length' "${src}")
@@ -280,7 +281,7 @@ function brewUpdateInfo() {
 
 function brewup() {
 	tmpFile=$(mktemp -t "${FUNCNAME[0]}")
-	printf "\n\n\n"
+	printf "\n\n\n|------------------------------------------------------------------------------\n\n"
 	Start_Time=$(date +%s)
 	msgLong "Start updating brew"
 	brew update -q

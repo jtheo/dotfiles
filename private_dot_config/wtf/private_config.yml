@@ -16,7 +16,7 @@ wtf:
   term: "xterm-256color"
   grid:
     # columns: [40, 70, 70, 70]
-    columns: [35, 35, 80]
+    columns: [40]
     rows: [5]
   refreshInterval: 5
   openUrlUtil:
@@ -115,7 +115,7 @@ wtf:
         top: 0
         left: 2
         height: 5
-        width: 1
+        width: 2
       storyType: top
       refreshInterval: 2h
 
@@ -125,9 +125,9 @@ wtf:
       numberOfPosts: 20
       position:
         top: 0
-        left: 3
+        left: 4
         height: 5
-        width: 1
+        width: 2
       refreshInterval: 6h
       sortOrder: new
       subreddit: "golang"
@@ -142,7 +142,7 @@ wtf:
         top: 5
         left: 2
         height: 3
-        width: 1
+        width: 2
       refreshInterval: 6h
       sortOrder: new
       subreddit: "platform_engineering"
@@ -155,9 +155,9 @@ wtf:
       numberOfPosts: 10
       position:
         top: 5
-        left: 3
+        left: 4
         height: 3
-        width: 1
+        width: 2
       refreshInterval: 6h
       sortOrder: new
       subreddit: "sre"
@@ -185,9 +185,9 @@ wtf:
       numberOfPosts: 10
       position:
         top: 8
-        left: 3
+        left: 4
         height: 3
-        width: 1
+        width: 2
       refreshInterval: 6h
       sortOrder: new
       subreddit: "neovim"
@@ -202,7 +202,7 @@ wtf:
         top: 8
         left: 2
         height: 3
-        width: 1
+        width: 2
       refreshInterval: 15m
       sortOrder: new
       subreddit: "kubernetes"
