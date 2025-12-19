@@ -685,7 +685,7 @@ function trimPlan() {
     }
 }' "${layer}" | sed -E -e 's/.{2}:.{2}:.{2}\..{3}//g' -e 's/STDOUT//g' -e 's/terraform://g' >"${tmpFile}"
 
-	pathplan=$(awk '/Running plan in /' "${layer}")
+	pathplan=$(awk '/Running plan in /' "${layer}" | sed -E "s#${HOME}/repos/itv/##")
 	printf "============== '%s' '%s'\n" "${pathplan}" "${layer}"
 	awk '{if ($0 ~ /Plan:|No changes/) {printf "\n\n%s\n",$0; exit}; print}' "${tmpFile}"
 	grep -A3 'Error:' "${layer}"
