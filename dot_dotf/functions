@@ -897,3 +897,7 @@ function binTheNode() {
 	timeout 30 kubectl delete no ${no}
 	aws ec2 terminate-instances --instance-ids ${id} | jq -r '.TerminatingInstances[] | .InstanceId + " " + .CurrentState.Name'
 }
+
+function fixHelmChartNotFound() {
+	helm repo update
+}

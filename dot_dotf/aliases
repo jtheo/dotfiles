@@ -90,4 +90,5 @@ alias byebye="cd ${HOME}/.tmux/plugins/tmux-resurrect/scripts; ./save.sh; /opt/h
 
 alias tinychat='docker run -p 8080:8080 -v chat-data:/app/data ghcr.io/anishgowda21/tiny-ollama-chat:latest'
 
+alias hollama='docker run --rm -d -p 4173:4173 --name hollama ghcr.io/fmaclen/hollama:latest'
 alias tmux='tmux -2'
