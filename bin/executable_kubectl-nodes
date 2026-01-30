@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+kubectl get no --no-headers -o "custom-columns=NAME:.metadata.name, ROLE:.metadata.labels.itv-role, Type:.metadata.labels.node\.kubernetes\.io/instance-type, ID:.spec.providerID, Age:.metadata.creationTimestamp, Status:.status.conditions[-1].type,Ver:.status.nodeInfo.kubeletVersion" |
+	awk '{split($4, a, "/"); print $1,$2,$3, a[4],a[5],$5,$6,$7}' |
+	column -t
