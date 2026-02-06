@@ -11,6 +11,7 @@ return {
 				"pylint",
 				"prettier",
 				"zls",
+				"helm-ls",
 			},
 		},
 		{ import = "plugins" },
