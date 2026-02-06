@@ -138,6 +138,7 @@ function gc() {
 	fi
 
 	cd "${dir}" || err "Can't cd to ${dir}"
+	return
 }
 
 function d() {
@@ -291,18 +292,25 @@ function aveCheck() {
 
 function itv() {
 	itvr=${HOME}/repos/itv
+	dst=${itvr}/${1}
 	ans=n
-	cd "${itvr}/${1}" || (
-		echo "${itvr}/${1} doesn't exists... Do you want to clone it? [Y/n] "
-		read -r -n 1 -t 5 ans
-		case ${ans} in
-		y | Y) gc "${1}" ;;
-		*)
-			echo "Ok, see ya"
-			return
-			;;
-		esac
+	if cd "${dst}" 2>/dev/null; then
 		return
+	fi
+
+	printf "%s doesn't exists... Do you want to clone it? [Y/n] " "${dst}"
+	read -r -n 1 -t 5 ans
+	case ${ans} in
+	y | Y) printf "\n\nOK, proceeding\n\n" ;;
+	*)
+		echo "Ok, see ya"
+		return
+		;;
+	esac
+	gc "${1}"
+	cd "${dst}" 2>/dev/null || (
+		echo "Error cd ${dst}"
+		return 1
 	)
 }
 
