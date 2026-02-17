@@ -160,3 +160,9 @@
   Output = ""
   Tag = ["grafana", "loki", "gha", "runner", "scaleset", "self-hosted", "github"]
   command = "count(rate({component=\"runner-scale-set-listener\"} |= `API rate limit exceeded` [1m]))"
+
+[[Snippets]]
+  Description = "list docker images in Amazon Linux 2023"
+  Output = ""
+  Tag = ["k8s", "kubernetes", "eks", "aws", "ctr", "containerd", "amazon", "container"]
+  command = "ctr -n k8s.io images list"

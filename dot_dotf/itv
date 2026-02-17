@@ -406,9 +406,15 @@ function trimChanges() {
 export GODEBUG=asyncpreemptoff=1
 
 function fts() {
-	[[ -n ${1} ]] || (
-		ec{}
-	)
+	[[ -e terragrunt.hcl ]] || {
+		echo "Can't find terragrunt.hcl"
+		return 1
+	}
+	[[ -n ${1} ]] || {
+		echo "I need an action"
+		return 1
+	}
+	start=$(date +%s)
 	logDir=${HOME}/L
 	[[ -d ${logDir} ]] || mkdir "${logDir}"
 	log_File="${logDir}/fts_${1%% *}_$(date +%Y%m%d-%H%M%S)"
@@ -417,8 +423,19 @@ function fts() {
 
 	source ~/repos/jtheo/localpy/bin/activate
 	export ITV_ORG=test
-	ave test-prd-root-lab -- terragrunt "${action}" "${*}" 2>&1 | tee "${log_File}"
+	role=test-prd-root-lab
 
 	echo
-	echo "Logged in ${log_File}"
+	echo "Start ${action} with role ${role} | ITV_ORG set to '${ITV_ORG}'"
+	echo
+	ave "${role}" -- terragrunt "${action}" "${*}" 2>&1 | tee "${log_File}"
+
+	now=$(date +%s)
+	since=$((now - start))
+	echo
+	echo
+	echo "ITV_ORG='${ITV_ORG}'"
+	echo "Done ${action} with role '${role}' - Logged in ${log_File} - Executed in ${since} seconds"
+	echo
+	echo
 }

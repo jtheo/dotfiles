@@ -9,6 +9,24 @@ function err() {
 	exit 1
 }
 
+function cdr() {
+	root=false
+	opwd=${PWD}
+	while ! ${root}; do
+		if [[ ${PWD} == "/" ]]; then
+			echo "Can't find .git, sorry"
+			cd "${opwd}" || err "Can't cd to ${opwd}"
+			return 1
+		fi
+		if [[ -d .git ]]; then
+			root=true
+			OLDPWD=${opwd}
+		else
+			cd ..
+		fi
+	done
+}
+
 function isIn() {
 	local seeking=$1
 	shift
@@ -54,9 +72,9 @@ if isIn "${branch}" "${invalidBranches[@]}"; then
 	err "Hey Cowboy! Stop it there! You are in ${branch}, maybe create a feature branch, and then try it again!"
 fi
 
-git ci -am "${message}"
-
 releaseFile="${branch}.${level}.release"
+
+cdr
 
 cat <<EOF >"${releaseFile}"
 $(title "${level}")
@@ -65,4 +83,6 @@ EOF
 
 git add "${releaseFile}"
 
-git commend -a
+git ci -am "${message}"
+
+cd - || err "Failed to go back"

@@ -1,13 +1,7 @@
 [includeIf "gitdir:~/repos/itv/**"]
     path = ~/repos/itv/gitconfig
 
-[includeIf "gitdir:~/repos/jtheo/**"]
-    path = ~/repos/jtheo/gitconfig
-
-[includeIf "gitdir:~/go/src/**"]
-    path = ~/repos/jtheo/gitconfig
-
-[includeIf "gitdir:~/.local/share/chezmoi/**"]
+[includeIf "gitdir:~/"]
     path = ~/repos/jtheo/gitconfig
 
 [core]
@@ -82,11 +76,9 @@
 [gpg]
 	program = gpg
 	format = ssh
-{{- if eq .chezmoi.os "darwin" }}
 [gpg "ssh"]
   # program = /usr/bin/ssh-keygen
   program = ssh-keygen
-{{- end }}
 
 [commit]
 	gpgsign = true

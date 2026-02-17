@@ -53,3 +53,5 @@ go/pkg
 .kube
 .tmux
 .ollama
+*/.vendor
+*/vendor
