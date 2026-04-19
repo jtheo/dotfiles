@@ -17,3 +17,16 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 		})
 	end,
 })
+
+-- vim.api.nvim_create_autocmd("BufWritePost", {
+-- 	pattern = "*.rb",
+-- 	callback = function()
+-- 		vim.notify("Formatting with rubyfmt...")
+-- 		local file = vim.fn.expand("%:p")
+-- 		vim.fn.jobstart("rubyfmt -i " .. vim.fn.shellescape(file), {
+-- 			on_exit = function()
+-- 				vim.cmd("e!")
+-- 			end,
+-- 		})
+-- 	end,
+-- })

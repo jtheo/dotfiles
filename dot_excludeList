@@ -55,3 +55,4 @@ go/pkg
 .ollama
 */.vendor
 */vendor
+**/localpy

@@ -12,6 +12,8 @@ return {
 				"prettier",
 				"zls",
 				"helm-ls",
+				"html-lsp",
+				"htmlbeautifier",
 			},
 		},
 		{ import = "plugins" },
