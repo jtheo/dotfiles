@@ -56,3 +56,4 @@ go/pkg
 */.vendor
 */vendor
 **/localpy
+models

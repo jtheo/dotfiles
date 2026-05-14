@@ -355,6 +355,7 @@ function ak() {
     echo "You're in the wrong place: ${PWD}"
     return 1
   fi
+  msg "Entering..."
   case ${action} in
   e)
     if [[ ! -e kube.config ]]; then
@@ -380,7 +381,7 @@ complete -W "${aws_profiles}" avl
 _kubectl_pon_complete() {
   local curr_arg prev_arg
   curr_arg="${COMP_WORDS[COMP_CWORD]}"
-  prev_arg="${COMP_WORDS[COMP_CWORD-1]}"
+  prev_arg="${COMP_WORDS[COMP_CWORD - 1]}"
 
   # Only propose node names as completions after "kubectl pon"
   if [[ ${COMP_WORDS[1]} == "pon" && $COMP_CWORD -eq 2 ]]; then

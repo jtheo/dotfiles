@@ -896,7 +896,7 @@ function binTheNode() {
     return 1
   fi
 
-  if ! id=$(echo "${data}" | jq '.spec.providerID | split("/")[4]' 2>&1); then
+  if ! id=$(echo "${data}" | jq -rc '.spec.providerID | split("/")[4]' 2>&1); then
     echo "Error parsing JSON: ${id}"
     return 1
   fi
@@ -906,7 +906,8 @@ function binTheNode() {
     return 1
   fi
 
-  taint.sh "${no} | ID: ${id}"
+  msg "taint.sh ${no} ${id}"
+  taint.sh "${no}"
   while [[ $(kubectl pon "${no}" -d | wc -l) -gt 1 ]]; do
     loadingBar 5
   done

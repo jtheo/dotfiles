@@ -55,3 +55,5 @@ if type -p colima >/dev/null 2>&1; then
   COLIMA_SSH_AUTH_SOCK=$(colima ssh env | awk -F= '/SSH_AUTH_SOCK/ {print $2}')
   export COLIMA_SSH_AUTH_SOCK
 fi
+
+AWS_VAULT_BIOMETRICS=true
