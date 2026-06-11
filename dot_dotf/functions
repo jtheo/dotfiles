@@ -286,7 +286,7 @@ function brewup() {
   msgLong "Start updating brew"
   brew update -q
   brew outdated --json >"${tmpFile}"
-  for action in upgrade "cleanup --prune=all"; do
+  for action in "upgrade -y" "cleanup --prune=all"; do
     msgLong "${action}"
     # shellcheck disable=SC2086
     brew ${action}

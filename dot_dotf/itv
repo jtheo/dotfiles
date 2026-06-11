@@ -37,7 +37,7 @@ export VENV=${HOME}/repos/jtheo/localpy/bin/activate
 
 export PATH=${PATH}:/usr/local/bin:${HOME}/bin:${HOME}/go/bin:${HOME}/repos/itv/cp-tools/bin:${HOME}/.cargo/bin:${KREW_ROOT:-$HOME/.krew}/bin
 
-tmpPATH=/tmp/tmpPATHfile
+tmpPATH=$(mktemp)
 echo "${PATH}" | tr ':' '\n' | sort -iu >"${tmpPATH}"
 newPATH=$( (
   grep brew "${tmpPATH}"
