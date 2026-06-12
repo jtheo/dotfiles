@@ -442,3 +442,13 @@ function fts() {
   echo
   echo
 }
+
+function mkResolver() {
+  if ! [[ -e kube.config ]]; then
+    echo "I don't see kube.config, exiting"
+    exit 1
+  fi
+  server=$(awk '/server:/ {split($2,e,"/"); print e[3]}' kube.config)
+  echo "Generating config for ${server}"
+  echo 'nameserver 1.1.1.1' | sudo tee "/etc/resolver/${server}"
+}

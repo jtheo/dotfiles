@@ -13,7 +13,7 @@ return {
 				"zls",
 				"helm-ls",
 				"html-lsp",
-				"htmlbeautifier",
+				"terraform-ls",
 			},
 		},
 		{ import = "plugins" },
