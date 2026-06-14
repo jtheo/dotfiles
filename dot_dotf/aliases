@@ -92,3 +92,5 @@ alias tinychat='docker run -p 8080:8080 --rm -v chat-data:/app/data ghcr.io/anis
 
 alias hollama='docker run --rm -d -p 4173:4173 --name hollama ghcr.io/fmaclen/hollama:latest'
 alias tmux='tmux -2'
+
+alias sw='s5cmd --endpoint-url https://s3.wasabisys.com'
