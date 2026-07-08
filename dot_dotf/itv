@@ -452,3 +452,5 @@ function mkResolver() {
   echo "Generating config for ${server}"
   echo 'nameserver 1.1.1.1' | sudo tee "/etc/resolver/${server}"
 }
+
+AWS_VAULT_BIOMETRICS=true

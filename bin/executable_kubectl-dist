@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+function msg() {
+  echo "$(date): ${*}"
+}
+
+function err() {
+  msg "[ERROR] ${*}"
+  exit 1
+}
+
+# https://unix.stackexchange.com/a/27014
+function displaytime {
+  local T=$1
+  local D=$((T / 60 / 60 / 24))
+  local H=$((T / 60 / 60 % 24))
+  local M=$((T / 60 % 60))
+  local S=$((T % 60))
+  ((D > 0)) && printf '%dd ' $D
+  ((H > 0)) && printf '%dh ' $H
+  ((M > 0)) && printf '%dm ' $M
+  printf '%ds\n' $S
+}
+
+function date2since() {
+  st="${1/T/ }"
+  epoch=$(date -z bst -jf "%Y-%m-%d %H:%M:%SZ" "${st}" +%s)
+  now=$(date +%s)
+  since=$((now - epoch))
+  if [[ $(date +%Z) == "BST" ]]; then
+    since=$((since - 3600))
+  fi
+  displaytime "${since}"
+}
+
+if [[ -z ${1} ]] || [[ ${1:0:1} == "-" ]]; then
+  err "Missing service"
+fi
+
+ns=prd
+if [[ ${2} == "-n" ]]; then
+  ns=${3}
+fi
+
+service=${1}
+tmpFile=$(mktemp)
+
+msg "Checking..."
+kubectl -n "${ns}" get po -o custom-columns='Name:.metadata.name,Node:.spec.nodeName,Start:.status.startTime,Status:.status.phase' | grep "${service}" >"${tmpFile}"
+while read -r pod node startTime status; do
+  az=$(kubectl get no -o yaml "${node}" | yq '.metadata.labels."topology.kubernetes.io/zone"')
+  echo "${pod} | ${node} | ${az} | $(date2since ${startTime}) | ${status}"
+done <"${tmpFile}" | column -t -s '|'
+
+rm "${tmpFile}"

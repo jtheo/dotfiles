@@ -1,0 +1,49 @@
+# ============================================
+# Ghostty Terminal - Complete Configuration
+# https://gist.github.com/davila7/5b07f55a6e65a06c121da9702d10c2e2
+# ============================================
+# File: ~/.config/ghostty/config
+# Reload: Cmd+Shift+, (macOS)
+# View options: ghostty +show-config --default --docs
+
+# --- Typography ---
+font-family = JetBrainsMonoNerdFont
+font-size = 14
+font-thicken = true
+adjust-cell-height = 2
+
+# --- Theme and Colors ---
+# Catppuccin with automatic light/dark switching
+theme = light:Catppuccin Latte,dark:Catppuccin Mocha
+
+# --- Window and Appearance ---
+background-opacity = 0.9
+background-blur-radius = 20
+macos-titlebar-style = transparent
+window-padding-x = 10
+window-padding-y = 8
+window-save-state = always
+window-theme = auto
+
+# --- Cursor ---
+cursor-style = bar
+cursor-style-blink = true
+cursor-opacity = 0.8
+
+
+
+# --- Shell Integration ---
+shell-integration = detect
+  # Font size
+keybind = cmd+plus=increase_font_size:1
+keybind = cmd+minus=decrease_font_size:1
+keybind = cmd+zero=reset_font_size
+
+
+# Reload config
+keybind = cmd+shift+comma=reload_config
+
+
+
+window-width = 140
+window-height = 40

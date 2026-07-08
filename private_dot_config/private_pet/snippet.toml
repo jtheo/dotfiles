@@ -166,3 +166,9 @@
   Output = ""
   Tag = ["k8s", "kubernetes", "eks", "aws", "ctr", "containerd", "amazon", "container"]
   command = "ctr -n k8s.io images list"
+
+[[Snippets]]
+  Description = "convert bmp to png, extend canvas with white background, ignore bmp errors"
+  Output = ""
+  Tag = ["convert", "magick", "bmp", "png", "canvas", "background", "extend"]
+  command = "magick -define bmp:ignore-filesize=true  qrcode.bmp -background white -gravity center -extent 200x200 qrcode3.png"
