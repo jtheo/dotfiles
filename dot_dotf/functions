@@ -929,3 +929,18 @@ function llms() {
   model=${1:-ggml-org/gemma-4-E4B-it-GGUF}
   llama-server --port 8000 -hf "${model}"
 }
+
+function rmgo() {
+  [[ -n ${1} ]] || (
+    echo "I need a cmd"
+    return 1
+  )
+  local tool=$(type -p ${1})
+  if [[ ! -e ${tool} ]]; then
+    echo "File <${tool}> doesn't exist"
+    return 1
+  fi
+  printf "Deleting... "
+  rm -v $(type -p "${tool}")
+
+}

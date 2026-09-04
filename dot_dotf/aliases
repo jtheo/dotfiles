@@ -20,7 +20,7 @@ alias n=nvim
 alias mtr='sudo $(which mtr)'
 alias grep='grep --color'
 
-alias lsd='ls -l | grep ^d'
+alias lsd='ls -ld */'
 
 alias jup='jupyter-notebook --notebook-dir=~/Downloads/Python/'
 
