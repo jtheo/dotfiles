@@ -26,7 +26,7 @@ window-save-state = always
 window-theme = auto
 
 # --- Cursor ---
-cursor-style = bar
+cursor-style = block
 cursor-style-blink = true
 cursor-opacity = 0.8
 
