@@ -280,7 +280,7 @@ function brewUpdateInfo() {
 }
 
 function brewup() {
-  tmpFile=$(mktemp -t "${FUNCNAME[0]}")
+  tmpFile=$(mktemp -t "${FUNCNAME[0]}_XXXXX")
   printf "\n\n\n\n\n|------------------------------------------------------------------------------\n\n"
   Start_Time=$(date +%s)
   msgLong "Start updating brew"
@@ -670,7 +670,7 @@ function trimPlan() {
 
   layer=${1}
 
-  tmpFile=$(mktemp -t "${FUNCNAME[0]}")
+  tmpFile=$(mktemp -t "${FUNCNAME[0]}_XXXXX")
 
   [[ -e "${layer}" ]] || err "Missing log file ${layer}"
   if errFound=$(grep ' Error: ' "${layer}"); then
@@ -741,7 +741,7 @@ function pods() {
 }
 
 function freeIPs() {
-  tmpFile=$(mktemp -t "${FUNCNAME[0]}")
+  tmpFile=$(mktemp -t "${FUNCNAME[0]}_XXXXX")
   if [[ -z ${AWS_VAULT} ]]; then
     echo "missing AWS token"
     return 1
