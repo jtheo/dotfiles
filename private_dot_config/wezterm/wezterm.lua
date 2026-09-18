@@ -1,7 +1,23 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
+local mux = wezterm.mux
+
+if wezterm.target_triple:find("linux") then
+	wezterm.on("gui-startup", function()
+		-- Spawn a new window and get references to tab, pane, and window
+		local _, _, window = mux.spawn_window({})
+		-- Maximize the window for full screen usage
+		window:gui_window():maximize()
+	end)
+end
 
 return {
+
+	-- From https://github.com/markheramis/wezterm/
+	adjust_window_size_when_changing_font_size = false,
+	window_decorations = "RESIZE",
+	use_fancy_tab_bar = false,
+
 	term = "screen-256color",
 	initial_rows = 60,
 	initial_cols = 240,
