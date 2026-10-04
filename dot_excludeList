@@ -57,3 +57,4 @@ go/pkg
 */vendor
 **/localpy
 models
+.kronk
