@@ -15,8 +15,8 @@ return {
 
 	-- From https://github.com/markheramis/wezterm/
 	adjust_window_size_when_changing_font_size = false,
-	window_decorations = "RESIZE",
 	use_fancy_tab_bar = false,
+	window_decorations = "RESIZE | TITLE",
 
 	term = "screen-256color",
 	initial_rows = 60,
