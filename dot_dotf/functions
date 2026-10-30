@@ -601,7 +601,23 @@ function clgo() {
   user=${tmp%/*}
   prj=${tmp##*/}
   mkcd "${base}/${user}"
-  git clone "${repo}"
+  git clone "${repo%/}"
+  cd "${prj}" || err "Can't cd in ${prj}"
+}
+
+function gcl() {
+  base=${HOME}/repos/jtheo
+  if [[ -z ${1} ]]; then
+    echo "I need a repo in format https://github.com/etc/etc"
+    return 1
+  else
+    repo=${1}
+  fi
+  tmp=${repo/*:\/\//}
+  user=${tmp%/*}
+  prj=${tmp##*/}
+  mkcd "${base}/${user}"
+  git clone "${repo%/}"
   cd "${prj}" || err "Can't cd in ${prj}"
 }
 

@@ -23,6 +23,7 @@ return {
 	initial_cols = 240,
 	hide_tab_bar_if_only_one_tab = true,
 	font = wezterm.font("JetBrains Mono"),
+	-- font = wezterm.font("IosevkaTerm NFM"),
 	color_scheme = "Catppuccin Mocha", --  " Mocha", -- or Macchiato, Frappe, Latt
 	font_size = 14.0,
 
