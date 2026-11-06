@@ -32,7 +32,7 @@ alias pac="source ~/repos/jtheo/localpy/bin/activate"
 export KUBECTL_VERSION="1.24"
 export AWS_VAULT_KEYCHAIN_NAME=login
 export DOCKER_HOST=unix://${HOME}/.colima/default/docker.sock
-export KUBECONFIG=./kube.config
+export KUBECONFIG=./kube.config:~/.kube/config
 export VENV=${HOME}/repos/jtheo/localpy/bin/activate
 
 export PATH=${PATH}:/usr/local/bin:${HOME}/bin:${HOME}/go/bin:${HOME}/repos/itv/cp-tools/bin:${HOME}/.cargo/bin:${KREW_ROOT:-$HOME/.krew}/bin
